@@ -18,6 +18,9 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long user_id;
+
     private LocalDate created_date;
 
     private LocalDate due_date;
@@ -29,6 +32,10 @@ public class Invoice {
     private String file;
 
     private Boolean paid;
+
+    private String customer_number;
+    private string customer_name;
+    private string customer_code
 
     public Invoice(Long id, LocalDate created_date, LocalDate due_date, Long personal_details_id, float price, String file, Boolean paid) {
         this.id = id;

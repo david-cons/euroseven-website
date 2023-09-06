@@ -19,6 +19,8 @@ public class PersonalDetails {
 
     private Long user_id;
 
+    private String name;
+
     private String address;
 
     private String postcode;
