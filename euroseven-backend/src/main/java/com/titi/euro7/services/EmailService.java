@@ -13,8 +13,4 @@ import java.util.logging.Logger;
 public class EmailService {
 
     Logger log = Logger.getLogger(EmailService.class.getName());
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
 }
