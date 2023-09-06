@@ -37,17 +37,25 @@
   }
 }
 
+.jumbotron-image {
+  opacity: 0;
+  transition: opacity 1s ease; /* Smooth transition for opacity */
+}
 
-
-/* Keyframes animation for the zoom effect */
+/* Apply a zoom-in effect to the active image */
+.jumbotron-image.active {
+  opacity: 1;
+  animation: zoom-in 10s ease-in-out infinite;
+}
+/* Keyframes animation for the zoom-in and zoom-out effect */
 @keyframes zoom-in {
-  0% {
-    transform: scale(1); /* Initial scale - no zoom */
+  0%, 100% {
+    transform: scale(1); /* Initial and final scale - no zoom */
   }
   50% {
     transform: scale(1.1); /* Zoom in halfway through the animation */
   }
-  100% {
-    transform: scale(1); /* Return to the original scale at the end */
-  }
 }
+
+
+

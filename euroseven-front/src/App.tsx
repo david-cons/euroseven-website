@@ -10,7 +10,6 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-
   const images = [f1, f2, f3, f4, f5];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -21,9 +20,7 @@ function App() {
     }, 10000); // Switch image every 10 seconds
 
     return () => clearInterval(imageSwitchInterval);
-  }, []);
-
-  const currentImage = images[currentImageIndex];
+  }, [images]);
 
   return (
     <Box>
@@ -92,6 +89,7 @@ function App() {
         </Button>
       </Box>
       <Box
+        className="jumbotron-container"
         sx={{
           width: "100%",
           height: "100vh",
@@ -99,18 +97,46 @@ function App() {
           position: "relative",
         }}
       >
-        <img
-          height="100%"
-          src={currentImage}
-          alt="jumbotron image"
-          className="jumbotron-image"
-          style={{
-            animation: "zoom-in 20s ease infinite", // Apply the zoom-in animation on page load
-            width: "100%", // Maintain aspect ratio and cover the container
-            height: "100%",
-            objectFit: "cover",
+        {images.map((image, index) => (
+          <img
+            key={index}
+            height="100%"
+            src={image}
+            alt="jumbotron image"
+            className={`jumbotron ${
+              index === currentImageIndex ? "active" : ""
+            }`}
+            style={{
+              width: "100%", // Maintain aspect ratio and cover the container
+              height: "100%",
+              objectFit: "cover",
+              position: "absolute", // Ensure images are absolutely positioned
+              top: 0, // Position images at the top
+              left: 0, // Position images at the left
+              opacity: index === currentImageIndex ? 1 : 0, // Apply the fade-in effect to the active image
+              transition: "opacity 1s ease", // Smooth transition for opacity
+            }}
+          />
+        ))}
+
+        <Box
+          className="jumbotron-overlay"
+          sx={{
+            position: "absolute",
+            top: "5%",
+            left: "50%",
+            width: "100%",
+            transform: "translate(-50%, -50%)",
+            padding: "20px",
+            color: "#fff" /* Text color */,
           }}
-        />
+        >
+          <img
+            height="100px"
+            src={logo2}
+            alt="logo2"
+          />
+        </Box>
       </Box>
     </Box>
   );
