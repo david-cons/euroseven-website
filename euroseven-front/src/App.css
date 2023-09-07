@@ -45,17 +45,42 @@
 /* Apply a zoom-in effect to the active image */
 .jumbotron-image.active {
   opacity: 1;
-  animation: zoom-in 10s ease-in-out infinite;
+  animation: zoom-in 20s ease-in-out infinite;
 }
 /* Keyframes animation for the zoom-in and zoom-out effect */
 @keyframes zoom-in {
-  0%, 100% {
-    transform: scale(1); /* Initial and final scale - no zoom */
+  0% {
+    transform: scale(1); /* Initial scale - no zoom */
   }
   50% {
     transform: scale(1.1); /* Zoom in halfway through the animation */
   }
+  100% {
+    transform: scale(1.1); /* Zoomed state at the end of the animation */
+  }
 }
 
 
 
+.navigation {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ccc;
+  cursor: pointer;
+  margin: 0 5px; /* Adjust spacing between circles */
+  transition: background-color 0.3s ease-in-out;
+  opacity: 0.5;
+}
+
+/* Style for the active circle (corresponding to the displayed image) */
+.circle.active {
+  background-color: #0054a6;
+  opacity: 1;
+}
