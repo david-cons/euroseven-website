@@ -18,7 +18,7 @@ public class EmailService {
     @Autowired
     private InvoiceService invoiceService;
 
-    @Autowire
+    @Autowired
     private UserService userService;
 
 
