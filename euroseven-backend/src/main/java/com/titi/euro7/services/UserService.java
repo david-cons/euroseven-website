@@ -37,6 +37,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public void toggleInactive(User user, boolean inactive) {
+        log.info("Setting inactive status for user " + user.toString() + " to "+ inactive);
+        user.setInactive(inactive);
+    }
+
+
+
     // TODO| implement PersonalDetails methods, one example below
 
     //public PersonalDetails getDetailsByUserId(Long id) {
