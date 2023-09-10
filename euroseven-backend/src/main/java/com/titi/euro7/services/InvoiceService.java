@@ -22,7 +22,13 @@ public class InvoiceService {
         return invoiceRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Gets the invoices for user with id @param Long user_id
+     * This can return an empty list in case the user doesn't have any invoices
+     */
+
     public List<Invoice> getInvoicesByUserId(Long user_id) {
+        log.info("Retrieving invoices for user with id  " + user_id);
         List<Invoice> invoices = this.getAllInvoices();
         List<Invoice> users_invoices = new ArrayList<Invoice>();
 
