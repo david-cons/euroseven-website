@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 @Service
 public class UserService {
-
+    // TODO: Add more admin related functionality here + user
     Logger log = Logger.getLogger(UserService.class.getName());
 
     @Autowired
