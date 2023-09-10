@@ -37,9 +37,9 @@ public class EmailService {
                 continue;
             }
 
-            // Filter for unpaid invoices.
+            List<Invoice> unpaidUserInvoices = filterUnpaidInvoices(userInvoices);
 
-            userInvoices.put(user, usersInvoices);
+            userInvoices.put(user, unpaidUserInvoices);
         }
 
         List<Email> result = new List<Email>();
@@ -72,7 +72,7 @@ public class EmailService {
         return new Email(to, content, subject, creation_date);
     }
 
-    private static String invoicesToString(List<Invoice> invoices)
+    private String invoicesToString(List<Invoice> invoices)
     {
         String result = "\n\n";
         for (Invoice i : invoices) {
@@ -82,7 +82,7 @@ public class EmailService {
         return result;
     }
 
-    private static String sum(List<Invoice> invoices)
+    private String sum(List<Invoice> invoices)
     {
         double suma = 0;
         for (Invoice i : invoices) {
@@ -90,5 +90,18 @@ public class EmailService {
         }
 
         return String.valueOf(suma);
+    }
+
+    private List<Invoice> filterUnpaidInvoices(List<Invoice> invoices)
+    {
+        List<Invoice> result = new List<Invoice>();
+
+        for (Invoice invoice : invoices) {
+            if (!invoice.paid) {
+                result.add(invoice);
+            }
+        }
+
+        return result;
     }
 }
