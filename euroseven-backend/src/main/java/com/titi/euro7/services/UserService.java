@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 @Service
 public class UserService {
-
+    // TODO: Add more admin related functionality here + user
     Logger log = Logger.getLogger(UserService.class.getName());
 
     @Autowired
@@ -36,6 +36,13 @@ public class UserService {
         log.info("Saving user " + user.toString());
         return userRepository.save(user);
     }
+
+    public void toggleInactive(User user, boolean inactive) {
+        log.info("Setting inactive status for user " + user.toString() + " to "+ inactive);
+        user.setInactive(inactive);
+    }
+
+
 
     // TODO| implement PersonalDetails methods, one example below
 

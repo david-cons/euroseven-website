@@ -36,12 +36,16 @@ public class User implements UserDetails {
     @NonNull
     private float saldo;
 
+    @NonNull
+    private boolean admin;
+
    // private Collection<? extends GrantedAuthority> authorities;
 
 
-    public User(@NonNull String username, @NonNull String password) {
+    public User(@NonNull String username, @NonNull String password, @NonNull boolean admin) {
         this.username = username;
         this.password = password;
+        this.admin = admin;
         this.inactive = false;
         this.saldo = 0;
     }
@@ -79,5 +83,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public boolean isAdmin() {return this.admin;}
 
 }

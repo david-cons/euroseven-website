@@ -27,6 +27,12 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
+    @PostMapping("/make-inactive/{id}")
+    public ResponseEntity<User> makeUserInactive(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(userService.toggleInactive(user, false));
+    }
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
