@@ -1,22 +1,53 @@
-import f1 from "../assets/f1.jpeg";
-import f2 from "../assets/f2.jpeg";
-import f3 from "../assets/f3.jpeg";
-import f4 from "../assets/f4.jpeg";
 import f5 from "../assets/f5.jpeg";
 import j1 from "../assets/j1.jpeg";
-import j2 from "../assets/j2.jpeg";
 import j3 from "../assets/j3.jpeg";
 import j4 from "../assets/j4.jpeg";
 import j5 from "../assets/j5.jpeg";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box, Button, IconButton } from "@mui/material";
 import logo2 from "../assets/logo2.png";
+
 export const Jumbotron = () => {
-  const images = [j1, f5, j3, j4, j5];
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = useMemo(() => {
+    return [j1, f5, j3, j4, j5];
+  }, []);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [startX, setStartX] = useState<number | null>(null);
+  const jumbotronImageRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    let objectRef: HTMLImageElement | null = null;
+    const handleImageTransition = () => {
+      if (jumbotronImageRef.current) {
+        objectRef = jumbotronImageRef.current;
+        jumbotronImageRef.current.style.transition = "none";
+        jumbotronImageRef.current.style.transform = "translateX(0)";
+        setTimeout(() => {
+          if (jumbotronImageRef.current) {
+            jumbotronImageRef.current.style.transition =
+              "transform 0.5s ease-in-out";
+          }
+        }, 0);
+      }
+    };
+
+    if (jumbotronImageRef.current) {
+      jumbotronImageRef.current.addEventListener(
+        "transitionend",
+        handleImageTransition
+      );
+    }
+
+    return () => {
+      if (objectRef) {
+        objectRef.removeEventListener("transitionend", handleImageTransition);
+      }
+    };
+  }, [currentImageIndex]);
 
   useEffect(() => {
     const imageSwitchInterval = setInterval(() => {
@@ -27,9 +58,59 @@ export const Jumbotron = () => {
     return () => clearInterval(imageSwitchInterval);
   }, [images]);
 
+  const handleMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
+    setStartX(e.clientX);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (startX !== null) {
+      const deltaX = e.clientX - startX;
+      if (jumbotronImageRef.current) {
+        jumbotronImageRef.current.style.transform = `translateX(${deltaX}px)`;
+      }
+    }
+  };
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (startX !== null) {
+      const deltaX = startX - e.clientX;
+      if (Math.abs(deltaX) > 50) {
+        if (deltaX > 0) {
+          changeImage(currentImageIndex + 1);
+        } else {
+          changeImage(currentImageIndex - 1);
+        }
+      }
+      setStartX(null);
+      if (jumbotronImageRef.current) {
+        jumbotronImageRef.current.style.transform = "translateX(0)";
+      }
+    }
+  };
+
   const changeImage = (index: number) => {
+    if (index < 0) {
+      index = images.length - 1;
+    } else if (index >= images.length) {
+      index = 0;
+    }
+
+    // Reset opacity for all images
+    const imageElements = document.querySelectorAll(
+      ".jumbotron"
+    ) as NodeListOf<HTMLImageElement>;
+    imageElements.forEach((imageElement) => {
+      imageElement.style.opacity = "0";
+    });
+
+    // Set the new current image to full opacity
+    if (imageElements[index]) {
+      imageElements[index].style.opacity = "1";
+    }
+
     setCurrentImageIndex(index);
   };
+
   return (
     <Box
       className="jumbotron-container"
@@ -59,6 +140,12 @@ export const Jumbotron = () => {
               index === currentImageIndex ? "zoom-in 20s ease-in-out" : "none", // Apply the zoom-in animation to the active image
             transition: "opacity 1s ease",
           }}
+          ref={jumbotronImageRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          draggable="false"
+          unselectable="on"
         />
       ))}
 
@@ -118,7 +205,7 @@ export const Jumbotron = () => {
                 mr: "10px",
                 width: "30px",
                 height: "35px",
-                color: "white",
+                color: "#0054a6",
               }}
             />
           </IconButton>
@@ -128,13 +215,13 @@ export const Jumbotron = () => {
                 mr: "10px",
                 width: "30px",
                 height: "35px",
-                color: "white",
+                color: "#0054a6",
               }}
             />
           </IconButton>
           <IconButton>
             <MenuIcon
-              sx={{ width: "30px", height: "35px", color: "white" }}
+              sx={{ width: "30px", height: "35px", color: "#0054a6" }}
             />
           </IconButton>
         </Box>

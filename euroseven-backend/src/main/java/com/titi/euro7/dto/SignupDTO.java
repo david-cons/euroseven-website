@@ -15,4 +15,7 @@ public class SignupDTO {
     @NonNull
     private String password;
 
+    @NonNull
+    private String role;
+
 }

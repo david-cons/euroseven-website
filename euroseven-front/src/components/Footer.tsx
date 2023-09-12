@@ -234,11 +234,12 @@ export const Footer = () => {
           >
             <img
               src={anpc1}
+              alt="anpc1"
               width="175px"
               height={"50px"}
               style={{ marginBottom: "20px" }}
             />
-            <img src={anpc2} width="175px" height={"50px"} />
+            <img src={anpc2} alt="anpc2" width="175px" height={"50px"} />
           </Paper>
         </Stack>
         <Stack spacing={2}>
@@ -437,7 +438,12 @@ export const Footer = () => {
           color: "#666666",
         }}
       >
-        <img src={logo2} height={"100px"} style={{ padding: "20px" }} />
+        <img
+          src={logo2}
+          alt="footer-logo"
+          height={"100px"}
+          style={{ padding: "20px" }}
+        />
         <Typography>
           © 2023 EuroSeven Industry - Toate drepturile rezervate
         </Typography>

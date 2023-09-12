@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @NonNull
     private float saldo;
 
-   // private Collection<? extends GrantedAuthority> authorities;
+    private String role;
 
 
     public User(@NonNull String username, @NonNull String password) {

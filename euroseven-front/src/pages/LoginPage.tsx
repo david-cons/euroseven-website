@@ -2,13 +2,67 @@ import { Box, Typography, TextField, Button, Link } from "@mui/material";
 import "./LoginPage.css";
 import f1 from "../assets/f1.jpeg";
 import logo1 from "../assets/logo1.png";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ThunkDispatch } from "redux-thunk";
+import { useDispatch } from "react-redux";
+import { AnyAction } from "redux";
+import {
+  authenticateUser,
+  authenticationSuccess,
+  authenticationFailure,
+} from "../services/AuthService";
 
-export const LoginPage = () => {
+export const LoginPage: React.FC = () => {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const navigate = useNavigate();
+  const dispatch: ThunkDispatch<{}, {}, AnyAction> = useDispatch();
+
+  const changeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
+
+  const changePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  const handleSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    console.log("here");
+    if (username && password) {
+      await dispatch(authenticateUser(username, password))
+        .then((response: any) => {
+          dispatch(
+            authenticationSuccess(
+              response.userId,
+              response.accessToken,
+              response.refreshToken,
+              response.role
+            )
+          );
+          if (response.role) {
+            if (response.role === "ROLE_ADMIN") {
+              navigate("/admin/home");
+            } else if (response.role === "ROLE_INCASARI") {
+              navigate("/incasari/home");
+            } else {
+              navigate("/home");
+            }
+          }
+        })
+        .catch((error: Error) => {
+          dispatch(authenticationFailure(error.message));
+        });
+    }
+  };
+
   return (
     <Box className="login-page">
       <Box className="login-left">
         <Box sx={{ position: "absolute", top: 0, left: 0, padding: "25px" }}>
-          <img src={logo1} height={"50px"} />
+          <img src={logo1} alt="login-logo" height={"50px"} />
         </Box>
         <Box className="login-header">
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -18,7 +72,11 @@ export const LoginPage = () => {
             Contul tău de client EuroSeven
           </Typography>
         </Box>
-        <Box component="form" sx={{ width: "80%", textAlign: "center" }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ width: "80%", textAlign: "center" }}
+        >
           <Box
             style={{
               display: "flex",
@@ -41,6 +99,8 @@ export const LoginPage = () => {
                 autoComplete="username"
                 autoFocus
                 variant="standard"
+                value={username}
+                onChange={changeUsername}
               />
               <TextField
                 margin="normal"
@@ -50,6 +110,8 @@ export const LoginPage = () => {
                 id="password"
                 autoComplete="current-password"
                 variant="standard"
+                value={password}
+                onChange={changePassword}
               />
             </Box>
             <Box
@@ -79,6 +141,7 @@ export const LoginPage = () => {
                 textTransform: "none",
                 fontSize: "15px",
               }}
+              onClick={() => handleSubmit}
               sx={{ mt: "10%", mb: 2, ml: "15%" }}
             >
               Autentificare
@@ -86,6 +149,7 @@ export const LoginPage = () => {
           </Box>
         </Box>
       </Box>
+
       <Box className="login-right" sx={{ objectFit: "cover" }}>
         <img className="login-picture" src={f1} alt="login-page" />
       </Box>

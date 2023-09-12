@@ -13,12 +13,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -38,13 +43,17 @@ public class AuthController {
     public ResponseEntity<TokenDTO> register(@Validated @RequestBody SignupDTO signupDTO) {
         User user = new User(signupDTO.getUsername(), signupDTO.getPassword());
         user.setUsername(signupDTO.getUsername());
-       // List<GrantedAuthority> authorities = new ArrayList<>();
-       // authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-       // user.setAuthorities(authorities);
+        user.setRole(signupDTO.getRole());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        switch (user.getRole()) {
+            case ("ROLE_ADMIN") -> authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            case ("ROLE_USER") -> authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            case ("ROLE_INCASARI") -> authorities.add(new SimpleGrantedAuthority("ROLE_INCASARI"));
+        }
 
         userDetailsManager.createUser(user);
 
-        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.getPassword(), null);
+        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.getPassword(), authorities);
 
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
@@ -58,6 +67,8 @@ public class AuthController {
             log.info("Successfully authenticated user: {}", loginDTO.getUsername());
 
             TokenDTO token = tokenGenerator.createToken(authentication);
+
+            token.setRole(tokenGenerator.decodeAccessToken(token.getAccessToken()).getClaim("role"));
             log.info("Successfully generated token for user: {}", loginDTO.getUsername());
 
             return ResponseEntity.ok(token);

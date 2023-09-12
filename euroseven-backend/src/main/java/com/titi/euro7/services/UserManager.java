@@ -24,7 +24,6 @@ public class UserManager implements UserDetailsManager {
     public void createUser(UserDetails user) {
         System.out.println("HERE " + user.getPassword());
         ((User) user).setPassword(passwordEncoder.encode(user.getPassword()));
-       // ((User) user).setAuthorities(user.getAuthorities());
         userRepository.save((User) user);
     }
 

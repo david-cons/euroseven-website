@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class TokenGenerator {
@@ -43,9 +44,7 @@ public class TokenGenerator {
                 .expiresAt(now.plus(5, ChronoUnit.DAYS))
                 .subject(user.getId().toString())
                 .claim("username", user.getUsername())
-//                .claim("roles", user.getAuthorities().stream()
-//                        .map(GrantedAuthority::getAuthority)
-//                        .collect(Collectors.toList()))
+                .claim("role", user.getRole())
                 .build();
 
         return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
