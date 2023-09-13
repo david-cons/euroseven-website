@@ -12,8 +12,6 @@ export const Icon = (props: {
       sx={{
         width: "60px",
         height: "60px",
-        ml: "20px",
-        mt: "20px",
         borderRadius: "50%",
         border: "2px solid #dee2e6",
         display: "flex",

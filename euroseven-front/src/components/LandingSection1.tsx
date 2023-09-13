@@ -1,4 +1,4 @@
-import { Card } from "../components/Card";
+import { LandingCard } from "./LandingCard";
 import card1 from "../assets/card1.jpeg";
 import card2 from "../assets/card2.jpeg";
 import card4 from "../assets/card4.jpg";
@@ -42,13 +42,13 @@ export const LandingSection1 = () => {
           ml: "2vh",
         }}
       >
-        <Card
+        <LandingCard
           image={card1}
           title={"Plăteşte Factura Online"}
           body={"Este simplu, rapid şi sigur să plăteşti online factura Euro7"}
           buttonText={"Plăteşte"}
         />
-        <Card
+        <LandingCard
           image={card2}
           title={"Oferte"}
           body={
@@ -56,7 +56,7 @@ export const LandingSection1 = () => {
           }
           buttonText={"Vezi"}
         />
-        <Card
+        <LandingCard
           image={card4}
           title={"Infomații Suplimentare"}
           body={

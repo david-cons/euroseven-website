@@ -60,6 +60,12 @@
   }
 }
 
+@font-face {
+  font-family: 'Catesque';
+  src: url('./assets/catesque.woff2') format('woff2'),
+       url('./assets/catesque.woff') format('woff');
+}
+
 
 
 .navigation {

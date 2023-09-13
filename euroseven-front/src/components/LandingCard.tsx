@@ -1,7 +1,7 @@
 import { Box, Typography, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 
-export const Card = (props: {
+export const LandingCard = (props: {
   image: string;
   title: String;
   body: String;

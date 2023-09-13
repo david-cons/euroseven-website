@@ -14,6 +14,7 @@ import {
 } from "../services/AuthService";
 
 export const LoginPage: React.FC = () => {
+  
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -30,7 +31,6 @@ export const LoginPage: React.FC = () => {
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    console.log("here");
     if (username && password) {
       await dispatch(authenticateUser(username, password))
         .then((response: any) => {
