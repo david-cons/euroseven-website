@@ -17,12 +17,19 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PaidIcon from "@mui/icons-material/Paid";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../services/AuthService";
 
 export const Sidebar = (props: {
   handleTabChange(tab: string): void;
   selectedTab: String;
 }) => {
   const navigate = useNavigate();
+
+
+  const logOut = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <Box
@@ -268,7 +275,7 @@ export const Sidebar = (props: {
           fontFamily: "Catesque",
         }}
         startIcon={<ExitToAppIcon />}
-        onClick={() => navigate("/login")}
+        onClick={logOut}
       >
         Deconectare
       </Button>

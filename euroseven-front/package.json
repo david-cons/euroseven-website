@@ -18,6 +18,8 @@
     "@types/react-dom": "^18.2.7",
     "axios": "^1.4.0",
     "chart.js": "^4.4.0",
+    "lodash.debounce": "^4.0.8",
+    "mui-file-input": "^3.0.2",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -31,7 +33,8 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
+    "@types/lodash.debounce": "^4.0.7"
   },
   "scripts": {
     "start": "react-scripts start",

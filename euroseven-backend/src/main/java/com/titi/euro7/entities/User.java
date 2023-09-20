@@ -1,6 +1,7 @@
 package com.titi.euro7.entities;
 
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -25,18 +26,40 @@ public class User implements UserDetails {
 
     // email is the username
     @NonNull
+    @Column(name = "username")
     private String username;
 
     @NonNull
+    @Column(name = "password")
     private String password;
 
-    @NonNull
+    @Column(name = "inactive")
     private Boolean inactive;
 
-    @NonNull
+    @Column(name = "saldo")
     private float saldo;
 
+    @Column(name = "role")
     private String role;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "cod_client")
+    private Integer codClient;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "localitate")
+    private String localitate;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Lob
+    @Column(name="picture", columnDefinition = "TEXT")
+    private String image;
 
 
     public User(@NonNull String username, @NonNull String password) {

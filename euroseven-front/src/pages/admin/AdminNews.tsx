@@ -48,9 +48,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         <TableCell component="th" scope="row" sx={{fontFamily: "Catesque",}}>
           {row.subject}
         </TableCell>
-        <TableCell align="right" sx={{fontFamily: "Catesque",}}>{row.sent_by}</TableCell>
-        <TableCell align="right" sx={{fontFamily: "Catesque",}}>{row.sent_at}</TableCell>
-        <TableCell align="right" sx={{fontFamily: "Catesque",}}>{row.received_by}</TableCell>
+        <TableCell align="left" sx={{fontFamily: "Catesque",}}>{row.sent_by}</TableCell>
+        <TableCell align="left" sx={{fontFamily: "Catesque",}}>{row.sent_at}</TableCell>
+        <TableCell align="left" sx={{fontFamily: "Catesque",}}>{row.received_by}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -112,7 +112,7 @@ const rows = [
   ),
 ];
 
-export const AdminNews = () => {
+export const AdminNews: React.FC = () => {
   return (
     <Box sx={{ width: "80%" }}>
       <Box
@@ -120,7 +120,6 @@ export const AdminNews = () => {
           width: "100%",
           position: "relative",
           height: "8vh",
-          mb: "16vh",
           textAlign: "left",
         }}
       >
@@ -163,16 +162,16 @@ export const AdminNews = () => {
       >
         <TableContainer component={Paper} >
           <Table aria-label="collapsible table">
-            <TableHead>
+            <TableHead sx={{backgroundColor: "#E4E5E6"}}>
               <TableRow>
                 <TableCell />
-                <TableCell sx={{fontFamily: "Catesque",}}>Subject</TableCell>
-                <TableCell align="right" sx={{fontFamily: "Catesque",}}>Trimis De</TableCell>
-                <TableCell align="right" sx={{fontFamily: "Catesque",}}>Data</TableCell>
-                <TableCell align="right" sx={{fontFamily: "Catesque",}}>Primit de</TableCell>
+                <TableCell sx={{fontFamily: "Catesque", fontWeight: "bold"}}>Subject</TableCell>
+                <TableCell align="left" sx={{fontFamily: "Catesque", fontWeight: "bold"}}>Trimis De</TableCell>
+                <TableCell align="left" sx={{fontFamily: "Catesque", fontWeight: "bold"}}>Data</TableCell>
+                <TableCell align="left" sx={{fontFamily: "Catesque", fontWeight: "bold"}}>Primit de</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody >
+            <TableBody sx={{backgroundColor: "#f8f9fe"}}>
               {rows.map((row) => (
                 <Row key={row.subject} row={row} />
               ))}

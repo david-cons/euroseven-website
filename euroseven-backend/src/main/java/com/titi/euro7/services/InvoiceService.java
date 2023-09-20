@@ -6,6 +6,7 @@ import com.titi.euro7.repositories.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -30,5 +31,36 @@ public class InvoiceService {
     public Invoice createInvoice(Invoice invoice) {
         log.info("Saving invoice ");
         return invoiceRepository.save(invoice);
+    }
+
+    public boolean deleteInvoice(Long id) {
+        log.info("Deleting invoice with id " + id);
+        if (!invoiceRepository.existsById(id)) {
+            log.info("Invoice with id " + id + " does not exist");
+            return false;
+        }
+        invoiceRepository.deleteById(id);
+        return true;
+    }
+
+    public List<Invoice> searchInvoiceByNrFactura(Integer nrFactura) {
+        log.info("Searching for invoice with nrFactura " + nrFactura);
+        List<Invoice> invoices = invoiceRepository.findAll();
+        List<Invoice> searchResult = new ArrayList<>();
+        for (Invoice invoice : invoices) {
+            Integer nrFactura1 = invoice.getNrFactura();
+            if (nrFactura1 != null && nrFactura1.toString().contains(nrFactura.toString())) {
+                searchResult.add(invoice);
+            }
+        }
+        return searchResult;
+    }
+
+    public List<Invoice> findPaidInvoices() {
+        return invoiceRepository.findInvoicesByPaidIsTrue();
+    }
+
+    public List<Invoice> findUnpaidInvoices() {
+        return invoiceRepository.findInvoicesByPaidIsFalse();
     }
 }

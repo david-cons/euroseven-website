@@ -10,7 +10,6 @@ export const authenticateUser = (username, password) => {
         password,
       })
       .then((response) => {
-        console.log(response);
         if (response.data) {
           dispatch(
             authenticationSuccess(
@@ -104,6 +103,7 @@ export const authenticationFailure = (error) => {
 export const logout = () => {
   localStorage.removeItem("role");
   localStorage.removeItem("token");
+  localStorage.removeItem("selectedTab");
   return {
     type: "LOGOUT",
   };

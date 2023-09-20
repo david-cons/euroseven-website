@@ -6,6 +6,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { SvgIconTypeMap } from "@mui/material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export const DashboardCard = (props: {
   color: string;
@@ -16,6 +17,8 @@ export const DashboardCard = (props: {
     muiName: string;
   };
 }) => {
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+
   return (
     <Paper
       elevation={5}
@@ -25,8 +28,8 @@ export const DashboardCard = (props: {
         justifyContent: "space-between",
         background: "white",
         padding: "2rem",
-        width: "250px",
-        height: "100px",
+        width: "250px", // Adjust width based on screen size
+        height: "100px", // Adjust height based on screen size
         borderRadius: "12px",
         boxShadow: "0 8px 16px -8px rgba(0, 0, 0, 0.3)",
         border: "0.1px solid #e0e0e0",
@@ -35,8 +38,8 @@ export const DashboardCard = (props: {
           transform: "scale(1.05)",
         },
         position: "relative",
-        mb: "20px",
-        mr: "20px",
+        mr: "25px",
+        mb: "25px",
       }}
     >
       <Box>
@@ -57,14 +60,24 @@ export const DashboardCard = (props: {
           </Typography>
         </Box>
         <Box
-          sx={{
-            padding: "20px",
-            position: "absolute",
-            left: "0",
-            bottom: "15px",
-          }}
+          sx={
+            props.none === undefined
+              ? { padding: "20px", position: "absolute", left: "0", top: "35px"}
+              : {
+                  padding: "20px",
+                  position: "absolute",
+                  left: "0",
+                  bottom: "15px",
+                }
+          }
         >
-          <Box sx={{ mt: "30px", display: "flex" }}>
+          <Box
+            sx={
+              props.none === undefined
+                ? { display: "flex" }
+                : { mt: "30px", display: "flex" }
+            }
+          >
             <Typography
               fontFamily={"Catesque"}
               sx={{

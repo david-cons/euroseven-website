@@ -1,4 +1,4 @@
-import { Box, Typography, TextField, Button, Link } from "@mui/material";
+import { Box, Typography, TextField, Button, Link, Snackbar, Alert } from "@mui/material";
 import "./LoginPage.css";
 import f1 from "../assets/f1.jpeg";
 import logo1 from "../assets/logo1.png";
@@ -12,11 +12,22 @@ import {
   authenticationSuccess,
   authenticationFailure,
 } from "../services/AuthService";
+import React from "react";
 
 export const LoginPage: React.FC = () => {
   
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [open, setOpen] = React.useState(false);
+
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const navigate = useNavigate();
   const dispatch: ThunkDispatch<{}, {}, AnyAction> = useDispatch();
@@ -43,12 +54,13 @@ export const LoginPage: React.FC = () => {
             )
           );
           if (response.role) {
+            setOpen(true);
             if (response.role === "ROLE_ADMIN") {
               navigate("/admin/home");
             } else if (response.role === "ROLE_INCASARI") {
               navigate("/incasari/home");
             } else {
-              navigate("/home");
+              navigate("/");
             }
           }
         })
@@ -60,6 +72,7 @@ export const LoginPage: React.FC = () => {
 
   return (
     <Box className="login-page">
+      
       <Box className="login-left">
         <Box sx={{ position: "absolute", top: 0, left: 0, padding: "25px" }}>
           <img src={logo1} alt="login-logo" height={"50px"} />
