@@ -67,7 +67,7 @@ public class WebSecurity {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(antMatcher("/api/auth/register"), antMatcher("/api/auth/login")).permitAll()
-                        .requestMatchers(antMatcher("/api/users")).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(antMatcher("/api/users")).hasAnyAuthority("ROLE_ADMIN", "ROLE_INCASARI")
                         .anyRequest().authenticated()
                 )
                 .cors((cors) -> cors.configurationSource(request -> {

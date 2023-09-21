@@ -1,6 +1,7 @@
 package com.titi.euro7.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -19,13 +20,13 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate created_date;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate due_date;
 
-    private Long personal_details_id;
-
-    private float price;
+    private double price;
 
     private String file;
 
@@ -34,13 +35,22 @@ public class Invoice {
     @Column(name = "nr_factura")
     private Integer nrFactura;
 
-    public Invoice(Long id, LocalDate created_date, LocalDate due_date, float price, String file, Boolean paid) {
+    @Column(name="cod_client")
+    private Integer codClient;
+
+    @Column(name="rest_de_plata")
+    private double restDePlata;
+
+    public Invoice(Long id, LocalDate created_date, double price, String file, Integer nrFactura, Integer codClient, double restDePlata) {
         this.id = id;
         this.created_date = created_date;
-        this.due_date = due_date;
+        this.due_date = created_date.plusMonths(1);
         this.price = price;
+        this.restDePlata = restDePlata;
         this.file = file;
-        this.paid = paid;
+        this.paid = false;
+        this.nrFactura = nrFactura;
+        this.codClient = codClient;
     }
 
     public Invoice() {

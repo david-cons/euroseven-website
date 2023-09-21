@@ -2,6 +2,7 @@ package com.titi.euro7.controllers;
 
 
 import com.titi.euro7.entities.Invoice;
+import com.titi.euro7.entities.Payment;
 import com.titi.euro7.services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,15 @@ public class InvoiceController {
     @GetMapping("/unpaid")
     public ResponseEntity<List<Invoice>> findUnpaidInvoices() {
         return ResponseEntity.ok(invoiceService.findUnpaidInvoices());
+    }
+
+    @PostMapping("/pay")
+    public ResponseEntity<Payment> payInvoice(@RequestBody Payment payment) {
+        return ResponseEntity.ok(invoiceService.registerPayment(payment));
+    }
+
+    @GetMapping("/payments")
+    public ResponseEntity<List<Payment>> getAllPayments() {
+        return ResponseEntity.ok(invoiceService.getAllPayments());
     }
 }

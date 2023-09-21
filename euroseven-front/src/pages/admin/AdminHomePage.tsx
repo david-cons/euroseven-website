@@ -6,16 +6,11 @@ import { useEffect, useState } from "react";
 import Search from "@mui/icons-material/Search";
 import { StyledAvatar } from "../../components/StyledAvatar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import {
-  AdminHome,
-  AdminUsers,
-  AdminNews,
-  AdminInvoices,
-  AdminSetari,
-} from "./";
+import { AdminHome, AdminUsers, AdminNews, AdminInvoices } from "./";
 import { UserService } from "../../services/UserService";
 import { UserEntity } from "../../types";
 import { useSelector } from "react-redux";
+import { SetariPage } from "../SetariPage";
 
 export const AdminHomePage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<String>(
@@ -111,7 +106,7 @@ export const AdminHomePage: React.FC = () => {
         {selectedTab === "facturi" && <AdminInvoices />}
         {selectedTab === "statistici" && <h1>Statistici</h1>}
         {selectedTab === "setari" && (
-          <AdminSetari admin={admin} setAdmin={setAdmin} />
+          <SetariPage user={admin} setUser={setAdmin} />
         )}
       </Box>
     </Box>

@@ -12,14 +12,14 @@ import {
   Typography,
 } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
-import { UserEntity } from "../../types";
+import { UserEntity } from "../types";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { UserService } from "../../services/UserService";
+import { UserService } from "../services/UserService";
 
-export const AdminSetari: React.FC<{
-  admin: UserEntity | null;
-  setAdmin: React.Dispatch<React.SetStateAction<UserEntity | null>>;
-}> = ({ admin, setAdmin }) => {
+export const SetariPage: React.FC<{
+  user: UserEntity | null;
+  setUser: React.Dispatch<React.SetStateAction<UserEntity | null>>;
+}> = ({ user, setUser }) => {
   const [prenume, setPrenume] = useState<string | undefined>("");
   const [nume, setNume] = useState<string | undefined>("");
   const [username, setUsername] = useState<string | undefined>("");
@@ -80,13 +80,13 @@ export const AdminSetari: React.FC<{
     event.preventDefault();
     const name = `${prenume} ${nume}`;
     await UserService.updateUser(
-      admin?.id,
+      user?.id,
       name,
       adresa,
       localitate,
       telefon
     ).then((res) => {
-      setAdmin(res);
+      setUser(res);
     });
     setOpenSnackbar(true);
   };
@@ -95,27 +95,27 @@ export const AdminSetari: React.FC<{
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     event.preventDefault();
-    UserService.uploadImage(selectedFile, admin?.id).then((res) => {
+    UserService.uploadImage(selectedFile, user?.id).then((res) => {
       setOpenSnackbar(true);
       if (res) {
-        setAdmin(res);
+        setUser(res);
       }
     });
   };
 
   useEffect(() => {
-    const parts = admin?.name?.split(" ");
+    const parts = user?.name?.split(" ");
     if (parts) {
       const firstName = parts[0];
       const lastName = parts.slice(1).join(" ");
       setPrenume(firstName);
       setNume(lastName);
     }
-    setUsername(admin?.username);
-    setTelefon(admin?.phone);
-    setLocalitate(admin?.localitate);
-    setAdresa(admin?.address);
-  }, [admin]);
+    setUsername(user?.username);
+    setTelefon(user?.phone);
+    setLocalitate(user?.localitate);
+    setAdresa(user?.address);
+  }, [user]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -176,7 +176,7 @@ export const AdminSetari: React.FC<{
                 src={
                   selectedFile
                     ? URL.createObjectURL(selectedFile) // Use the selected file URL
-                    : `data:image/jpeg;base64,${admin?.image}` // Use the admin's image URL
+                    : `data:image/jpeg;base64,${user?.image}` // Use the admin's image URL
                 }
                 onClick={handleAvatarClick}
                 sx={{
@@ -201,7 +201,7 @@ export const AdminSetari: React.FC<{
                   mb: "20px",
                 }}
               >
-                {`${admin?.name}`}
+                {`${user?.name}`}
               </Typography>
               <Typography
                 sx={{

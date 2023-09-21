@@ -1,5 +1,5 @@
 import axios from "../axios";
-import { InvoiceEntity } from "../types";
+import { InvoiceEntity, PaymentEntity } from "../types";
 
 const URL = "http://localhost:8081/api/invoices";
 
@@ -59,6 +59,14 @@ export abstract class InvoiceService {
   public static async getAllUnpaidInvoices(): Promise<InvoiceEntity[]> {
     return new Promise((resolve) => {
       axios.get(URL + "/unpaid").then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async getAllPayments(): Promise<PaymentEntity[]> {
+    return new Promise((resolve) => {
+      axios.get(URL + "/payments").then((response) => {
         resolve(response.data);
       });
     });
