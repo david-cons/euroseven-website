@@ -9,7 +9,7 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
-import { Paper, Typography, Divider, Button, Box } from "@mui/material";
+import { Paper, Typography, Box } from "@mui/material";
 import TabletAndroidOutlinedIcon from "@mui/icons-material/TabletAndroidOutlined";
 import DesktopWindowsOutlinedIcon from "@mui/icons-material/DesktopWindowsOutlined";
 import PhoneIcon from "@mui/icons-material/Phone";

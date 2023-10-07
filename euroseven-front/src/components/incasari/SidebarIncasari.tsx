@@ -11,8 +11,6 @@ import {
 import logo2 from "../../assets/logo2.png";
 import WindowIcon from "@mui/icons-material/Window";
 import EmailIcon from "@mui/icons-material/Email";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PaidIcon from "@mui/icons-material/Paid";

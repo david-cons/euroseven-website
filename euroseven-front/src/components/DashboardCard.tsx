@@ -6,7 +6,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { SvgIconTypeMap } from "@mui/material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
-import useMediaQuery from "@mui/material/useMediaQuery";
+//import useMediaQuery from "@mui/material/useMediaQuery";
 
 export const DashboardCard = (props: {
   color: string;
@@ -17,7 +17,7 @@ export const DashboardCard = (props: {
     muiName: string;
   };
 }) => {
-  const isSmallScreen = useMediaQuery("(max-width:600px)");
+  //const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   return (
     <Paper

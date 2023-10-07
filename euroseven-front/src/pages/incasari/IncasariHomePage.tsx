@@ -22,7 +22,12 @@ export const IncasariHomePage: React.FC = () => {
       : "acasa"
   );
 
+  const [invoiceFilter, setInvoiceFilter] = useState<String | null>(null);
+
   const [incasari, setInacasari] = useState<UserEntity | null>(null);
+
+  const [createUser, setCreateUser] = useState<boolean>(false);
+  const [createPayment, setCreatePayment] = useState<boolean>(false);
 
   const incasariId = useSelector((state: any) => state.authentication.userId);
 
@@ -109,10 +114,17 @@ export const IncasariHomePage: React.FC = () => {
           </Box>
         </Box>
         {selectedTab === "acasa" && (
-          <IncasariHome setSelectedTab={setSelectedTab} />
+          <IncasariHome
+            setSelectedTab={setSelectedTab}
+            setInvoiceFilter={setInvoiceFilter}
+            setCreateUser={setCreateUser}
+            setCreatePayment={setCreatePayment}
+          />
         )}
-        {selectedTab === "plati" && <IncasariPlati />}
-        {selectedTab === "facturi" && <IncasariInvoices />}
+        {selectedTab === "plati" && <IncasariPlati incasariId={incasari?.id} createPayment={createPayment} setCreatePayment={setCreatePayment} />}
+        {selectedTab === "facturi" && (
+          <IncasariInvoices filter={invoiceFilter} setInvoiceFilter={setInvoiceFilter} createUser={createUser} setCreateUser={setCreateUser} />
+        )}
         {selectedTab === "setari" && (
           <SetariPage user={incasari} setUser={setInacasari} />
         )}

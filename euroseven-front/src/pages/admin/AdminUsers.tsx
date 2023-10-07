@@ -1,12 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import { GridColDef } from "@mui/x-data-grid";
-import {
-  Box,
-  Typography,
-  Button,
-  Snackbar,
-  Alert,
-} from "@mui/material";
+import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
 import { UserMenu } from "../../components/admin/UserMenu";
 import { useEffect, useState } from "react";
 import { UserEntity } from "../../types";
@@ -14,7 +8,7 @@ import { UserService } from "../../services/UserService";
 import axios from "../../axios";
 import debounce from "lodash.debounce";
 import { Euro7DataGrid } from "../../components/admin/Euro7DataGrid";
-import { SearchBar } from "../../components/admin/SearchBar";
+import { SearchBar } from "../../components/SearchBar";
 
 export const AdminUsers: React.FC = () => {
   const [users, setUsers] = useState<UserEntity[]>([]);
@@ -47,13 +41,13 @@ export const AdminUsers: React.FC = () => {
     {
       field: "codClient",
       headerName: "Cod Client",
-      width: 200,
+      width: 175,
       headerClassName: "super-app-theme--header",
     },
     {
       field: "name",
-      headerName: "Name",
-      width: 260,
+      headerName: "Nume",
+      width: 150,
       headerClassName: "super-app-theme--header",
       renderCell: (params) => {
         return (
@@ -65,26 +59,31 @@ export const AdminUsers: React.FC = () => {
     },
     {
       field: "address",
-      headerName: "Address",
+      headerName: "Adresă",
       width: 300,
       headerClassName: "super-app-theme--header",
     },
     {
       field: "saldo",
-      headerName: "Saldo",
+      headerName: "Sold",
+      width: 200,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "restDePlataTotal",
+      headerName: "Rest De Plata",
       width: 200,
       headerClassName: "super-app-theme--header",
     },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: "",
       width: 150,
       renderCell: (params) => {
         const id = params.row.id;
         return (
           <UserMenu
             id={id}
-            forUser={true}
             users={users.length > 0 ? users : []}
             handleOpenSnackbar={handleOpenSnackbar}
             setUsers={setUsers}
@@ -180,7 +179,11 @@ export const AdminUsers: React.FC = () => {
         </Button>
       </Box>
       <Box sx={{ mb: "10vh" }}>
-        <SearchBar handleSearchInputChange={handleSearchInputChange} searchText={searchText}/>
+        <SearchBar
+          handleSearchInputChange={handleSearchInputChange}
+          searchText={searchText}
+          forWho="utilizator"
+        />
         <Euro7DataGrid
           searchText={searchText}
           users={users}

@@ -1,12 +1,19 @@
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { Box, Grid } from "@mui/material";
 import { NavCard } from "../../components/incasari/NavCard";
 import { logout } from "../../services/AuthService";
 import { useNavigate } from "react-router-dom";
 
 export const IncasariHome: React.FC<{
   setSelectedTab: React.Dispatch<React.SetStateAction<String>>;
-}> = ({ setSelectedTab }) => {
+  setInvoiceFilter: React.Dispatch<React.SetStateAction<String | null>>;
+  setCreateUser: React.Dispatch<React.SetStateAction<boolean>>;
+  setCreatePayment: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  setSelectedTab,
+  setInvoiceFilter,
+  setCreateUser,
+  setCreatePayment,
+}) => {
   const navigate = useNavigate();
 
   const logOut = () => {
@@ -20,6 +27,21 @@ export const IncasariHome: React.FC<{
 
   const goToFacturi = () => {
     setSelectedTab("facturi");
+  };
+
+  const goToFacturiRestante = () => {
+    setSelectedTab("facturi");
+    setInvoiceFilter("restante");
+  };
+
+  const goToCreeazaFactura = () => {
+    setSelectedTab("facturi");
+    setCreateUser(true);
+  };
+
+  const goToInregistreazaPlata = () => {
+    setSelectedTab("plati");
+    setCreatePayment(true);
   };
 
   const goToPlati = () => {
@@ -36,7 +58,7 @@ export const IncasariHome: React.FC<{
             path1={
               "M11 21H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h5l2 3h9a2 2 0 0 1 2 2v2M19 15v6M16 18h6"
             }
-            onClick={goToFacturi}
+            onClick={goToFacturiRestante}
           />
         </Grid>
         <Grid item xs={4}>
@@ -47,7 +69,7 @@ export const IncasariHome: React.FC<{
               "M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"
             }
             polygon={"18 2 22 6 12 16 8 16 8 12 18 2"}
-            onClick={goToFacturi}
+            onClick={goToCreeazaFactura}
           />
         </Grid>
         <Grid item xs={4}>
@@ -56,7 +78,7 @@ export const IncasariHome: React.FC<{
             boxColor={"orange"}
             path1={"M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6"}
             path2={"M14 3v5h5M18 21v-6M15 18h6"}
-            onClick={goToPlati}
+            onClick={goToInregistreazaPlata}
           />
         </Grid>
         <Grid item xs={4}>

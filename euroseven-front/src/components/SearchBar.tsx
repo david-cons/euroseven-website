@@ -4,7 +4,8 @@ import SearchIcon from "@mui/icons-material/Search";
 export const SearchBar: React.FC<{
   handleSearchInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchText: string;
-}> = ({ handleSearchInputChange, searchText }) => {
+  forWho: string;
+}> = ({ handleSearchInputChange, searchText, forWho }) => {
   return (
     <Box
       sx={{
@@ -24,7 +25,7 @@ export const SearchBar: React.FC<{
             <SearchIcon />
           </InputAdornment>
         }
-        placeholder="Cauta client..."
+        placeholder={`Cauta ${forWho}...`}
         sx={{
           height: "5vh",
           mt: "15px",

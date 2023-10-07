@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -21,9 +22,11 @@ public class Invoice {
     private Long id;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate created_date;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate due_date;
 
     private double price;
@@ -41,15 +44,16 @@ public class Invoice {
     @Column(name="rest_de_plata")
     private double restDePlata;
 
-    public Invoice(Long id, LocalDate created_date, double price, String file, Integer nrFactura, Integer codClient, double restDePlata) {
-        this.id = id;
+    @Column(name="index_vechi")
+    private double indexVechi;
+
+    @Column(name="index_nou")
+    private double indexNou;
+
+    public Invoice(LocalDate created_date, double price, String file, Integer codClient) {
         this.created_date = created_date;
-        this.due_date = created_date.plusMonths(1);
         this.price = price;
-        this.restDePlata = restDePlata;
         this.file = file;
-        this.paid = false;
-        this.nrFactura = nrFactura;
         this.codClient = codClient;
     }
 

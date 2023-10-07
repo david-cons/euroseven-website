@@ -20,6 +20,16 @@ export abstract class InvoiceService {
     });
   }
 
+  public static async getInvoiceByNrFactura(
+    nrFactura: number
+  ): Promise<InvoiceEntity> {
+    return new Promise((resolve) => {
+      axios.get(URL + "/nrFactura/" + nrFactura).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
   public static async createInvoice(
     invoice: InvoiceEntity
   ): Promise<InvoiceEntity> {
@@ -39,10 +49,10 @@ export abstract class InvoiceService {
   }
 
   public static async searchInvoices(
-    nrFactura: number
+    keyword: string
   ): Promise<InvoiceEntity[]> {
     return new Promise((resolve) => {
-      axios.get(URL + "/search?nrFactura=" + nrFactura).then((response) => {
+      axios.get(URL + "/search?keyword=" + keyword).then((response) => {
         resolve(response.data);
       });
     });
@@ -69,6 +79,55 @@ export abstract class InvoiceService {
       axios.get(URL + "/payments").then((response) => {
         resolve(response.data);
       });
+    });
+  }
+
+  public static async registerPayment(
+    payment: PaymentEntity
+  ): Promise<PaymentEntity> {
+    return new Promise((resolve) => {
+      axios.post(URL + "/pay", payment).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async getAllNrFacturiByCodClient(
+    codClient: number
+  ): Promise<{ nrFactura: number; restDePlata: number }[]> {
+    return new Promise((resolve) => {
+      axios.get(URL + `/nrFacturi/${codClient}`).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async searchPaymentByNumeOrCodClient(
+    keyword: string
+  ): Promise<PaymentEntity[]> {
+    return new Promise((resolve) => {
+      axios
+        .get(URL + "/payments/search?keyword=" + keyword)
+        .then((response) => {
+          resolve(response.data);
+        });
+    });
+  }
+
+  public static async updateInvoice(
+    id: number,
+    created_date: string,
+    price: number,
+    file: string
+  ): Promise<InvoiceEntity> {
+    return new Promise((resolve) => {
+      axios
+        .post(
+          `${URL}/update/${id}?created_date=${created_date}&price=${price}&file=${file}`
+        )
+        .then((response) => {
+          resolve(response.data);
+        });
     });
   }
 }

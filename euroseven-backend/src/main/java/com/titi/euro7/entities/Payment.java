@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -20,8 +20,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate date;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime date;
 
     private double amount;
 
@@ -34,22 +34,21 @@ public class Payment {
     @Column(name = "cod_client")
     private int codClient;
 
-    @Column(name = "invoice_id")
-    private Long invoiceId;
+    @Column(name = "nr_factura")
+    private Integer nrFactura;
 
-    @Column(name = "admin_id")
-    private Long adminId;
+    @Column(name = "incasari_id")
+    private Long incasariId;
 
     @Column(name = "payment_method")
     private String paymentMethod;
 
-    public Payment(Long id, LocalDate date, double amount, Long userId, Long invoiceId, Long adminId, String paymentMethod) {
+    public Payment(Long id, double amount, Long userId, Integer nrFactura, Long incasariId, String paymentMethod) {
         this.id = id;
-        this.date = date;
         this.amount = amount;
         this.userId = userId;
-        this.invoiceId = invoiceId;
-        this.adminId = adminId;
+        this.nrFactura = nrFactura;
+        this.incasariId = incasariId;
         this.paymentMethod = paymentMethod;
     }
 

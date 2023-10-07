@@ -23,6 +23,7 @@ export const Footer = () => {
       }}
     >
       <Box sx={{ display: "flex", mt: "10vh" }}>
+        
         <Stack spacing={2}>
           <Typography
             variant="h6"

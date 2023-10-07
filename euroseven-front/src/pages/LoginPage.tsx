@@ -1,8 +1,8 @@
-import { Box, Typography, TextField, Button, Link, Snackbar, Alert } from "@mui/material";
+import { Box, Typography, TextField, Button, Link } from "@mui/material";
 import "./LoginPage.css";
 import f1 from "../assets/f1.jpeg";
 import logo1 from "../assets/logo1.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import { useDispatch } from "react-redux";
@@ -15,19 +15,8 @@ import {
 import React from "react";
 
 export const LoginPage: React.FC = () => {
-  
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [open, setOpen] = React.useState(false);
-
-
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   const navigate = useNavigate();
   const dispatch: ThunkDispatch<{}, {}, AnyAction> = useDispatch();
@@ -54,7 +43,6 @@ export const LoginPage: React.FC = () => {
             )
           );
           if (response.role) {
-            setOpen(true);
             if (response.role === "ROLE_ADMIN") {
               navigate("/admin/home");
             } else if (response.role === "ROLE_INCASARI") {
@@ -70,12 +58,28 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "ROLE_ADMIN") {
+      navigate("/admin/home");
+    } else if (role === "ROLE_INCASARI") {
+      navigate("/incasari/home");
+    }
+  }, []);
+
   return (
     <Box className="login-page">
-      
       <Box className="login-left">
         <Box sx={{ position: "absolute", top: 0, left: 0, padding: "25px" }}>
-          <img src={logo1} alt="login-logo" height={"50px"} />
+          <img
+            src={logo1}
+            alt="login-logo"
+            height={"50px"}
+            onClick={() => {
+              navigate("/");
+            }}
+            style={{ cursor: "pointer" }}
+          />
         </Box>
         <Box className="login-header">
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>

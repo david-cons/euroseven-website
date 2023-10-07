@@ -1,18 +1,15 @@
 package com.titi.euro7.controllers;
 
 
+import com.titi.euro7.dto.AddSaldoDTO;
 import com.titi.euro7.entities.UpdateInformation;
 import com.titi.euro7.entities.User;
 import com.titi.euro7.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -49,7 +46,7 @@ public class UserController {
 
     @PostMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UpdateInformation updateInformation) {
-        return ResponseEntity.ok(userService.updateUser(id, updateInformation.getName(), updateInformation.getAddress(), updateInformation.getLocalitate(), updateInformation.getPhone()));
+        return ResponseEntity.ok(userService.updateUser(id, updateInformation.getName(), updateInformation.getAddress(), updateInformation.getJudet(), updateInformation.getLocalitate(), updateInformation.getPhone()));
     }
 
     @PostMapping("/toggle/{id}")
@@ -70,5 +67,20 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/coduriClienti")
+    public ResponseEntity<List<Integer>> getCoduriClienti() {
+        return ResponseEntity.ok(userService.getAllCodClient());
+    }
+
+    @GetMapping("/codClient/{codClient}")
+    public ResponseEntity<User> getUserByCodClient(@PathVariable Integer codClient) {
+        return ResponseEntity.ok(userService.getUserByCodClient(codClient));
+    }
+
+    @PostMapping("/{id}/add-saldo")
+    public ResponseEntity<User> addSaldo(@PathVariable Long id, @RequestBody AddSaldoDTO addSaldoDTO) {
+        return ResponseEntity.ok(userService.addToSaldo(id, addSaldoDTO.getAmount()));
     }
 }

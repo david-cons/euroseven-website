@@ -4,14 +4,10 @@ import j3 from "../assets/j3.jpeg";
 import j4 from "../assets/j4.jpeg";
 import j5 from "../assets/j5.jpeg";
 import { useState, useEffect, useRef, useMemo } from "react";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import SearchIcon from "@mui/icons-material/Search";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Box, Button, IconButton } from "@mui/material";
-import logo2 from "../assets/logo2.png";
+import { Box } from "@mui/material";
+import { JumbotronOverlay } from "./JumbotronOverlay";
 
 export const Jumbotron = () => {
-
   const images = useMemo(() => {
     return [j1, f5, j3, j4, j5];
   }, []);
@@ -116,7 +112,7 @@ export const Jumbotron = () => {
       className="jumbotron-container"
       sx={{
         width: "100%",
-        height: "93vh",
+        height: "89vh",
         overflow: "hidden", // Prevent horizontal scrollbar
         position: "relative",
       }}
@@ -148,84 +144,7 @@ export const Jumbotron = () => {
           unselectable="on"
         />
       ))}
-
-      <Box
-        className="jumbotron-overlay"
-        sx={{
-          position: "absolute",
-          top: "5%",
-          left: "50%",
-          width: "100%",
-          transform: "translate(-50%, -50%)",
-          padding: "20px",
-          color: "#fff" /* Text color */,
-          display: "flex",
-        }}
-      >
-        <img height="100px" src={logo2} alt="logo2" />
-        <Box sx={{ ml: "25vh", mt: "3vh" }}>
-          <Button
-            variant="text"
-            sx={{ mr: "25px", fontWeight: "bold", color: "white" }}
-          >
-            Clienti Rezidentiali
-          </Button>
-          <Button
-            variant="text"
-            sx={{ mr: "25px", fontWeight: "bold", color: "white" }}
-          >
-            Clienti Business
-          </Button>
-          <Button
-            variant="text"
-            sx={{ mr: "25px", fontWeight: "bold", color: "white" }}
-          >
-            Electripedia
-          </Button>
-          <Button
-            variant="text"
-            sx={{ mr: "25px", fontWeight: "bold", color: "white" }}
-          >
-            Servicii Online
-          </Button>
-          <Button
-            variant="text"
-            sx={{ mr: "25px", fontWeight: "bold", color: "white" }}
-          >
-            Informatii Utile
-          </Button>
-          <Button variant="text" sx={{ fontWeight: "bold", color: "white" }}>
-            Plafonare
-          </Button>
-        </Box>
-        <Box sx={{ ml: "34vh", mt: "2vh" }}>
-          <IconButton>
-            <PermIdentityIcon
-              sx={{
-                mr: "10px",
-                width: "30px",
-                height: "35px",
-                color: "#0054a6",
-              }}
-            />
-          </IconButton>
-          <IconButton>
-            <SearchIcon
-              sx={{
-                mr: "10px",
-                width: "30px",
-                height: "35px",
-                color: "#0054a6",
-              }}
-            />
-          </IconButton>
-          <IconButton>
-            <MenuIcon
-              sx={{ width: "30px", height: "35px", color: "#0054a6" }}
-            />
-          </IconButton>
-        </Box>
-      </Box>
+      <JumbotronOverlay />
       <Box
         sx={{
           position: "absolute",

@@ -1,7 +1,6 @@
 import { Box, Typography, Button } from "@mui/material";
 import logo1 from "../assets/logo1.png";
 import { useNavigate } from "react-router-dom";
-
 export const Title = () => {
   const navigate = useNavigate();
   return (
@@ -27,11 +26,11 @@ export const Title = () => {
       />
       <Box
         sx={{
-          top: "45%",
+          top: "50%",
           position: "absolute",
           margin: "0",
           transform: "translateY(-50%)",
-          left: "20vh",
+          left: "15vh",
           textAlign: "left",
         }}
       >
@@ -42,11 +41,17 @@ export const Title = () => {
             fontWeight: "bold",
             fontSize: "18px",
             color: "#0054a6",
+            fontFamily: "Catesque",
           }}
         >
           MyEuroSeven
         </Typography>
-        <Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
+
+        <Typography
+          variant="body1"
+          component="div"
+          sx={{ flexGrow: 1, fontFamily: "Catesque" }}
+        >
           Creează-ți cont MyEuroSeven si bucură-te de toate beneficiile oferite.
         </Typography>
       </Box>
@@ -57,12 +62,13 @@ export const Title = () => {
           position: "absolute",
           margin: "0",
           transform: "translateY(-50%)",
-          right: "5%",
+          right: "1%",
           borderRadius: "20px",
           backgroundColor: "#0054a6",
           "&:hover": {
             backgroundColor: "#0054a6",
           },
+          fontFamily: "Catesque",
         }}
         onClick={() => {
           navigate("/login");

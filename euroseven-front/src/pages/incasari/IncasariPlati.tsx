@@ -2,21 +2,20 @@ import {
   Alert,
   Box,
   Button,
-  Grid,
-  InputAdornment,
-  Modal,
-  OutlinedInput,
   Snackbar,
-  TextField,
   Typography,
+  debounce,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { UserMenu } from "../../components/admin/UserMenu";
-import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
-import { InvoiceEntity, PaymentEntity } from "../../types";
+import { PaymentEntity, UserEntity } from "../../types";
 import { InvoiceService } from "../../services/InvoiceService";
+import axios from "../../axios";
+import { SearchBar } from "../../components/SearchBar";
+import { Euro7DataGrid } from "../../components/admin/Euro7DataGrid";
+import { ModalAddPlati } from "../../components/incasari/Modals";
 
 const columns: GridColDef[] = [
   {
@@ -44,7 +43,7 @@ const columns: GridColDef[] = [
     headerClassName: "super-app-theme--header",
   },
   {
-    field: "invoiceId",
+    field: "nrFactura",
     headerName: "Nr. Factura",
     width: 150,
     headerClassName: "super-app-theme--header",
@@ -67,14 +66,13 @@ const columns: GridColDef[] = [
   },
   {
     field: "actions",
-    headerName: "Actions",
+    headerName: "",
     width: 150,
     renderCell: (params) => {
       const id = params.row.id;
       return (
         <UserMenu
           id={id}
-          forUser={false}
           users={null}
           handleOpenSnackbar={() => {}}
           setUsers={null}
@@ -84,13 +82,57 @@ const columns: GridColDef[] = [
   },
 ];
 
-export const IncasariPlati: React.FC = () => {
+export const IncasariPlati: React.FC<{
+  incasariId: number | undefined;
+  createPayment?: boolean;
+  setCreatePayment: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ incasariId, createPayment, setCreatePayment }) => {
   const [payments, setPayments] = useState<PaymentEntity[]>([]);
 
   const [openModal, setOpenModal] = useState(false);
 
+  const [searchText, setSearchText] = useState<string>("");
+  const [searchedPayments, setSearchedPayments] = useState<PaymentEntity[]>([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleCloseSnackbar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  const fetchSearchResults = async (query: string) => {
+    if (query.trim() !== "") {
+      const response = await axios.get(
+        "http://localhost:8081/api/invoices/payments/search?keyword=" + query
+      );
+      setSearchedPayments(response.data);
+    } else {
+      setSearchedPayments([]);
+    }
+  };
+
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchText(event.target.value);
+  };
+
+  useEffect(() => {
+    const debouncedFetchSearchResults = debounce(fetchSearchResults, 1);
+    debouncedFetchSearchResults(searchText);
+  }, [searchText]);
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -102,158 +144,32 @@ export const IncasariPlati: React.FC = () => {
           console.log(error);
         });
     };
+
     fetchPayments();
+    if (createPayment === true) {
+      handleOpenModal();
+    }
+    return () => {
+      setCreatePayment(false);
+    };
   }, []);
 
   return (
     <Box sx={{ width: "80%" }}>
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        sx={{ position: "absolute", bottom: 0, left: 0, padding: "20px" }}
       >
-        <Box
-          sx={{
-            position: "absolute" as "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "100vh",
-            height: "40vh",
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            fontFamily: "Catesque",
-          }}
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
         >
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Înregistrează Plată
-          </Typography>
-          <Box>
-            {/* <form onSubmit={handleSubmitUpdateUser}> */}
-            <form>
-              <Box sx={{ mt: "5vh" }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField
-                      name={"prenume"}
-                      id={"prenume"}
-                      size={"small"}
-                      label={"Prenume"}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          "&:hover fieldset": {
-                            borderColor: "#0054a6", // Border color when hovered
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      name={"nume"}
-                      id={"nume"}
-                      size={"small"}
-                      label={"Nume"}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          "&:hover fieldset": {
-                            borderColor: "#0054a6", // Border color when hovered
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      disabled
-                      name={"username"}
-                      id={"username"}
-                      size={"small"}
-                      label={"Email"}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          "&:hover fieldset": {
-                            borderColor: "#0054a6", // Border color when hovered
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      name={"phone"}
-                      id={"phone"}
-                      size={"small"}
-                      label={"Telefon"}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          "&:hover fieldset": {
-                            borderColor: "#0054a6", // Border color when hovered
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      id={"localitate"}
-                      name={"localitate"}
-                      size={"small"}
-                      label={"Localitate"}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          "&:hover fieldset": {
-                            borderColor: "#0054a6", // Border color when hovered
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      id={"address"}
-                      size={"small"}
-                      label={"Adresa"}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          "&:hover fieldset": {
-                            borderColor: "#0054a6", // Border color when hovered
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-              <Button
-                variant={"contained"}
-                sx={{
-                  backgroundColor: "#0054a6",
-                  "&:hover": {
-                    backgroundColor: "#0054a6",
-                    color: "white",
-                  },
-                  position: "absolute",
-                  bottom: "0",
-                  right: "0",
-                  width: "175px",
-                  mb: "10px",
-                  mr: "20px",
-                }}
-                type="submit"
-              >
-                Salveaza
-              </Button>
-            </form>
-          </Box>
-        </Box>
-      </Modal>
+          Plata a fost înregistrata cu success!
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           width: "100%",
@@ -262,6 +178,18 @@ export const IncasariPlati: React.FC = () => {
           textAlign: "left",
         }}
       >
+        {openModal && (
+          <Box sx={{ position: "absolute", top: "70%", right: "1%" }}>
+            <ModalAddPlati
+              openModal={openModal}
+              handleCloseModal={handleCloseModal}
+              incasariId={incasariId}
+              payments={payments}
+              setPayments={setPayments}
+              handleOpenSnackbar={handleOpenSnackbar}
+            />
+          </Box>
+        )}
         <Typography
           fontFamily={"Catesque"}
           fontWeight={"bold"}
@@ -289,35 +217,11 @@ export const IncasariPlati: React.FC = () => {
         </Button>
       </Box>
       <Box sx={{ mb: "10vh" }}>
-        <Box
-          sx={{
-            width: "100%",
-            borderRadius: "15px",
-            boxShadow: "0 0 16px -8px black",
-            height: "8vh",
-            mb: "15px",
-            justifyContent: "left",
-            alignItems: "left",
-            textAlign: "left",
-          }}
-        >
-          <OutlinedInput
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            }
-            placeholder="Cauta factura..."
-            sx={{
-              height: "5vh",
-              mt: "15px",
-              ml: "15px",
-              width: "40%",
-              borderRadius: "20px",
-              fontFamily: "Catesque",
-            }}
-          />
-        </Box>
+        <SearchBar
+          handleSearchInputChange={handleSearchInputChange}
+          searchText={searchText}
+          forWho="plata"
+        />
         <Box
           sx={{
             overflowX: "hidden",
@@ -325,29 +229,52 @@ export const IncasariPlati: React.FC = () => {
             borderRadius: "25px",
           }}
         >
-          <DataGrid
-            rows={payments}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-            sx={{
-              fontFamily: "Catesque",
-              backgroundColor: "transparent",
-              borderRadius: "25px",
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#E4E5E6",
-              },
-              "& .MuiDataGrid-columnHeaderTitle": {
-                fontWeight: "bold",
-              },
-            }}
-          />
+          {searchedPayments && searchText !== "" ? (
+            <Euro7DataGrid
+              searchText={searchText}
+              payments={payments}
+              columns={columns}
+              searchedPayments={searchedPayments}
+            />
+          ) : (
+            <DataGrid
+              rows={reverseArray(payments)}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+              sx={{
+                fontFamily: "Catesque",
+                backgroundColor: "transparent",
+                borderRadius: "25px",
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#E4E5E6",
+                },
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  fontWeight: "bold",
+                },
+              }}
+            />
+          )}
         </Box>
       </Box>
     </Box>
   );
 };
+
+function reverseArray<T>(arr: T[]): T[] {
+  const reversedArr = [...arr]; // Create a copy of the original array
+  const len = reversedArr.length;
+
+  for (let i = 0; i < Math.floor(len / 2); i++) {
+    // Swap elements at index i with their corresponding elements from the end
+    const temp = reversedArr[i];
+    reversedArr[i] = reversedArr[len - 1 - i];
+    reversedArr[len - 1 - i] = temp;
+  }
+
+  return reversedArr;
+}

@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private Boolean inactive;
 
     @Column(name = "saldo")
-    private float saldo;
+    private double saldo;
 
     @Column(name = "role")
     private String role;
@@ -51,6 +51,8 @@ public class User implements UserDetails {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "judet")
+    private String judet;
     @Column(name = "localitate")
     private String localitate;
 
@@ -58,8 +60,11 @@ public class User implements UserDetails {
     private String phone;
 
     @Lob
-    @Column(name="picture", columnDefinition = "TEXT")
+    @Column(name = "picture", columnDefinition = "TEXT")
     private String image;
+
+    @Column(name = "de_plata_total")
+    private double restDePlataTotal;
 
 
     public User(@NonNull String username, @NonNull String password) {

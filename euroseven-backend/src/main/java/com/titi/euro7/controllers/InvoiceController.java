@@ -1,13 +1,17 @@
 package com.titi.euro7.controllers;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.titi.euro7.dto.InvoiceDTO;
 import com.titi.euro7.entities.Invoice;
 import com.titi.euro7.entities.Payment;
 import com.titi.euro7.services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -23,6 +27,11 @@ public class InvoiceController {
     @GetMapping("/{id}")
     public ResponseEntity<Invoice> findInvoiceById(@PathVariable Long id) {
         return ResponseEntity.ok(invoiceService.getInvoiceById(id));
+    }
+
+    @GetMapping("/nrFactura/{nrFactura}")
+    public ResponseEntity<Invoice> findInvoiceByNrFactura(@PathVariable Integer nrFactura) {
+        return ResponseEntity.ok(invoiceService.getInvoiceByNrFactura(nrFactura));
     }
 
     @PostMapping("/create")
@@ -41,8 +50,8 @@ public class InvoiceController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Invoice>> searchInvoiceByNrFactura(@RequestParam Integer nrFactura) {
-        return ResponseEntity.ok(invoiceService.searchInvoiceByNrFactura(nrFactura));
+    public ResponseEntity<List<Invoice>> searchInvoiceByNrFactura(@RequestParam String keyword) {
+        return ResponseEntity.ok(invoiceService.searchInvoiceByNrFacturaOrCodClient(keyword));
     }
 
     @GetMapping("/paid")
@@ -64,4 +73,20 @@ public class InvoiceController {
     public ResponseEntity<List<Payment>> getAllPayments() {
         return ResponseEntity.ok(invoiceService.getAllPayments());
     }
+
+    @GetMapping("/nrFacturi/{codClient}")
+    public ResponseEntity<List<InvoiceDTO>> getAllNrsFacturi(@PathVariable Integer codClient) {return ResponseEntity.ok(invoiceService.getAllNrsFacturaByCodClient(codClient)); }
+
+
+    @GetMapping("/payments/search")
+    public ResponseEntity<List<Payment>> searchPaymentByNumeOrCodClient(@RequestParam String keyword) {
+        return ResponseEntity.ok(invoiceService.searchPaymentByNumeOrCodClient(keyword));
+    }
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestParam @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "MM/dd/yyyy") LocalDate created_date, @RequestParam double price, @RequestParam String file) {
+        return ResponseEntity.ok(invoiceService.updateInvoice(id, created_date, price, file));
+    }
+
 }

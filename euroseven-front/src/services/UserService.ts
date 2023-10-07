@@ -40,7 +40,8 @@ export abstract class UserService {
     id: number | undefined,
     name: string,
     address: string | undefined,
-    localitate: string | undefined,
+    judet: string | undefined | null,
+    localitate: string | undefined | null,
     phone: string | undefined
   ): Promise<UserEntity> {
     return new Promise((resolve) => {
@@ -95,6 +96,37 @@ export abstract class UserService {
       axios.get(`${URL}/${id}/image`).then((response) => {
         resolve(response.data);
       });
+    });
+  }
+
+  public static async getCoduriClienti(): Promise<number[]> {
+    return new Promise((resolve) => {
+      axios.get(URL + "/coduriClienti").then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async getUserByCodClient(
+    codClient: number
+  ): Promise<UserEntity> {
+    return new Promise((resolve) => {
+      axios.get(URL + "/codClient/" + codClient).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async addSaldoToUser(
+    id: number,
+    AddSaldoDTO: { amount: number }
+  ): Promise<UserEntity> {
+    return new Promise((resolve) => {
+      axios
+        .post(URL + "/" + id + "/add-saldo", AddSaldoDTO)
+        .then((response) => {
+          resolve(response.data);
+        });
     });
   }
 }

@@ -5,6 +5,7 @@ import { UserHomePage } from "./pages/user/UserHomePage";
 import { AdminHomePage } from "./pages/admin/AdminHomePage";
 import { IncasariHomePage } from "./pages/incasari/IncasariHomePage";
 import { useEffect } from "react";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   const removeFromLocalStorage = () => {
@@ -13,12 +14,11 @@ function App() {
 
   useEffect(() => {
     window.addEventListener("beforeunload", removeFromLocalStorage);
-
     return () => {
       window.removeEventListener("beforeunload", removeFromLocalStorage);
     };
   }, []);
-  
+
   return (
     <div className="App">
       <div className="content">
@@ -27,8 +27,22 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<UserHomePage />} />
-            <Route path="/admin/home" element={<AdminHomePage />} />
-            <Route path="/incasari/home" element={<IncasariHomePage />} />
+            <Route
+              path="/admin/home"
+              element={
+                <ProtectedRoute roleName="ROLE_ADMIN">
+                  <AdminHomePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/incasari/home"
+              element={
+                <ProtectedRoute roleName="ROLE_INCASARI">
+                  <IncasariHomePage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </div>

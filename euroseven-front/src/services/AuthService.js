@@ -104,6 +104,7 @@ export const logout = () => {
   localStorage.removeItem("role");
   localStorage.removeItem("token");
   localStorage.removeItem("selectedTab");
+  localStorage.removeItem("persist:root");
   return {
     type: "LOGOUT",
   };

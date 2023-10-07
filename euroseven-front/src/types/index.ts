@@ -8,31 +8,35 @@ export type UserEntity = {
   name?: string;
   codClient?: number;
   address?: string;
-  localitate?: string;
+  judet?: string;
+  localitate?: string | null;
   phone?: string;
   image?: string;
+  restDePlataTotal?: number;
 };
 
 export type InvoiceEntity = {
-  id: number;
-  created_date?: Date;
+  id?: number;
+  created_date?: string | null;
   due_date?: Date;
   price?: number;
   file?: string;
   paid?: Boolean;
   nrFactura?: string;
-  codCLient?: number;
+  codClient?: number | null;
   restDePlata?: number;
+  indexNou?: number;
+  indexVechi?: number;
 };
 
 export type PaymentEntity = {
-  id: number;
-  date?: Date;
+  id?: number;
+  date?: string | null;
   amount?: number;
-  userId: number;
-  userName: string;
+  userId?: number;
+  userName?: string;
   codClient?: number;
-  invoiceId?: number;
-  adminId?: number;
+  nrFactura?: number;
+  incasariId?: number;
   paymentMethod?: string;
 };

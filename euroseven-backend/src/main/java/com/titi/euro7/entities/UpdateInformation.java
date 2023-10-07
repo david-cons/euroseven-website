@@ -8,6 +8,7 @@ public class UpdateInformation {
 
     private String name;
     private String address;
+    private String judet;
     private String localitate;
     private String phone;
 

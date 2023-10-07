@@ -24,9 +24,9 @@ export const SetariPage: React.FC<{
   const [nume, setNume] = useState<string | undefined>("");
   const [username, setUsername] = useState<string | undefined>("");
   const [telefon, setTelefon] = useState<string | undefined>("");
-  const [localitate, setLocalitate] = useState<string | undefined>("");
+  const [localitate, setLocalitate] = useState<string | undefined | null>("");
   const [adresa, setAdresa] = useState<string | undefined>("");
-
+  const [judet, setJudet] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -83,6 +83,7 @@ export const SetariPage: React.FC<{
       user?.id,
       name,
       adresa,
+      judet,
       localitate,
       telefon
     ).then((res) => {
@@ -212,7 +213,7 @@ export const SetariPage: React.FC<{
                   mb: "25px",
                 }}
               >
-                Administrator
+                {user?.role === "ROLE_ADMIN" ? "Administrator" : "Incasari"}
               </Typography>
               <Divider sx={{ mt: "10px", width: "315px" }} />
               <Button
@@ -231,6 +232,7 @@ export const SetariPage: React.FC<{
                   transform: "translateX(-50%)",
                   width: "200px",
                   mb: "8px",
+                  fontFamily: "Catesque",
                 }}
               >
                 Încarcă imagine
@@ -291,9 +293,24 @@ export const SetariPage: React.FC<{
                     value={prenume}
                     onChange={changePrenume}
                     sx={{
+                      "& .MuiInputBase-input": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "black", // Label color
+                        fontFamily: "Catesque", // Font family
+                        fontSize: "18px",
+                      },
                       "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#0054a6", // Border color
+                        },
                         "&:hover fieldset": {
-                          borderColor: "#0054a6", // Border color when hovered
+                          borderColor: "#0054a6", // Hover border color
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#0054a6", // Focused border color
                         },
                       },
                     }}
@@ -308,9 +325,24 @@ export const SetariPage: React.FC<{
                     value={nume}
                     onChange={changeNume}
                     sx={{
+                      "& .MuiInputBase-input": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "black", // Label color
+                        fontFamily: "Catesque", // Font family
+                        fontSize: "18px",
+                      },
                       "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#0054a6", // Border color
+                        },
                         "&:hover fieldset": {
-                          borderColor: "#0054a6", // Border color when hovered
+                          borderColor: "#0054a6", // Hover border color
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#0054a6", // Focused border color
                         },
                       },
                     }}
@@ -325,9 +357,28 @@ export const SetariPage: React.FC<{
                     label={"Email"}
                     value={username}
                     sx={{
+                      "& input:disabled": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                        WebkitTextFillColor: "black",
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "black", // Label color
+                        fontFamily: "Catesque", // Font family
+                        fontSize: "18px",
+                      },
                       "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#0054a6", // Border color
+                        },
                         "&:hover fieldset": {
-                          borderColor: "#0054a6", // Border color when hovered
+                          borderColor: "#0054a6", // Hover border color
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#0054a6", // Focused border color
+                        },
+                        "&.Mui-disabled fieldset": {
+                          borderColor: "#0054a6", // Focused border color
                         },
                       },
                     }}
@@ -342,9 +393,24 @@ export const SetariPage: React.FC<{
                     value={telefon}
                     onChange={changeTelefon}
                     sx={{
+                      "& .MuiInputBase-input": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "black", // Label color
+                        fontFamily: "Catesque", // Font family
+                        fontSize: "18px",
+                      },
                       "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#0054a6", // Border color
+                        },
                         "&:hover fieldset": {
-                          borderColor: "#0054a6", // Border color when hovered
+                          borderColor: "#0054a6", // Hover border color
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#0054a6", // Focused border color
                         },
                       },
                     }}
@@ -359,9 +425,24 @@ export const SetariPage: React.FC<{
                     value={localitate}
                     onChange={changeLocalitate}
                     sx={{
+                      "& .MuiInputBase-input": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "black", // Label color
+                        fontFamily: "Catesque", // Font family
+                        fontSize: "18px",
+                      },
                       "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#0054a6", // Border color
+                        },
                         "&:hover fieldset": {
-                          borderColor: "#0054a6", // Border color when hovered
+                          borderColor: "#0054a6", // Hover border color
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#0054a6", // Focused border color
                         },
                       },
                     }}
@@ -375,9 +456,24 @@ export const SetariPage: React.FC<{
                     value={adresa}
                     onChange={changeAdresa}
                     sx={{
+                      "& .MuiInputBase-input": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "black", // Label color
+                        fontFamily: "Catesque", // Font family
+                        fontSize: "18px",
+                      },
                       "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#0054a6", // Border color
+                        },
                         "&:hover fieldset": {
-                          borderColor: "#0054a6", // Border color when hovered
+                          borderColor: "#0054a6", // Hover border color
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#0054a6", // Focused border color
                         },
                       },
                     }}
@@ -399,6 +495,7 @@ export const SetariPage: React.FC<{
                 width: "175px",
                 mb: "10px",
                 mr: "20px",
+                fontFamily: "Catesque",
               }}
               type="submit"
             >

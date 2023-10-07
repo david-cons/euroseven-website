@@ -37,6 +37,7 @@ public class UserService {
 
     public User createUser(User user) {
         log.info("Saving user " + user.toString());
+        user.setRestDePlataTotal(0.0);
         return userRepository.save(user);
     }
 
@@ -52,20 +53,20 @@ public class UserService {
 
     public List<User> searchUser(String keyword) {
         log.info("Searching for user with keyword " + keyword);
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAllByRole("ROLE_USER");
         List<User> searchResult = new ArrayList<>();
 
         if (isNumeric(keyword)) {
             for (User user : users) {
                 Integer codClient = user.getCodClient();
-                if (codClient != null && codClient.toString().contains(keyword)) {
+                if (codClient != null && codClient.toString().startsWith(keyword)) {
                     searchResult.add(user);
                 }
             }
         } else {
             for (User user : users) {
                 String name = user.getName();
-                if (name != null && name.contains(keyword)) {
+                if (name != null && name.startsWith(keyword)) {
                     searchResult.add(user);
                 }
             }
@@ -74,7 +75,7 @@ public class UserService {
         return searchResult;
     }
 
-    public User updateUser(Long id, String name, String address, String localitate, String phone) {
+    public User updateUser(Long id, String name, String address, String judet, String localitate, String phone) {
         log.info("Updating user with id " + id);
         User user = userRepository.findById(id).orElse(null);
         if (user == null) {
@@ -83,6 +84,7 @@ public class UserService {
         }
         user.setName(name);
         user.setAddress(address);
+        user.setJudet(judet);
         user.setLocalitate(localitate);
         user.setPhone(phone);
         return userRepository.save(user);
@@ -126,6 +128,27 @@ public class UserService {
             return null;
         }
 
+    }
+
+
+    public List<Integer> getAllCodClient() {
+        log.info("Getting all codClient");
+        return userRepository.findAllCodClient();
+    }
+
+    public User getUserByCodClient(Integer codClient) {
+        log.info("Getting user by codClient");
+        return userRepository.findByCodClient(codClient);
+    }
+
+    public User addToSaldo(Long id, double amount) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            log.info("User with id " + id + " does not exist");
+            return null;
+        }
+        user.setSaldo(user.getSaldo() + amount);
+        return userRepository.save(user);
     }
 
 

@@ -66,7 +66,6 @@ const columns: GridColDef[] = [
       return (
         <UserMenu
           id={id}
-          forUser={false}
           users={null}
           handleOpenSnackbar={() => {}}
           setUsers={null}

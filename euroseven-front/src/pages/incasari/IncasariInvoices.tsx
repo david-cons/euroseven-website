@@ -1,86 +1,155 @@
 import {
+  Alert,
   Box,
   Button,
-  InputAdornment,
-  OutlinedInput,
+  Snackbar,
   Typography,
+  debounce,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { UserMenu } from "../../components/admin/UserMenu";
-import SearchIcon from "@mui/icons-material/Search";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InvoiceEntity } from "../../types";
 import { InvoiceService } from "../../services/InvoiceService";
+import axios from "../../axios";
+import { SearchBar } from "../../components/SearchBar";
+import { Euro7DataGrid } from "../../components/admin/Euro7DataGrid";
+import { ModalAddFacturi } from "../../components/incasari/Modals";
+import { InvoiceMenu } from "../../components/incasari/InvoiceMenu";
 
-const columns: GridColDef[] = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 70,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "nrFactura",
-    headerName: "Nr. Factura",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "codClient",
-    headerName: "Cod Client",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "created_date",
-    headerName: "Data Emitere",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "due_date",
-    headerName: "Data Scadenta",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "restDePlata",
-    headerName: "Rest de Plata",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-    renderCell: (params) => (
-      <div
-        style={{
-          color: params.value === 0 ? "green" : "red",
-          fontWeight: "bold",
-        }}
-      >
-        {params.value + " RON"}
-      </div>
-    ),
-  },
-  {
-    field: "actions",
-    headerName: "Actions",
-    width: 150,
-    renderCell: (params) => {
-      const id = params.row.id;
-      return (
-        <UserMenu
-          id={id}
-          forUser={false}
-          users={null}
-          handleOpenSnackbar={() => {}}
-          setUsers={null}
-        />
-      );
+export const IncasariInvoices: React.FC<{
+  filter?: String | null;
+  setInvoiceFilter: React.Dispatch<React.SetStateAction<String | null>>;
+  createUser?: boolean;
+  setCreateUser: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ filter, setInvoiceFilter, createUser, setCreateUser }) => {
+  const columns: GridColDef[] = [
+    {
+      field: "id",
+      headerName: "ID",
+      width: 70,
+      headerClassName: "super-app-theme--header",
     },
-  },
-];
+    {
+      field: "nrFactura",
+      headerName: "Nr. Factura",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "codClient",
+      headerName: "Cod Client",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "created_date",
+      headerName: "Data Emitere",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "due_date",
+      headerName: "Data Scadenta",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "price",
+      headerName: "Preț",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+      renderCell: (params) => (
+        <div
+          style={{
+            color: params.value === 0 ? "green" : "red",
+            fontWeight: "bold",
+          }}
+        >
+          {params.value + " RON"}
+        </div>
+      ),
+    },
+    {
+      field: "restDePlata",
+      headerName: "Rest de Plata",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+      renderCell: (params) => (
+        <div
+          style={{
+            color: params.value === 0 ? "green" : "red",
+            fontWeight: "bold",
+          }}
+        >
+          {params.value + " RON"}
+        </div>
+      ),
+    },
+    {
+      field: "actions",
+      headerName: "",
+      width: 150,
+      renderCell: (params) => {
+        const id = params.row.id;
+        return (
+          <InvoiceMenu
+            id={id}
+            invoices={invoices}
+            handleOpenSnackbar={handleOpenSnackbar}
+            setInvoices={setInvoices}
+          />
+        );
+      },
+    },
+  ];
 
-export const IncasariInvoices: React.FC = () => {
   const [invoices, setInvoices] = useState<InvoiceEntity[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
+  const [searchedInvoices, setSearchedInvoices] = useState<InvoiceEntity[]>([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleCloseSnackbar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
+  const fetchSearchResults = async (query: string) => {
+    if (query.trim() !== "") {
+      const response = await axios.get(
+        "http://localhost:8081/api/invoices/search?keyword=" + query
+      );
+      setSearchedInvoices(response.data);
+    } else {
+      setSearchedInvoices([]);
+    }
+  };
+
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchText(event.target.value);
+  };
+
+  useEffect(() => {
+    const debouncedFetchSearchResults = debounce(fetchSearchResults, 1);
+    debouncedFetchSearchResults(searchText);
+  }, [searchText]);
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -93,10 +162,38 @@ export const IncasariInvoices: React.FC = () => {
         });
     };
     fetchInvoices();
-  }, []);
+    if (createUser === true) {
+      handleOpenModal();
+    }
+    return () => {
+      setInvoiceFilter(null);
+      setCreateUser(false);
+    };
+  }, [setInvoiceFilter]);
 
   return (
     <Box sx={{ width: "80%" }}>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        sx={{ position: "absolute", bottom: 0, left: 0, padding: "20px" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Factura a fost înregistrata cu success!
+        </Alert>
+      </Snackbar>
+      <ModalAddFacturi
+        openModal={openModal}
+        handleCloseModal={handleCloseModal}
+        facturi={invoices}
+        setFacturi={setInvoices}
+        handleOpenSnackbar={handleOpenSnackbar}
+      />
       <Box
         sx={{
           width: "100%",
@@ -126,40 +223,17 @@ export const IncasariInvoices: React.FC = () => {
             right: 0,
             top: 0,
           }}
+          onClick={handleOpenModal}
         >
           Adauga
         </Button>
       </Box>
       <Box sx={{ mb: "10vh" }}>
-        <Box
-          sx={{
-            width: "100%",
-            borderRadius: "15px",
-            boxShadow: "0 0 16px -8px black",
-            height: "8vh",
-            mb: "15px",
-            justifyContent: "left",
-            alignItems: "left",
-            textAlign: "left",
-          }}
-        >
-          <OutlinedInput
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            }
-            placeholder="Cauta factura..."
-            sx={{
-              height: "5vh",
-              mt: "15px",
-              ml: "15px",
-              width: "40%",
-              borderRadius: "20px",
-              fontFamily: "Catesque",
-            }}
-          />
-        </Box>
+        <SearchBar
+          handleSearchInputChange={handleSearchInputChange}
+          searchText={searchText}
+          forWho="factura"
+        />
         <Box
           sx={{
             overflowX: "hidden",
@@ -167,29 +241,56 @@ export const IncasariInvoices: React.FC = () => {
             borderRadius: "25px",
           }}
         >
-          <DataGrid
-            rows={invoices}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-            sx={{
-              fontFamily: "Catesque",
-              backgroundColor: "transparent",
-              borderRadius: "25px",
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#E4E5E6",
-              },
-              "& .MuiDataGrid-columnHeaderTitle": {
-                fontWeight: "bold",
-              },
-            }}
-          />
+          {searchedInvoices && searchText !== "" ? (
+            <Euro7DataGrid
+              searchText={searchText}
+              invoices={searchedInvoices}
+              columns={columns}
+              searchedInvoices={searchedInvoices}
+            />
+          ) : (
+            <DataGrid
+              rows={
+                filter === "restante"
+                  ? invoices.filter((invoice) => invoice.restDePlata !== 0)
+                  : reverseArray(invoices)
+              }
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+              sx={{
+                fontFamily: "Catesque",
+                backgroundColor: "transparent",
+                borderRadius: "25px",
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#E4E5E6",
+                },
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  fontWeight: "bold",
+                },
+              }}
+            />
+          )}
         </Box>
       </Box>
     </Box>
   );
 };
+
+function reverseArray<T>(arr: T[]): T[] {
+  const reversedArr = [...arr]; // Create a copy of the original array
+  const len = reversedArr.length;
+
+  for (let i = 0; i < Math.floor(len / 2); i++) {
+    // Swap elements at index i with their corresponding elements from the end
+    const temp = reversedArr[i];
+    reversedArr[i] = reversedArr[len - 1 - i];
+    reversedArr[len - 1 - i] = temp;
+  }
+
+  return reversedArr;
+}
