@@ -63,7 +63,6 @@ export const IncasariInvoices: React.FC<{
       renderCell: (params) => (
         <div
           style={{
-            color: params.value === 0 ? "green" : "red",
             fontWeight: "bold",
           }}
         >

@@ -22,6 +22,7 @@ export interface IFormInput {
   textValue: string;
   radioValue: string;
   checkboxValue: string[];
+  userNameValue: string;
   dateValue: Date;
   dropdownValue: string;
   sliderValue: number;

@@ -130,4 +130,12 @@ export abstract class InvoiceService {
         });
     });
   }
+
+  public static async deletePayment(id: number): Promise<Boolean> {
+    return new Promise((resolve) => {
+      axios.post(`${URL}/payments/delete/${id}`).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
 }

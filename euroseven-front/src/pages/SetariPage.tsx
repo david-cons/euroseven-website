@@ -363,9 +363,11 @@ export const SetariPage: React.FC<{
                         WebkitTextFillColor: "black",
                       },
                       "& .MuiInputLabel-root": {
-                        color: "black", // Label color
                         fontFamily: "Catesque", // Font family
                         fontSize: "18px",
+                      },
+                      "& .MuiInputLabel-root.Mui-disabled": { // Specifically target the disabled label
+                        color: "black",
                       },
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
@@ -378,7 +380,7 @@ export const SetariPage: React.FC<{
                           borderColor: "#0054a6", // Focused border color
                         },
                         "&.Mui-disabled fieldset": {
-                          borderColor: "#0054a6", // Focused border color
+                          borderColor: "#0054a6", // Disabled border color
                         },
                       },
                     }}

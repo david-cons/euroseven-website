@@ -37,6 +37,8 @@ export const NavCard: React.FC<{
           position: "relative",
           height: "175px",
           width: "425px",
+          maxHeight: "175px",
+          maxWidth: "425px",
           flexDirection: "column",
           transition: "background-color 0.5s, color 0.5s", // Smooth transition for backgroundColor, transform, and color
           "&:hover": {

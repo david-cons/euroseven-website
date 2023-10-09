@@ -68,12 +68,34 @@ export const AdminUsers: React.FC = () => {
       headerName: "Sold",
       width: 200,
       headerClassName: "super-app-theme--header",
+      renderCell: (params) => {
+        return (
+          <div
+            style={{
+              fontWeight: "bold",
+            }}
+          >
+            {params.value + " RON"}
+          </div>
+        );
+      },
     },
     {
       field: "restDePlataTotal",
       headerName: "Rest De Plata",
       width: 200,
       headerClassName: "super-app-theme--header",
+      renderCell: (params) => {
+        return (
+          <div
+            style={{
+              fontWeight: "bold",
+            }}
+          >
+            {params.value + " RON"}
+          </div>
+        );
+      },
     },
     {
       field: "actions",

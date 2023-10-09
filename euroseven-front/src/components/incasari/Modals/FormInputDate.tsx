@@ -11,6 +11,7 @@ export const FormInputDate = ({ name, control, label }: FormInputProps) => {
         control={control}
         render={({ field: { onChange, value } }) => (
           <DatePicker
+            label={label}
             value={value}
             onChange={onChange}
             sx={{
@@ -22,7 +23,6 @@ export const FormInputDate = ({ name, control, label }: FormInputProps) => {
                 color: "black", // Label color
                 fontFamily: "Catesque", // Font family
                 fontSize: "18px",
-                position: 'relative'
               },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

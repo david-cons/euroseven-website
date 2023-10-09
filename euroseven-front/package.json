@@ -23,6 +23,7 @@
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "lodash.debounce": "^4.0.8",
+    "lunr": "^2.3.9",
     "mui-file-input": "^3.0.2",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -39,7 +40,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
-    "@types/lodash.debounce": "^4.0.7"
+    "@types/lodash.debounce": "^4.0.7",
+    "@types/lunr": "^2.3.5"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,4 +1,14 @@
-import { Avatar, Box, IconButton } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  TextField,
+} from "@mui/material";
 import { MaterialUISwitch } from "../../components/admin/MaterialUISwitch";
 import { StyledBadge } from "../../components/admin/StyledBadge";
 import { Sidebar } from "../../components/admin/Sidebar";
@@ -11,6 +21,7 @@ import { UserService } from "../../services/UserService";
 import { UserEntity } from "../../types";
 import { useSelector } from "react-redux";
 import { SetariPage } from "../SetariPage";
+import { pages, idx } from "../../lunrjs/dataAdmin";
 
 export const AdminHomePage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<String>(
@@ -25,6 +36,27 @@ export const AdminHomePage: React.FC = () => {
   const handleTabClick = (tab: String) => {
     setSelectedTab(tab);
     localStorage.setItem("selectedTab", tab.toString());
+  };
+
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<typeof pages>([]);
+
+  const [openSearch, setOpenSearch] = useState(false);
+
+  const handleSearch = () => {
+    if (query !== "" && query !== " ") {
+      const matchedPages = pages.filter((page) =>
+        page.content.toLowerCase().includes(query.toLowerCase())
+      );
+
+      setResults(matchedPages);
+    } else {
+      setResults([]);
+    }
+  };
+
+  const handleClickSearch = () => {
+    setOpenSearch(!openSearch);
   };
 
   useEffect(() => {
@@ -66,8 +98,97 @@ export const AdminHomePage: React.FC = () => {
       >
         <Box>
           <Search
-            sx={{ position: "absolute", top: 0, left: 0, padding: "20px" }}
+            onClick={handleClickSearch}
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              padding: "20px",
+              ":hover": {
+                cursor: "pointer",
+              },
+              color: "#0054a6",
+            }}
           />
+          {openSearch && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: "3%",
+                paddingTop: "13px",
+              }}
+            >
+              <TextField
+                type="text"
+                value={query}
+                size="small"
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  handleSearch();
+                }}
+                placeholder="Caută..."
+                sx={{
+                  "& .MuiInputBase-input": {
+                    color: "black", // Text color
+                    fontFamily: "Catesque", // Font family
+                  },
+                  "& input:disabled": {
+                    color: "black", // Text color
+                    fontFamily: "Catesque", // Font family
+                    WebkitTextFillColor: "black",
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "black", // Label color
+                    fontFamily: "Catesque", // Font family
+                    fontSize: "18px",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#0054a6", // Border color
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#0054a6", // Hover border color
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#0054a6", // Focused border color
+                    },
+                  },
+                }}
+              />
+
+              <List
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  position: "absolute",
+                  top: 0,
+                  left: "100%",
+                  paddingTop: "5px",
+                }}
+              >
+                {query &&
+                  results.length > 0 &&
+                  results.map((page) => (
+                    <ListItem>
+                      <ListItemButton
+                        key={page.id}
+                        onClick={() => {
+                          handleTabClick(page.selectedTab);
+                          handleClickSearch();
+                        }}
+                        sx={{ color: "#0054a6", fontFamily: "Catesque" }}
+                      >
+                        <ListItemIcon sx={{ color: "#0054a6" }}>
+                          {page.icon()}
+                        </ListItemIcon>
+                        {page.displayName}
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+              </List>
+            </Box>
+          )}
 
           <Box
             sx={{

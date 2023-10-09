@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
-import React, { useState } from "react";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, FormLabel, Modal, Typography } from "@mui/material";
 
 import {
   FormInputDropdown,
@@ -89,6 +89,12 @@ export const ModalAddPlati: React.FC<{
     handleOpenSnackbar();
     handleCloseModal();
   };
+
+  useEffect(() => {
+    setValue("userNameValue", user?.name!);
+    console.log(nrFacturi);
+  }, [user]);
+
   return (
     <Modal
       open={openModal}
@@ -116,7 +122,6 @@ export const ModalAddPlati: React.FC<{
         <Typography variant="h4" fontFamily="Catesque" sx={{ mb: "5vh" }}>
           Înregistrează Plată
         </Typography>
-
         <FormInputDropdown
           name="dropdownValue"
           control={control}
@@ -128,24 +133,29 @@ export const ModalAddPlati: React.FC<{
           user={user}
           setUser={setUser}
         />
-        <FormInputMultiCheckbox
-          control={control}
-          setValue={setValue}
-          name={"checkboxValue"}
-          label={"Facturi Restante"}
-          nrFacturi={nrFacturi}
-          setNrFacturi={setNrFacturi}
-          sume={sume}
-          setSume={setSume}
-        />
+        {nrFacturi.length > 0 && (
+          <FormInputMultiCheckbox
+            control={control}
+            setValue={setValue}
+            name={"checkboxValue"}
+            label={"Facturi Restante"}
+            nrFacturi={nrFacturi}
+            setNrFacturi={setNrFacturi}
+            sume={sume}
+            setSume={setSume}
+          />
+        )}
+        {nrFacturi.length === 0 && user !== undefined && (
+          <Typography fontFamily={"Catesque"}>
+            Nu există facturi restante
+          </Typography>
+        )}
         <FormInputText name="textValue" control={control} label="Text Input" />
         <FormInputUsername
           name="userNameValue"
-          user={user}
           control={control}
-          label="Text Input"
+          label="Nume"
         />
-
         <Button
           onClick={handleSubmit(onSubmit)}
           variant={"contained"}

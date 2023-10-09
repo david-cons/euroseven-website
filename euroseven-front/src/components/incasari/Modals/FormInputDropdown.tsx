@@ -64,7 +64,7 @@ export const FormInputDropdown: React.FC<FormInputProps> = ({
                 "& input[type=number]": {
                   "-moz-appearance": "textfield",
                 },
-                '& input:disabled': {
+                "& input:disabled": {
                   color: "black", // Text color
                   fontFamily: "Catesque", // Font family
                   WebkitTextFillColor: "black",
@@ -89,8 +89,14 @@ export const FormInputDropdown: React.FC<FormInputProps> = ({
                   "&.Mui-focused fieldset": {
                     borderColor: "#0054a6", // Focused border color
                   },
+                  "&.Mui-disabled": {
+                    color: "black", // Label color for disabled state
+                  },
                 },
                 "& .MuiOutlinedInput-root": {
+                  "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#0054a6", // Border color for disabled input
+                  },
                   "& fieldset": {
                     borderColor: "#0054a6", // Border color
                   },

@@ -9,6 +9,7 @@ import { Euro7BarChart } from "../../components/admin/Euro7BarChart";
 import { Euro7Doughnut } from "../../components/admin/Euro7Doughnut";
 
 export const AdminHome: React.FC = () => {
+  
   return (
     <Box>
       <Box

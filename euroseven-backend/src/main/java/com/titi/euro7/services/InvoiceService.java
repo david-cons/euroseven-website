@@ -221,7 +221,7 @@ public class InvoiceService {
             // If the price decreased
             else if (priceDifference < 0) {
                 invoice.setRestDePlata(invoice.getRestDePlata() + priceDifference); // Decrease it
-                user.setRestDePlataTotal(user.getRestDePlataTotal() + priceDifference);
+               // user.setRestDePlataTotal(user.getRestDePlataTotal() + priceDifference);
 
                 if (invoice.getRestDePlata() < 0) {
                     user.setSaldo(user.getSaldo() - invoice.getRestDePlata()); // Convert negative value to positive
@@ -236,6 +236,44 @@ public class InvoiceService {
             userRepository.save(user);
         }
         return invoiceRepository.save(invoice);
+    }
+
+    public boolean deletePayment(Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId).orElse(null);
+
+        if (payment == null) {
+            log.info("Payment with ID " + paymentId + " does not exist");
+            return false;
+        }
+
+        Invoice invoice = invoiceRepository.findByNrFactura(payment.getNrFactura());
+        if (invoice == null) {
+            log.info("Invoice with nr " + payment.getNrFactura() + " does not exist");
+            return false;
+        }
+
+        User user = userRepository.findByCodClient(invoice.getCodClient());
+        if (user == null) {
+            log.info("User with codClient " + invoice.getCodClient() + " does not exist");
+            return false;
+        }
+
+        // Add back the payment amount to invoice's and user's rest to pay.
+        invoice.setRestDePlata(invoice.getRestDePlata() + payment.getAmount());
+        user.setRestDePlataTotal(user.getRestDePlataTotal() + payment.getAmount());
+
+        if (invoice.getRestDePlata() > 0) {
+            invoice.setPaid(false); // Set the invoice as unpaid
+        }
+
+        // Save updated invoice and user
+        invoiceRepository.save(invoice);
+        userRepository.save(user);
+
+        // Delete the payment
+        paymentRepository.delete(payment);
+
+        return true;
     }
 
 }

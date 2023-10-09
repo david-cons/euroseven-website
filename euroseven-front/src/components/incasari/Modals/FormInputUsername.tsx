@@ -30,6 +30,9 @@ export const FormInputUsername = ({ name, control, label }: FormInputProps) => {
               fontFamily: "Catesque", // Font family
               WebkitTextFillColor: "black",
             },
+            "& .MuiInputLabel-root.Mui-disabled": {
+              color: "black", // This will make the label color black when the TextField is disabled
+            },
             "& .MuiInputLabel-root": {
               color: "black", // Label color
               fontFamily: "Catesque", // Font family

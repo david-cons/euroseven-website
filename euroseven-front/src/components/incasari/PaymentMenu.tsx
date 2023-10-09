@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react";
-import { InvoiceEntity, PaymentEntity } from "../../types";
+import { useState } from "react";
+import { PaymentEntity } from "../../types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Button, Divider, MenuItem } from "@mui/material";
+import { Button, MenuItem } from "@mui/material";
 import { InvoiceService } from "../../services/InvoiceService";
 import { StyledMenu } from "../admin/StyledMenu";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ModalEditFactura } from "./Modals/ModalEditFactura";
 
-export const InvoiceMenu: React.FC<{
+export const PaymentMenu: React.FC<{
   id: number;
-  invoices?: InvoiceEntity[] | null;
+  payments?: PaymentEntity[] | null;
   handleOpenSnackbar: () => void;
-  setInvoices?: React.Dispatch<React.SetStateAction<InvoiceEntity[]>> | null;
-}> = ({ id, invoices, handleOpenSnackbar, setInvoices }) => {
+  setPayments?: React.Dispatch<React.SetStateAction<PaymentEntity[]>> | null;
+}> = ({ id, payments, handleOpenSnackbar, setPayments }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [invoice, setInvoice] = useState<InvoiceEntity | null>(null);
-  const [openModal, setOpenModal] = useState(false);
-
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
 
   const open = Boolean(anchorEl);
 
@@ -32,10 +25,11 @@ export const InvoiceMenu: React.FC<{
   };
 
   const handleDelete = async () => {
-    if (invoices) {
+    if (payments) {
       try {
-        await InvoiceService.deleteInvoice(id);
-        setInvoices!(invoices.filter((invoice) => invoice.id !== id));
+        console.log("hey");
+        await InvoiceService.deletePayment(id);
+        setPayments!(payments.filter((payment) => payment.id !== id));
         handleOpenSnackbar();
         handleClose();
       } catch (e) {
@@ -43,19 +37,6 @@ export const InvoiceMenu: React.FC<{
       }
     }
   };
-
-  useEffect(() => {
-    const fetchInvoice = async () => {
-      try {
-        const fetchedInvoice = await InvoiceService.getInvoiceById(id);
-        setInvoice(fetchedInvoice);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    fetchInvoice();
-  }, []);
 
   return (
     <div>
@@ -85,19 +66,6 @@ export const InvoiceMenu: React.FC<{
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleOpenModal} disableRipple>
-          <EditIcon />
-          Editează
-        </MenuItem>
-        <ModalEditFactura
-          invoice={invoice!}
-          openModal={openModal}
-          handleCloseModal={handleCloseModal}
-          handleOpenSnackbar={handleOpenSnackbar}
-          setInvoices={setInvoices}
-          invoices={invoices!}
-        />
-        <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleDelete} disableRipple>
           <DeleteIcon />
           Stergere

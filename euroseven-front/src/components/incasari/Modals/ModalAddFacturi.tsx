@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InvoiceEntity, UserEntity } from "../../../types";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { FormInputDate, FormInputDropdown, FormInputText, IFormInput } from ".";
@@ -45,6 +45,7 @@ export const ModalAddFacturi: React.FC<{
     return `${day}/${month}/${year}`;
   };
 
+
   const onSubmit = async (data: IFormInput) => {
     console.log(data);
     const created_date = formatDate(getValues("dateValue"));
@@ -63,6 +64,10 @@ export const ModalAddFacturi: React.FC<{
       handleCloseModal();
     });
   };
+
+  useEffect(() => {
+    setValue("userNameValue", user?.name!);
+  }, [user]);
 
   return (
     <Modal
@@ -104,11 +109,11 @@ export const ModalAddFacturi: React.FC<{
           name="userNameValue"
           user={user}
           control={control}
-          label="Text Input"
+          label="Nume"
         />
 
         <FormInputText name="textValue" control={control} label="Text Input" />
-        <FormInputDate name="dateValue" control={control} label="Date Input" />
+        <FormInputDate label="Dată" name="dateValue" control={control} />
         <FormInputFile
           name="fileValue"
           control={control}

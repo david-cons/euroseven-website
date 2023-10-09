@@ -16,71 +16,7 @@ import axios from "../../axios";
 import { SearchBar } from "../../components/SearchBar";
 import { Euro7DataGrid } from "../../components/admin/Euro7DataGrid";
 import { ModalAddPlati } from "../../components/incasari/Modals";
-
-const columns: GridColDef[] = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 70,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "date",
-    headerName: "Data Plata",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "codClient",
-    headerName: "Cod Client",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "userName",
-    headerName: "Nume",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "nrFactura",
-    headerName: "Nr. Factura",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "amount",
-    headerName: "Suma",
-    width: 150,
-    headerClassName: "super-app-theme--header",
-    renderCell: (params) => (
-      <div
-        style={{
-          color: params.value === 0 ? "green" : "green",
-          fontWeight: "bold",
-        }}
-      >
-        {params.value + " RON"}
-      </div>
-    ),
-  },
-  {
-    field: "actions",
-    headerName: "",
-    width: 150,
-    renderCell: (params) => {
-      const id = params.row.id;
-      return (
-        <UserMenu
-          id={id}
-          users={null}
-          handleOpenSnackbar={() => {}}
-          setUsers={null}
-        />
-      );
-    },
-  },
-];
+import { PaymentMenu } from "../../components/incasari/PaymentMenu";
 
 export const IncasariPlati: React.FC<{
   incasariId: number | undefined;
@@ -95,6 +31,70 @@ export const IncasariPlati: React.FC<{
   const [searchedPayments, setSearchedPayments] = useState<PaymentEntity[]>([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  const columns: GridColDef[] = [
+    {
+      field: "id",
+      headerName: "ID",
+      width: 70,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "date",
+      headerName: "Data Plata",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "codClient",
+      headerName: "Cod Client",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "userName",
+      headerName: "Nume",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "nrFactura",
+      headerName: "Nr. Factura",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "amount",
+      headerName: "Suma",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+      renderCell: (params) => (
+        <div
+          style={{
+            color: params.value === 0 ? "green" : "green",
+            fontWeight: "bold",
+          }}
+        >
+          {params.value + " RON"}
+        </div>
+      ),
+    },
+    {
+      field: "actions",
+      headerName: "",
+      width: 150,
+      renderCell: (params) => {
+        const id = params.row.id;
+        return (
+          <PaymentMenu
+            id={id}
+            payments={payments}
+            setPayments={setPayments}
+            handleOpenSnackbar={handleOpenSnackbar}
+          />
+        );
+      },
+    },
+  ];
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
     reason?: string

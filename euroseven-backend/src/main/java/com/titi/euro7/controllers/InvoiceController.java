@@ -89,4 +89,9 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceService.updateInvoice(id, created_date, price, file));
     }
 
+    @PostMapping("/payments/delete/{id}")
+    public ResponseEntity<Boolean> deletePayment(@PathVariable Long id) {
+        return ResponseEntity.ok(invoiceService.deletePayment(id));
+    }
+
 }
