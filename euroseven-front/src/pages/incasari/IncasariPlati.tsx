@@ -17,6 +17,7 @@ import { SearchBar } from "../../components/SearchBar";
 import { Euro7DataGrid } from "../../components/admin/Euro7DataGrid";
 import { ModalAddPlati } from "../../components/incasari/Modals";
 import { PaymentMenu } from "../../components/incasari/PaymentMenu";
+import { roRO } from "@mui/x-data-grid";
 
 export const IncasariPlati: React.FC<{
   incasariId: number | undefined;
@@ -43,6 +44,7 @@ export const IncasariPlati: React.FC<{
       headerName: "Data Plata",
       width: 150,
       headerClassName: "super-app-theme--header",
+      valueGetter: (params) => new Date(params.value),
     },
     {
       field: "codClient",

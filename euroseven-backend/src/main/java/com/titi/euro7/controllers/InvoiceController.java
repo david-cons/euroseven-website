@@ -94,4 +94,14 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceService.deletePayment(id));
     }
 
+    @GetMapping("/unpaid/count/{codClient}")
+    public ResponseEntity<Integer> getCountUnpaidInvoices(@PathVariable Integer codClient) {
+        return ResponseEntity.ok(invoiceService.getCountUnpaidInvoices(codClient));
+    }
+
+    @GetMapping("/payments/{codClient}")
+    public ResponseEntity<List<Payment>> getAllPaymentsByCodClient(@PathVariable Integer codClient) {
+        return ResponseEntity.ok(invoiceService.getAllPaymentsByCodClient(codClient));
+    }
+
 }

@@ -52,6 +52,14 @@ public class Payment {
         this.paymentMethod = paymentMethod;
     }
 
+    public Payment(double amount, LocalDateTime date, String userName, Integer nrFactura, String paymentMethod) {
+        this.amount = amount;
+        this.date = date;
+        this.userName = userName;
+        this.nrFactura = nrFactura;
+        this.paymentMethod = paymentMethod;
+    }
+
     public Payment() {
 
     }

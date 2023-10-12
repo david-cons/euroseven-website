@@ -45,7 +45,6 @@ export const ModalAddFacturi: React.FC<{
     return `${day}/${month}/${year}`;
   };
 
-
   const onSubmit = async (data: IFormInput) => {
     console.log(data);
     const created_date = formatDate(getValues("dateValue"));

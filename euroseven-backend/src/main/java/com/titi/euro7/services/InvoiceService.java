@@ -276,4 +276,18 @@ public class InvoiceService {
         return true;
     }
 
+    public Integer getCountUnpaidInvoices(Integer codClient) {
+        List<Invoice> invoices = invoiceRepository.findAllUnpaidInvoicesByCodClient(codClient);
+        return invoices.size();
+    }
+
+    public List<Payment> getAllPaymentsByCodClient(Integer codClient) {
+
+        List<Payment> payments = paymentRepository.findAllByCodClient(codClient);
+        if (payments.size() < 5)
+            return payments;
+        else
+            return  payments.subList(0,5);
+    }
+
 }

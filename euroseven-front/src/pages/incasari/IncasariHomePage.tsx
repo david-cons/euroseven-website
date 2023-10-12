@@ -64,6 +64,7 @@ export const IncasariHomePage: React.FC = () => {
       <SidebarIncasari
         handleTabChange={handleTabClick}
         selectedTab={selectedTab}
+        name={incasari && incasari.name ? incasari.name : "ERROR"}
       />
       <Box
         sx={{
@@ -121,9 +122,20 @@ export const IncasariHomePage: React.FC = () => {
             setCreatePayment={setCreatePayment}
           />
         )}
-        {selectedTab === "plati" && <IncasariPlati incasariId={incasari?.id} createPayment={createPayment} setCreatePayment={setCreatePayment} />}
+        {selectedTab === "plati" && (
+          <IncasariPlati
+            incasariId={incasari?.id}
+            createPayment={createPayment}
+            setCreatePayment={setCreatePayment}
+          />
+        )}
         {selectedTab === "facturi" && (
-          <IncasariInvoices filter={invoiceFilter} setInvoiceFilter={setInvoiceFilter} createUser={createUser} setCreateUser={setCreateUser} />
+          <IncasariInvoices
+            filter={invoiceFilter}
+            setInvoiceFilter={setInvoiceFilter}
+            createUser={createUser}
+            setCreateUser={setCreateUser}
+          />
         )}
         {selectedTab === "setari" && (
           <SetariPage user={incasari} setUser={setInacasari} />

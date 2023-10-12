@@ -43,6 +43,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/client/home"
+              element={
+                <ProtectedRoute roleName="ROLE_USER">
+                  <UserHomePage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </div>

@@ -94,7 +94,9 @@ export abstract class InvoiceService {
 
   public static async getAllNrFacturiByCodClient(
     codClient: number
-  ): Promise<{ nrFactura: number; restDePlata: number }[]> {
+  ): Promise<
+    { nrFactura: number; restDePlata: number; created_date: string }[]
+  > {
     return new Promise((resolve) => {
       axios.get(URL + `/nrFacturi/${codClient}`).then((response) => {
         resolve(response.data);
@@ -134,6 +136,26 @@ export abstract class InvoiceService {
   public static async deletePayment(id: number): Promise<Boolean> {
     return new Promise((resolve) => {
       axios.post(`${URL}/payments/delete/${id}`).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async getCountUnpaidInvoices(
+    codClient: number
+  ): Promise<number> {
+    return new Promise((resolve) => {
+      axios.get(`${URL}/unpaid/count/${codClient}`).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async getLastPaymentsByCodClient(
+    codClient: number
+  ): Promise<PaymentEntity[]> {
+    return new Promise((resolve) => {
+      axios.get(`${URL}/payments/${codClient}`).then((response) => {
         resolve(response.data);
       });
     });

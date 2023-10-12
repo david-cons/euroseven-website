@@ -16,6 +16,8 @@ export interface FormInputProps {
   changeAmount?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   user?: UserEntity | undefined;
   setUser?: React.Dispatch<React.SetStateAction<UserEntity | undefined>>;
+  dates?: string[];
+  setDates?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export interface IFormInput {
