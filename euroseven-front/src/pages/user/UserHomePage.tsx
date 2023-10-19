@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserEntity } from "../../types";
+import { PaymentEntity, UserEntity } from "../../types";
 import { useSelector } from "react-redux";
 import { UserService } from "../../services/UserService";
 import { Avatar, Box, Fab, IconButton } from "@mui/material";
@@ -13,6 +13,7 @@ import { SetariPage } from "../SetariPage";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { UserHome } from "./UserHome";
 import { UserInvoices } from "./UserInvoices";
+import { InvoiceService } from "../../services/InvoiceService";
 
 export const UserHomePage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<String>(
@@ -23,6 +24,10 @@ export const UserHomePage: React.FC = () => {
 
   const [user, setUser] = useState<UserEntity | null>(null);
 
+  const [recentPayments, setRecentPayments] = useState<PaymentEntity[]>([]);
+
+  const query = new URLSearchParams(window.location.search);
+
   const userId = useSelector((state: any) => state.authentication.userId);
 
   const handleTabClick = (tab: String) => {
@@ -31,17 +36,66 @@ export const UserHomePage: React.FC = () => {
   };
 
   useEffect(() => {
+    let isMounted = true;
     const fetchUser = async () => {
-      await UserService.getUserById(userId)
-        .then((res) => {
-          setUser(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (isMounted) {
+        await UserService.getUserById(userId)
+          .then((res) => {
+            setUser(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     };
+
+    const payment = async () => {
+      // Check to see if this is a redirect back from Checkout
+      if (query.get("success")) {
+        if (isMounted) {
+          const nrFactura = query.get("factura");
+          const invoice = await InvoiceService.getInvoiceByNrFactura(
+            Number(nrFactura!)
+          );
+          if (invoice && invoice.restDePlata! > 0 && userId) {
+            await InvoiceService.registerPayment({
+              amount: invoice.restDePlata,
+              userId: userId,
+              nrFactura: Number(invoice.nrFactura),
+              paymentMethod: "Card",
+            });
+            window.history.replaceState(null, "", window.location.pathname);
+            fetchUser();
+          }
+        } else if (query.get("canceled")) {
+          console.log("cancelled");
+          window.history.replaceState(null, "", window.location.pathname);
+        }
+      }
+    };
+
+    payment();
     fetchUser();
-  }, [userId]);
+    return () => {
+      isMounted = false; // Set the flag to false when the component is unmounted or a dependency changes
+    };
+  }, [query.get("success"), userId]);
+
+  useEffect(() => {
+    const fetchRecentPayments = async () => {
+      if (user) {
+        await InvoiceService.getLastPaymentsByCodClient(user.codClient!)
+          .then((res) => {
+            setRecentPayments(res);
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    };
+    fetchRecentPayments();
+  }, [user]);
 
   return (
     <Box
@@ -109,8 +163,13 @@ export const UserHomePage: React.FC = () => {
             </StyledAvatar>
           </Box>
         </Box>
-        {selectedTab === "acasa" && <UserHome user={user} />}
-        {selectedTab === "facturi" && <UserInvoices user={user} />}
+
+        {selectedTab === "acasa" && (
+          <UserHome user={user} recentPayments={recentPayments} />
+        )}
+        {selectedTab === "facturi" && (
+          <UserInvoices setSelectedTab={setSelectedTab} user={user} />
+        )}
         {selectedTab === "contract" && <h1>Contract</h1>}
         {selectedTab === "contor" && <h1>Citire Contor</h1>}
         {selectedTab === "consum" && <h1>Consum</h1>}

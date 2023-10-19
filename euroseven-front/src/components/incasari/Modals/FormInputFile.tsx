@@ -7,6 +7,7 @@ export const FormInputFile: React.FC<FormInputProps> = ({
   name,
   control,
   label,
+  handleFileChange,
 }) => {
   return (
     <>
@@ -27,7 +28,10 @@ export const FormInputFile: React.FC<FormInputProps> = ({
             Incarca Factura
             <VisuallyHiddenInput
               {...props}
-              onChange={onChange}
+              onChange={(e) => {
+                handleFileChange && handleFileChange(e);
+                onChange(e);
+              }}
               required
               value={""}
               type="file"

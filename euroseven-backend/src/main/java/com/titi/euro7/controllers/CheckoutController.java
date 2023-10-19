@@ -25,7 +25,7 @@ public class CheckoutController {
     public ResponseEntity<String> checkout(@PathVariable Long id) {
         Invoice invoice = invoiceService.getInvoiceById(id);
 
-        String sessionUrl = stripeService.createCheckoutSession(invoice.getPrice(), invoice.getNrFactura().toString());
+        String sessionUrl = stripeService.createCheckoutSession(invoice.getRestDePlata(), invoice.getNrFactura().toString());
 
         return ResponseEntity.ok(sessionUrl);
     }

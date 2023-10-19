@@ -2,7 +2,7 @@ import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Icon } from "../../components/Icon";
 import userhome4 from "../../assets/userhome4.jpg";
-import { UserEntity } from "../../types";
+import { PaymentEntity, UserEntity } from "../../types";
 import { useEffect, useState } from "react";
 import { InvoiceService } from "../../services/InvoiceService";
 import { RecentPaymentsTable } from "../../components/client/RecentPaymentsTable";
@@ -10,7 +10,10 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import PaymentIcon from "@mui/icons-material/Payment";
 import DescriptionIcon from "@mui/icons-material/Description";
 
-export const UserHome: React.FC<{ user: UserEntity | null }> = ({ user }) => {
+export const UserHome: React.FC<{
+  user: UserEntity | null;
+  recentPayments: PaymentEntity[] | null;
+}> = ({ user, recentPayments }) => {
   const [countUnpaidInvoices, setCountUnpaidInvoices] = useState<number>(0);
 
   useEffect(() => {
@@ -25,7 +28,6 @@ export const UserHome: React.FC<{ user: UserEntity | null }> = ({ user }) => {
           });
       };
       fetchUnpaidInvoices();
-      localStorage.setItem("selectedTab", "acasa");
     }
   }, [user]);
 
@@ -373,7 +375,7 @@ export const UserHome: React.FC<{ user: UserEntity | null }> = ({ user }) => {
               borderRadius: "10px",
             }}
           ></Box>
-          {user && <RecentPaymentsTable codClient={user?.codClient!} />}
+          {user && <RecentPaymentsTable recentPayments={recentPayments} />}
         </Paper>
       </Box>
     </Box>

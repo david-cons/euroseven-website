@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { UserMenu } from "../../components/admin/UserMenu";
 import React, { useEffect, useState } from "react";
 import { InvoiceEntity } from "../../types";
 import { InvoiceService } from "../../services/InvoiceService";
@@ -19,6 +18,7 @@ import { ModalAddFacturi } from "../../components/incasari/Modals";
 import { InvoiceMenu } from "../../components/incasari/InvoiceMenu";
 import { roRO } from "@mui/x-data-grid";
 import CustomNoRowsOverlay from "../../components/incasari/CustomNoRowsOverlay";
+import moment from "moment";
 
 export const IncasariInvoices: React.FC<{
   filter?: String | null;
@@ -51,7 +51,10 @@ export const IncasariInvoices: React.FC<{
       width: 150,
       headerClassName: "super-app-theme--header",
       type: "date",
-      valueGetter: (params) => new Date(params.value),
+      valueGetter: (params) => {
+        return moment(params.value, "DD/MM/YYYY").toDate();
+      },
+      renderCell: (params) => moment(params.value).format("DD/MM/YYYY"),
     },
     {
       field: "due_date",
@@ -59,7 +62,10 @@ export const IncasariInvoices: React.FC<{
       width: 150,
       headerClassName: "super-app-theme--header",
       type: "date",
-      valueGetter: (params) => new Date(params.value),
+      valueGetter: (params) => {
+        return moment(params.value, "DD/MM/YYYY").toDate();
+      },
+      renderCell: (params) => moment(params.value).format("DD/MM/YYYY"),
     },
     {
       field: "price",

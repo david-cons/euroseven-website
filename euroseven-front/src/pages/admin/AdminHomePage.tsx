@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { SetariPage } from "../SetariPage";
 import { pages, idx } from "../../lunrjs/dataAdmin";
 import { IncasariInvoices } from "../incasari/IncasariInvoices";
+import { AdminIFactura } from "./AdminIFactura";
 
 export const AdminHomePage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<String>(
@@ -227,6 +228,7 @@ export const AdminHomePage: React.FC = () => {
         {selectedTab === "anunturi" && <AdminNews />}
         {selectedTab === "facturi" && <IncasariInvoices />}
         {selectedTab === "statistici" && <h1>Statistici</h1>}
+        {selectedTab === "ifactura" && <AdminIFactura />}
         {selectedTab === "setari" && (
           <SetariPage user={admin} setUser={setAdmin} />
         )}

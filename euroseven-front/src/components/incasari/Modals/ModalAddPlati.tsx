@@ -75,6 +75,12 @@ export const ModalAddPlati: React.FC<{
           }
           setPayments!([...payments!, res]);
           remainingAmount -= invoice.restDePlata!;
+          reset({
+            textValue: "",
+            checkboxValue: [],
+            dropdownValue: "",
+            userNameValue: "",
+          });
         });
       }
     }

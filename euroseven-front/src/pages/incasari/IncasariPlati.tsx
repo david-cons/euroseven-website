@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { UserMenu } from "../../components/admin/UserMenu";
 import { useEffect, useState } from "react";
 import { PaymentEntity, UserEntity } from "../../types";
 import { InvoiceService } from "../../services/InvoiceService";
@@ -18,6 +17,7 @@ import { Euro7DataGrid } from "../../components/admin/Euro7DataGrid";
 import { ModalAddPlati } from "../../components/incasari/Modals";
 import { PaymentMenu } from "../../components/incasari/PaymentMenu";
 import { roRO } from "@mui/x-data-grid";
+import moment from "moment";
 
 export const IncasariPlati: React.FC<{
   incasariId: number | undefined;
@@ -42,9 +42,15 @@ export const IncasariPlati: React.FC<{
     {
       field: "date",
       headerName: "Data Plata",
+      type: "dateTime",
       width: 150,
       headerClassName: "super-app-theme--header",
-      valueGetter: (params) => new Date(params.value),
+      valueGetter: (params) => {
+        return moment(params.value, "DD/MM/YYYY HH:mm").toDate();
+      },
+      renderCell: (params) => {
+        return moment(params.value).format("DD/MM/YYYY HH:mm");
+      },
     },
     {
       field: "codClient",
@@ -248,6 +254,7 @@ export const IncasariPlati: React.FC<{
                 },
               }}
               pageSizeOptions={[5, 10]}
+              localeText={roRO.components.MuiDataGrid.defaultProps.localeText}
               sx={{
                 fontFamily: "Catesque",
                 backgroundColor: "transparent",

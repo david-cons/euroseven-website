@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import axios from "../axios";
 import { InvoiceEntity, PaymentEntity } from "../types";
 
@@ -158,6 +159,20 @@ export abstract class InvoiceService {
       axios.get(`${URL}/payments/${codClient}`).then((response) => {
         resolve(response.data);
       });
+    });
+  }
+
+  public static async downloadInvoice(
+    nrFactura: string
+  ): Promise<AxiosResponse<Blob>> {
+    return new Promise((resolve) => {
+      axios
+        .get(`${URL}/download-file?fileName=${nrFactura}`, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          resolve(response);
+        });
     });
   }
 }

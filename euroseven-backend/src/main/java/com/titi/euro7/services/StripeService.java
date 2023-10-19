@@ -21,7 +21,7 @@ public class StripeService {
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl(YOUR_DOMAIN + "?success=true")
+                        .setSuccessUrl(YOUR_DOMAIN + "?success=true&factura="+nrFactura)
                         .setCancelUrl(YOUR_DOMAIN + "?canceled=true")
                         .setLocale(SessionCreateParams.Locale.RO)
                         .setAutomaticTax(
@@ -33,7 +33,7 @@ public class StripeService {
                                         .setQuantity(1L)
                                         .setPriceData(
                                                 SessionCreateParams.LineItem.PriceData.builder()
-                                                        .setCurrency("eur")
+                                                        .setCurrency("ron")
                                                         .setUnitAmount(stripePrice)
                                                         .setProductData(
                                                                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
