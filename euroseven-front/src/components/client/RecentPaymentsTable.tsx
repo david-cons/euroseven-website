@@ -8,6 +8,8 @@ import {
   TableBody,
   Box,
   Typography,
+  styled,
+  tableCellClasses,
 } from "@mui/material";
 
 export const RecentPaymentsTable = (props: {
@@ -18,7 +20,7 @@ export const RecentPaymentsTable = (props: {
   return (
     <Box>
       {recentPayments && recentPayments.length === 0 ? (
-        <Typography fontFamily="Catesque">Nici-o plată.</Typography>
+        <Typography fontFamily="Catesque" sx={{mt: "5vh"}}>Nici-o plată.</Typography>
       ) : (
         <TableContainer
           component={Box}
@@ -30,24 +32,36 @@ export const RecentPaymentsTable = (props: {
             aria-label="payments table"
           >
             <TableHead>
-              <TableRow sx={{ "& *": { fontWeight: "bold" } }}>
-                <TableCell>Factură</TableCell>
-                <TableCell align="left">Sumă</TableCell>
-                <TableCell align="center">Dată</TableCell>
-                <TableCell align="left">Metodă de Plată</TableCell>
+              <TableRow sx={{ backgroundColor: "white" }}>
+                <StyledTableCell sx={{ fontWeight: "bold" }}>
+                  Factură
+                </StyledTableCell>
+                <StyledTableCell sx={{ fontWeight: "bold" }} align="left">
+                  Sumă
+                </StyledTableCell>
+                <StyledTableCell sx={{ fontWeight: "bold" }} align="center">
+                  Dată
+                </StyledTableCell>
+                <StyledTableCell sx={{ fontWeight: "bold" }} align="left">
+                  Metodă de Plată
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {recentPayments &&
                 recentPayments.map((payment) => (
-                  <TableRow key={payment.nrFactura}>
-                    <TableCell component="th" scope="row">
+                  <StyledTableRow key={payment.nrFactura}>
+                    <StyledTableCell component="th" scope="row">
                       {`Nr. ${payment.nrFactura}`}
-                    </TableCell>
-                    <TableCell align="left">{`${payment.amount} RON`}</TableCell>
-                    <TableCell align="center">{payment.date}</TableCell>
-                    <TableCell align="left">{payment.paymentMethod}</TableCell>
-                  </TableRow>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">{`${payment.amount} RON`}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      {payment.date}
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {payment.paymentMethod}
+                    </StyledTableCell>
+                  </StyledTableRow>
                 ))}
             </TableBody>
           </Table>
@@ -56,3 +70,20 @@ export const RecentPaymentsTable = (props: {
     </Box>
   );
 };
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "Catesque",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));

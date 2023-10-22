@@ -164,6 +164,11 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceService.getAllPaymentsByCodClient(codClient));
     }
 
+    @GetMapping("/codClient/{codClient}")
+    public ResponseEntity<List<Invoice>> getAllInvoicesByCodClient(@PathVariable Integer codClient) {
+        return ResponseEntity.ok(invoiceService.findAllByCodClient(codClient));
+    }
+
     @PostMapping("/upload")
     public void uploadInvoices(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {

@@ -298,4 +298,8 @@ public class InvoiceService {
         return payments.subList(payments.size() - 5, payments.size());
     }
 
+    public List<Invoice> findAllByCodClient(Integer codClient) {
+        return invoiceRepository.findAllByCodClient(codClient);
+    }
+
 }

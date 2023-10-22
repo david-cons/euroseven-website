@@ -1,133 +1,40 @@
 import { useEffect, useState } from "react";
 import { InvoiceEntity } from "../../types";
 import { InvoiceService } from "../../services/InvoiceService";
-import { Box, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@mui/material";
 import axios from "../../axios";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import CustomNoRowsOverlay from "../incasari/CustomNoRowsOverlay";
 import { reverseArray } from "../../utils";
+import { InvoiceElement } from "./InvoiceElement";
+import { TablePagination } from "@mui/material";
 
 export const UserInvoicesTable = (props: {
   codClient: number;
   setSelectedTab: React.Dispatch<React.SetStateAction<String>>;
 }) => {
   const [invoices, setInvoices] = useState<InvoiceEntity[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const columns: GridColDef[] = [
-    {
-      field: "id",
-    },
-    {
-      field: "paid",
-      type: "boolean",
-    },
-    {
-      field: "nrFactura",
-      headerName: "Factură",
-      width: 150,
-      headerClassName: "super-app-theme--header",
-      renderCell: (params) => {
-        return <div>{`Nr. ${params.value}`}</div>;
-      },
-    },
-    {
-      field: "price",
-      headerName: "Sumă",
-      width: 175,
-      headerClassName: "super-app-theme--header",
-      renderCell: (params) => {
-        return (
-          <div
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            {params.value + " RON"}
-          </div>
-        );
-      },
-    },
-    {
-      field: "restDePlata",
-      headerName: "Rest de Plată",
-      width: 175,
-      headerClassName: "super-app-theme--header",
-      renderCell: (params) => {
-        return (
-          <div
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            {params.value + " RON"}
-          </div>
-        );
-      },
-    },
-    {
-      field: "created_date",
-      headerName: "Dată Emitere",
-      width: 150,
-      headerClassName: "super-app-theme--header",
-    },
-    {
-      field: "due_date",
-      headerName: "Dată Scadentă",
-      width: 150,
-      headerClassName: "super-app-theme--header",
-    },
-    {
-      field: "descarca",
-      headerName: "Descarcă",
-      width: 200,
-      headerClassName: "super-app-theme--header",
-      renderCell: (params) => {
-        return (
-          <Button
-            variant="outlined"
-            onClick={() => handleDownload(params.row.nrFactura)}
-          >
-            Descarcă
-          </Button>
-        );
-      },
-      align: "center",
-      headerAlign: "center",
-    },
-    {
-      field: "plateste",
-      headerName: "Plătește",
-      width: 175,
-      headerClassName: "super-app-theme--header",
-      renderCell: (params) => {
-        return params.row.paid === true ? (
-          <Box
-            sx={{
-              height: "30px",
-              width: "115px",
-              background: "#0054a6",
-              borderRadius: "5px",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            <Typography fontFamily={"Catesque"} color={"white"}>
-              Plătită
-            </Typography>
-          </Box>
-        ) : (
-          <Button
-            variant="outlined"
-            onClick={() => checkoutInvoice(params.row.id)}
-          >
-            Plătește
-          </Button>
-        );
-      },
-      align: "center",
-      headerAlign: "center",
-    },
-  ];
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const checkoutInvoice = async (invoiceId: number) => {
     axios
@@ -162,14 +69,17 @@ export const UserInvoicesTable = (props: {
       if (link.parentNode) {
         link.parentNode.removeChild(link);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error downloading the invoice:", error);
+      if (error.response && error.response.status === 404) {
+        alert("Invoice not found");
+      }
     }
   };
-  
+
   useEffect(() => {
     const fetchUserInvoices = async () => {
-      await InvoiceService.searchInvoices(props.codClient.toString())
+      await InvoiceService.getAllInvoicesByCodClient(props.codClient)
         .then((res) => {
           setInvoices(res);
           console.log(res);
@@ -183,46 +93,207 @@ export const UserInvoicesTable = (props: {
 
   return (
     <Box>
-      {invoices.length === 0 ? (
-        <Typography fontFamily="Catesque">Nici-o factură.</Typography>
-      ) : (
-        <DataGrid
-          rows={reverseArray(invoices)}
-          columns={columns}
-          initialState={{
-            columns: {
-              columnVisibilityModel: {
-                id: false,
-                paid: false,
-              },
-            },
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-          autoHeight
-          slots={{
-            noRowsOverlay: CustomNoRowsOverlay,
-          }}
-          sx={{
-            fontFamily: "Catesque",
-            backgroundColor: "transparent",
-            borderRadius: "25px",
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "#E4E5E6",
-            },
-            "& .MuiDataGrid-columnsContainer": {
-              marginLeft: "16px", // Adjust the value as needed
-            },
-            "& .MuiDataGrid-columnHeaderTitle": {
-              fontWeight: "bold",
-            },
-            width: "80%",
-            margin: "0 auto",
-          }}
-        />
-      )}
+      <TableContainer
+        component={Box}
+        sx={{ mt: "4vh", "& *": { fontFamily: "Catesque" } }}
+      >
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="payments table">
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "white" }}>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  width: "250px",
+                  fontStyle: "italic",
+                  fontFamily: "Catesque",
+                }}
+                align="left"
+              >
+                Descriere
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  width: "100px",
+                  fontStyle: "italic",
+                  fontFamily: "Catesque",
+                }}
+                align="left"
+              >
+                Dată
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  width: "100px",
+                  fontStyle: "italic",
+                  fontFamily: "Catesque",
+                }}
+                align="left"
+              >
+                Nr. Factură
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  width: "100px",
+                  fontStyle: "italic",
+                  fontFamily: "Catesque",
+                }}
+                align="left"
+              >
+                Sumă
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  width: "100px",
+                  fontStyle: "italic",
+                  fontFamily: "Catesque",
+                }}
+                align="left"
+              >
+                Rest de Plată
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  width: "200px",
+                  fontStyle: "italic",
+                  fontFamily: "Catesque",
+                }}
+                align="left"
+              >
+                Acțiuni
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {invoices &&
+              reverseArray(invoices)
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((invoice) => (
+                  <TableRow key={invoice.id}>
+                    <TableCell component="th" scope="row">
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "center",
+                          alignItems: "center",
+                          fontFamily: "Catesque",
+                          fontWeight: "bold",
+                          mt: "5px",
+                        }}
+                        onClick={() =>
+                          handleDownload(Number(invoice.nrFactura))
+                        }
+                      >
+                        <InvoiceElement
+                          color={invoice.paid === true ? "#0054a6" : "red"}
+                        />
+                        {`Factură ${invoice.created_date!.substring(3)}`}
+                      </Box>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{ fontFamily: "Catesque" }}
+                    >{`${invoice.due_date}`}</TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{ fontFamily: "Catesque" }}
+                    >{`${invoice.nrFactura}`}</TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{ fontFamily: "Catesque" }}
+                    >{`${invoice.price} RON`}</TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{ fontFamily: "Catesque" }}
+                    >{`${invoice.restDePlata} RON`}</TableCell>
+                    <TableCell align="left">
+                      <Box
+                        sx={{
+                          display: "flex",
+                          float: "left",
+                          alignItems: "center",
+                          position: "relative",
+                        }}
+                      >
+                        <Button
+                          variant="outlined"
+                          onClick={() =>
+                            handleDownload(Number(invoice.nrFactura))
+                          }
+                          sx={{
+                            fontFamily: "Catesque",
+                            mr: "15px",
+                            width: "100px",
+                            background: "#0054a6",
+                            color: "white",
+                            "&:hover": {
+                              background: "#0054a6",
+                              color: "white",
+                            },
+                          }}
+                        >
+                          Descarcă
+                        </Button>
+                        {invoice.paid !== true && (
+                          <>
+                            <Button
+                              variant="outlined"
+                              onClick={() => checkoutInvoice(invoice.id!)}
+                              sx={{
+                                fontFamily: "Catesque",
+                                width: "100px",
+                                background: "#0054a6",
+                                color: "white",
+                                position: "relative",
+                                zIndex: 1,
+                                transition: "transform 0.3s ease",
+                                "&:hover": {
+                                  transform: "translateY(5px)",
+                                  background: "#0054a6",
+                                  color: "white",
+                                },
+                              }}
+                            >
+                              Plătește
+                            </Button>
+                            <Box
+                              sx={{
+                                content: '""',
+                                position: "absolute",
+                                bottom: -4,
+                                right: "6%",
+                                width: "35%",
+                                height: "6px",
+                                background: "#01386e",
+                                zIndex: "0",
+                                borderRadius: "3px",
+                              }}
+                            />
+                          </>
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+          </TableBody>
+          <TablePagination
+            component="div"
+            count={invoices.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5]}
+            sx={{
+              fontFamily: "Catesque",
+            }}
+          />
+        </Table>
+      </TableContainer>
     </Box>
   );
 };

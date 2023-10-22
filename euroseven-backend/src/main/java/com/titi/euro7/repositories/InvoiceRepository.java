@@ -24,5 +24,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query("SELECT new com.titi.euro7.entities.Invoice(i.id, i.created_date, i.due_date, i.price, i.file, i.paid, i.nrFactura, i.codClient, i.restDePlata, i.indexVechi, i.indexNou) FROM Invoice i WHERE i.codClient = ?1 AND i.paid = false")
     List<Invoice> findAllUnpaidInvoicesByCodClient(Integer codClient);
 
+    @Query("SELECT new com.titi.euro7.entities.Invoice(i.id, i.created_date, i.due_date, i.price, i.file, i.paid, i.nrFactura, i.codClient, i.restDePlata, i.indexVechi, i.indexNou) FROM Invoice i WHERE i.codClient = ?1")
+    List<Invoice> findAllByCodClient(Integer codClient);
+
     //TODO| add more methods here
 }

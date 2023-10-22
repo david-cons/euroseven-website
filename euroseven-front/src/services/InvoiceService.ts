@@ -165,14 +165,27 @@ export abstract class InvoiceService {
   public static async downloadInvoice(
     nrFactura: string
   ): Promise<AxiosResponse<Blob>> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       axios
         .get(`${URL}/download-file?fileName=${nrFactura}`, {
           responseType: "blob",
         })
         .then((response) => {
           resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
         });
+    });
+  }
+
+  public static async getAllInvoicesByCodClient(
+    codClient: number
+  ): Promise<InvoiceEntity[]> {
+    return new Promise((resolve) => {
+      axios.get(`${URL}/codClient/${codClient}`).then((response) => {
+        resolve(response.data);
+      });
     });
   }
 }

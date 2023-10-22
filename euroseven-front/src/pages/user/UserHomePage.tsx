@@ -71,6 +71,9 @@ export const UserHomePage: React.FC = () => {
           console.log("cancelled");
           window.history.replaceState(null, "", window.location.pathname);
         }
+      } else if (query.get("canceled")) {
+        console.log("cancelled");
+        window.history.replaceState(null, "", window.location.pathname);
       }
     };
 

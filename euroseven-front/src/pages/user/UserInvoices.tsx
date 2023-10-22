@@ -8,7 +8,6 @@ export const UserInvoices: React.FC<{
   user: UserEntity | null;
   setSelectedTab: React.Dispatch<React.SetStateAction<String>>;
 }> = ({ user, setSelectedTab }) => {
-  
   return (
     <Box sx={{ width: "100%", margin: "0 auto" }}>
       <Box
@@ -31,10 +30,40 @@ export const UserInvoices: React.FC<{
           Facturi
         </Typography>
       </Box>
-      <UserInvoicesTable
-        codClient={user && user.codClient ? user.codClient : 0}
-        setSelectedTab={setSelectedTab}
-      />
+
+      <Box sx={{ width: "80%", margin: "0 auto" }}>
+        <Box
+          sx={{
+            width: "100%",
+            height: "50px",
+            background: "#efefef",
+            textAlign: "center",
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Box sx={{ width: "50%", margin: "0 auto" }}>
+            <Typography sx={{ color: "black", fontSize: "1rem" }}>
+              Restul tău de plată este:{" "}
+              {user && user.restDePlataTotal && user.restDePlataTotal > 0 ? (
+                <b style={{ color: "red" }}>
+                  {user && user.restDePlataTotal
+                    ? `${user.restDePlataTotal.toFixed(2)} RON`
+                    : `0.00 RON`}
+                </b>
+              ) : (
+                <b style={{ color: "green" }}>0.00 RON</b>
+              )}
+            </Typography>
+          </Box>
+        </Box>
+
+        <UserInvoicesTable
+          codClient={user && user.codClient ? user.codClient : 0}
+          setSelectedTab={setSelectedTab}
+        />
+      </Box>
     </Box>
   );
 };
