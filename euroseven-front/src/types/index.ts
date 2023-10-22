@@ -18,7 +18,7 @@ export type UserEntity = {
 export type InvoiceEntity = {
   id?: number;
   created_date?: string | null;
-  due_date?: Date;
+  due_date?: string | null;
   price?: number;
   file?: string;
   paid?: Boolean;

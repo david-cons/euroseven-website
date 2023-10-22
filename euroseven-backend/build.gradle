@@ -32,6 +32,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'com.mysql:mysql-connector-j:8.1.0'
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+    implementation 'com.stripe:stripe-java:23.6.0'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.25'
+    implementation 'com.google.cloud:google-cloud-storage:2.22.0'
+
 }
 
 tasks.named('test') {

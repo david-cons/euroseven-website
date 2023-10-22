@@ -18,6 +18,8 @@ export const FormInputDropdown: React.FC<FormInputProps> = ({
   user,
   setUser,
   disabled,
+  dates,
+  setDates,
 }) => {
   const [coduriClient, setCoduriClient] = useState<string[]>([]);
 
@@ -132,6 +134,10 @@ export const FormInputDropdown: React.FC<FormInputProps> = ({
                   setNrFacturi(res.map((number) => String(number.nrFactura)));
                 setSume &&
                   setSume(res.map((number) => String(number.restDePlata)));
+                setDates &&
+                  setDates(
+                    res.map((date) => transformDateFormat(date.created_date))
+                  );
               }
             );
           }}
@@ -151,3 +157,8 @@ export const FormInputDropdown: React.FC<FormInputProps> = ({
     />
   );
 };
+
+function transformDateFormat(dateStr: string): string {
+  const [year, month, day] = dateStr.split("-");
+  return `${day}/${month}/${year}`;
+}

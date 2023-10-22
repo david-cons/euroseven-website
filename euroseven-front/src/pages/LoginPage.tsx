@@ -47,6 +47,8 @@ export const LoginPage: React.FC = () => {
               navigate("/admin/home");
             } else if (response.role === "ROLE_INCASARI") {
               navigate("/incasari/home");
+            } else if (response.role === "ROLE_USER") {
+              navigate("/client/home");
             } else {
               navigate("/");
             }
@@ -64,6 +66,8 @@ export const LoginPage: React.FC = () => {
       navigate("/admin/home");
     } else if (role === "ROLE_INCASARI") {
       navigate("/incasari/home");
+    } else if (role === "ROLE_USER") {
+      navigate("/client/home");
     }
   }, []);
 

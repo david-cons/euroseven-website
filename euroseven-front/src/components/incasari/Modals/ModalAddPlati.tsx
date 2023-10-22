@@ -41,6 +41,7 @@ export const ModalAddPlati: React.FC<{
   const [nrFacturi, setNrFacturi] = useState<string[]>([]);
   const [sume, setSume] = useState<string[]>([]);
   const [user, setUser] = useState<UserEntity | undefined>();
+  const [dates, setDates] = useState<string[]>([]);
 
   const onSubmit = async (data: IFormInput) => {
     console.log(data);
@@ -74,6 +75,12 @@ export const ModalAddPlati: React.FC<{
           }
           setPayments!([...payments!, res]);
           remainingAmount -= invoice.restDePlata!;
+          reset({
+            textValue: "",
+            checkboxValue: [],
+            dropdownValue: "",
+            userNameValue: "",
+          });
         });
       }
     }
@@ -132,6 +139,8 @@ export const ModalAddPlati: React.FC<{
           setSume={setSume}
           user={user}
           setUser={setUser}
+          dates={dates}
+          setDates={setDates}
         />
         {nrFacturi.length > 0 && (
           <FormInputMultiCheckbox
@@ -143,6 +152,8 @@ export const ModalAddPlati: React.FC<{
             setNrFacturi={setNrFacturi}
             sume={sume}
             setSume={setSume}
+            dates={dates}
+            setDates={setDates}
           />
         )}
         {nrFacturi.length === 0 && user !== undefined && (

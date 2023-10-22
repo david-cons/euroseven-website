@@ -46,7 +46,13 @@ export abstract class UserService {
   ): Promise<UserEntity> {
     return new Promise((resolve) => {
       axios
-        .post(URL + "/update/" + id, { name, address, localitate, phone })
+        .post(URL + "/update/" + id, {
+          name,
+          address,
+          judet,
+          localitate,
+          phone,
+        })
         .then((response) => {
           resolve(response.data);
         });

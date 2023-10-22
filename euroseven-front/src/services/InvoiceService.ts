@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import axios from "../axios";
 import { InvoiceEntity, PaymentEntity } from "../types";
 
@@ -94,7 +95,9 @@ export abstract class InvoiceService {
 
   public static async getAllNrFacturiByCodClient(
     codClient: number
-  ): Promise<{ nrFactura: number; restDePlata: number }[]> {
+  ): Promise<
+    { nrFactura: number; restDePlata: number; created_date: string }[]
+  > {
     return new Promise((resolve) => {
       axios.get(URL + `/nrFacturi/${codClient}`).then((response) => {
         resolve(response.data);
@@ -134,6 +137,53 @@ export abstract class InvoiceService {
   public static async deletePayment(id: number): Promise<Boolean> {
     return new Promise((resolve) => {
       axios.post(`${URL}/payments/delete/${id}`).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async getCountUnpaidInvoices(
+    codClient: number
+  ): Promise<number> {
+    return new Promise((resolve) => {
+      axios.get(`${URL}/unpaid/count/${codClient}`).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async getLastPaymentsByCodClient(
+    codClient: number
+  ): Promise<PaymentEntity[]> {
+    return new Promise((resolve) => {
+      axios.get(`${URL}/payments/${codClient}`).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async downloadInvoice(
+    nrFactura: string
+  ): Promise<AxiosResponse<Blob>> {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${URL}/download-file?fileName=${nrFactura}`, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public static async getAllInvoicesByCodClient(
+    codClient: number
+  ): Promise<InvoiceEntity[]> {
+    return new Promise((resolve) => {
+      axios.get(`${URL}/codClient/${codClient}`).then((response) => {
         resolve(response.data);
       });
     });

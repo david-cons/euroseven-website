@@ -57,6 +57,20 @@ public class Invoice {
         this.codClient = codClient;
     }
 
+    public Invoice(Long id, LocalDate created_date, LocalDate due_date, double price, String file, Boolean paid, Integer nrFactura, Integer codClient, double restDePlata, double indexVechi, double indexNou) {
+        this.id = id;
+        this.created_date = created_date;
+        this.due_date = due_date;
+        this.price = price;
+        this.file = file;
+        this.paid = paid;
+        this.nrFactura = nrFactura;
+        this.codClient = codClient;
+        this.restDePlata = restDePlata;
+        this.indexVechi = indexVechi;
+        this.indexNou = indexNou;
+    }
+
     public Invoice() {
 
     }

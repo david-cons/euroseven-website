@@ -235,6 +235,37 @@ export const Sidebar = (props: {
               <ListItem
                 disablePadding
                 sx={{
+                  color:
+                    props.selectedTab === "ifactura" ? "#509be4" : "#FFFFFF",
+                  mt: "10px",
+                }}
+              >
+                <ListItemButton
+                  onClick={() => props.handleTabChange("ifactura")}
+                >
+                  <ListItemIcon>
+                    <BarChartIcon
+                      sx={{
+                        color:
+                          props.selectedTab === "ifactura"
+                            ? "#509be4"
+                            : "#FFFFFF",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Incarca Factura [BETA]"
+                    sx={{
+                      "& .MuiListItemText-primary": {
+                        fontFamily: "Catesque",
+                      },
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem
+                disablePadding
+                sx={{
                   color: props.selectedTab === "setari" ? "#509be4" : "#FFFFFF",
                   mt: "10px",
                 }}

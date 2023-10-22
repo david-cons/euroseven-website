@@ -43,10 +43,23 @@ export const ModalUser: React.FC<{
   handleOpenSnackbar,
   handleClose,
 }) => {
-  const { handleSubmit, reset, control, setValue } =
-    useForm<IUserFormInput>({
-      defaultValues: defaultValues,
+  const { handleSubmit, reset, control, setValue } = useForm<IUserFormInput>({
+    defaultValues: defaultValues,
+  });
+
+  const handleCloseAndReset = () => {
+    handleCloseModal();
+    handleClose();
+    reset({
+      prenumeValue: user?.name?.split(" ")[0],
+      numeValue: user?.name?.split(" ").slice(1).join(" "),
+      emailValue: user?.username,
+      telefonValue: user?.phone!,
+      judetValue: user?.judet!,
+      localitateValue: user?.localitate!,
+      adresaValue: user?.address!,
     });
+  };
 
   const onSubmit = async (data: IUserFormInput) => {
     console.log(data);
@@ -117,7 +130,7 @@ export const ModalUser: React.FC<{
   return (
     <Modal
       open={openModal}
-      onClose={handleCloseModal}
+      onClose={handleCloseAndReset}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >

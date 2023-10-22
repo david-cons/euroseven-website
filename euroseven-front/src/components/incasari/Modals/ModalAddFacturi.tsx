@@ -34,6 +34,32 @@ export const ModalAddFacturi: React.FC<{
     });
 
   const [user, setUser] = useState<UserEntity | undefined>();
+  const [file, setFile] = useState<string>("");
+
+  const handleCloseAndReset = () => {
+    handleCloseModal();
+    reset({
+      textValue: "",
+      dateValue: new Date(),
+      dropdownValue: "",
+    });
+    setUser(undefined);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+
+    reader.onloadend = function () {
+      const base64String = reader.result
+        ?.toString()
+        .replace(/^data:.+;base64,/, "");
+      setFile(base64String!);
+    };
+
+    reader.readAsDataURL(file);
+  };
 
   const formatDate = (date: Date | null): string => {
     if (date === null) return "";
@@ -45,13 +71,11 @@ export const ModalAddFacturi: React.FC<{
     return `${day}/${month}/${year}`;
   };
 
-
   const onSubmit = async (data: IFormInput) => {
     console.log(data);
     const created_date = formatDate(getValues("dateValue"));
     const price = Number(getValues("textValue"));
     const codClient = Number(getValues("dropdownValue"));
-    const file = "";
     InvoiceService.createInvoice({
       created_date: created_date,
       price: price,
@@ -60,6 +84,13 @@ export const ModalAddFacturi: React.FC<{
     }).then((res) => {
       console.log(res);
       setFacturi!([...facturi!, res]);
+      reset({
+        textValue: "",
+        checkboxValue: [],
+        dropdownValue: "",
+        dateValue: new Date(),
+        fileValue: undefined,
+      });
       handleOpenSnackbar();
       handleCloseModal();
     });
@@ -72,7 +103,7 @@ export const ModalAddFacturi: React.FC<{
   return (
     <Modal
       open={openModal}
-      onClose={handleCloseModal}
+      onClose={handleCloseAndReset}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -118,6 +149,7 @@ export const ModalAddFacturi: React.FC<{
           name="fileValue"
           control={control}
           label="Data Facturii"
+          handleFileChange={handleFileChange}
         />
 
         <Button

@@ -20,7 +20,9 @@ import { logout } from "../../services/AuthService";
 export const SidebarIncasari = (props: {
   handleTabChange(tab: string): void;
   selectedTab: String;
+  name: string;
 }) => {
+  
   const navigate = useNavigate();
 
   const logOut = () => {
@@ -66,7 +68,7 @@ export const SidebarIncasari = (props: {
                 letterSpacing: "2px",
               }}
             >
-              Titi
+              {props.name}
             </Typography>
             <Typography
               color="#9da4ae"

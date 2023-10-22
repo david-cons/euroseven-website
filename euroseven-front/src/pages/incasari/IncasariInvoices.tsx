@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { UserMenu } from "../../components/admin/UserMenu";
 import React, { useEffect, useState } from "react";
 import { InvoiceEntity } from "../../types";
 import { InvoiceService } from "../../services/InvoiceService";
@@ -17,12 +16,15 @@ import { SearchBar } from "../../components/SearchBar";
 import { Euro7DataGrid } from "../../components/admin/Euro7DataGrid";
 import { ModalAddFacturi } from "../../components/incasari/Modals";
 import { InvoiceMenu } from "../../components/incasari/InvoiceMenu";
+import { roRO } from "@mui/x-data-grid";
+import CustomNoRowsOverlay from "../../components/incasari/CustomNoRowsOverlay";
+import moment from "moment";
 
 export const IncasariInvoices: React.FC<{
   filter?: String | null;
-  setInvoiceFilter: React.Dispatch<React.SetStateAction<String | null>>;
+  setInvoiceFilter?: React.Dispatch<React.SetStateAction<String | null>>;
   createUser?: boolean;
-  setCreateUser: React.Dispatch<React.SetStateAction<boolean>>;
+  setCreateUser?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ filter, setInvoiceFilter, createUser, setCreateUser }) => {
   const columns: GridColDef[] = [
     {
@@ -48,12 +50,22 @@ export const IncasariInvoices: React.FC<{
       headerName: "Data Emitere",
       width: 150,
       headerClassName: "super-app-theme--header",
+      type: "date",
+      valueGetter: (params) => {
+        return moment(params.value, "DD/MM/YYYY").toDate();
+      },
+      renderCell: (params) => moment(params.value).format("DD/MM/YYYY"),
     },
     {
       field: "due_date",
       headerName: "Data Scadenta",
       width: 150,
       headerClassName: "super-app-theme--header",
+      type: "date",
+      valueGetter: (params) => {
+        return moment(params.value, "DD/MM/YYYY").toDate();
+      },
+      renderCell: (params) => moment(params.value).format("DD/MM/YYYY"),
     },
     {
       field: "price",
@@ -165,8 +177,10 @@ export const IncasariInvoices: React.FC<{
       handleOpenModal();
     }
     return () => {
-      setInvoiceFilter(null);
-      setCreateUser(false);
+      if (setInvoiceFilter && setCreateUser) {
+        setInvoiceFilter!(null);
+        setCreateUser!(false);
+      }
     };
   }, [setInvoiceFilter]);
 
@@ -259,6 +273,11 @@ export const IncasariInvoices: React.FC<{
                 pagination: {
                   paginationModel: { page: 0, pageSize: 5 },
                 },
+              }}
+              localeText={roRO.components.MuiDataGrid.defaultProps.localeText}
+              slots={{
+                noRowsOverlay: CustomNoRowsOverlay,
+                noResultsOverlay: CustomNoRowsOverlay,
               }}
               pageSizeOptions={[5, 10]}
               sx={{

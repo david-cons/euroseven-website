@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -51,6 +52,11 @@ public class InvoiceService {
         return invoiceRepository.findAll();
     }
 
+
+    public Invoice uploadInvoice(Invoice invoice) {
+        return invoiceRepository.save(invoice);
+    }
+
     public Invoice createInvoice(Invoice invoice) {
         log.info("Saving invoice ");
         User user = userRepository.findByCodClient(invoice.getCodClient());
@@ -64,9 +70,7 @@ public class InvoiceService {
             invoice.setRestDePlata(invoice.getPrice());
             invoice.setIndexVechi(0.0); // TODO: Change This
             invoice.setIndexNou(0.0); // TODO: Change This
-            int nrFactura = (int)UUID.randomUUID().getMostSignificantBits();
-            if (nrFactura < 0) { nrFactura = nrFactura * (-1); }
-            invoice.setNrFactura(nrFactura);
+
             if (user.getSaldo() <= invoice.getPrice()) {
                 invoice.setRestDePlata(invoice.getRestDePlata() - user.getSaldo());
                 user.setSaldo(0.0);
@@ -135,29 +139,32 @@ public class InvoiceService {
             log.info("Invoice with nr " + payment.getNrFactura() + " does not exist");
             return null;
         }
-        if (payment.getAmount() > invoice.getRestDePlata()) {
-            log.info("Payment amount is greater than the rest to be paid");
-            return null;
-        }
-        assert user != null;
-        payment.setCodClient(user.getCodClient());
-        payment.setUserName(user.getName());
-        if (payment.getAmount() <= invoice.getRestDePlata()) {
-            invoice.setRestDePlata(invoice.getRestDePlata() - payment.getAmount());
-            if (invoice.getRestDePlata() == 0) {
-                invoice.setPaid(true);
+        if (invoice.getRestDePlata() != 0) {
+            if (payment.getAmount() > invoice.getRestDePlata()) {
+                log.info("Payment amount is greater than the rest to be paid");
+                return null;
             }
-            user.setRestDePlataTotal(user.getRestDePlataTotal() - payment.getAmount());
-        } else {
-            invoice.setRestDePlata(0);
-            invoice.setPaid(true);
-            user.setRestDePlataTotal(user.getRestDePlataTotal() - invoice.getRestDePlata());
-        }
+            assert user != null;
+            payment.setCodClient(user.getCodClient());
+            payment.setUserName(user.getName());
+            if (payment.getAmount() <= invoice.getRestDePlata()) {
+                invoice.setRestDePlata(invoice.getRestDePlata() - payment.getAmount());
+                if (invoice.getRestDePlata() == 0) {
+                    invoice.setPaid(true);
+                }
+                user.setRestDePlataTotal(user.getRestDePlataTotal() - payment.getAmount());
+            } else {
+                invoice.setRestDePlata(0);
+                invoice.setPaid(true);
+                user.setRestDePlataTotal(user.getRestDePlataTotal() - invoice.getRestDePlata());
+            }
 
-        payment.setDate(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        userRepository.save(user);
-        invoiceRepository.save(invoice);
-        return paymentRepository.save(payment);
+            payment.setDate(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            userRepository.save(user);
+            invoiceRepository.save(invoice);
+            return paymentRepository.save(payment);
+        }
+        return null;
     }
 
     public List<Payment> getAllPayments() {
@@ -274,6 +281,25 @@ public class InvoiceService {
         paymentRepository.delete(payment);
 
         return true;
+    }
+
+    public Integer getCountUnpaidInvoices(Integer codClient) {
+        List<Invoice> invoices = invoiceRepository.findAllUnpaidInvoicesByCodClient(codClient);
+        return invoices.size();
+    }
+
+    public List<Payment> getAllPaymentsByCodClient(Integer codClient) {
+
+        List<Payment> payments = paymentRepository.findAllByCodClient(codClient);
+
+        if (payments.size() <= 5) {
+            return payments;
+        }
+        return payments.subList(payments.size() - 5, payments.size());
+    }
+
+    public List<Invoice> findAllByCodClient(Integer codClient) {
+        return invoiceRepository.findAllByCodClient(codClient);
     }
 
 }

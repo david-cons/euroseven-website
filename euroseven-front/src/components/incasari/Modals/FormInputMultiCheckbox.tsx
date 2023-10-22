@@ -9,6 +9,8 @@ import {
 import { useState, useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { FormInputProps } from "./FormInputProps";
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
 
 export const FormInputMultiCheckbox: React.FC<FormInputProps> = ({
   name,
@@ -19,6 +21,8 @@ export const FormInputMultiCheckbox: React.FC<FormInputProps> = ({
   setNrFacturi,
   sume,
   setSume,
+  dates,
+  setDates,
 }) => {
   const [selectedItems, setSelectedItems] = useState<any>([]);
 
@@ -58,14 +62,28 @@ export const FormInputMultiCheckbox: React.FC<FormInputProps> = ({
                   item
                   xs={3}
                   key={`key_${nrFactura}`}
-                  sx={{ position: "relative" }}
+                  sx={{ position: "relative", mt: "15px" }}
                 >
+                  <Typography
+                    sx={{
+                      position: "absolute",
+                      top: -25,
+                      color: "black",
+                      left: 43,
+                      fontFamily: "Catesque",
+                      fontSize: "14px",
+                      opacity: "0.7",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {`${dates![index]}`}
+                  </Typography>
                   <Typography
                     sx={{
                       position: "absolute",
                       top: -5,
                       color: "red",
-                      left: 39,
+                      left: 43,
                       fontFamily: "Catesque",
                     }}
                   >
@@ -77,16 +95,19 @@ export const FormInputMultiCheckbox: React.FC<FormInputProps> = ({
                         name={name}
                         render={({ field }) => {
                           return (
-                            <Checkbox
-                              checked={selectedItems.includes(nrFactura)}
-                              onChange={() => handleSelect(nrFactura)}
-                              sx={{
-                                "& .MuiButtonBase-root-MuiCheckbox-root": {
-                                  position: "absolute",
-                                  top: 0,
-                                },
-                              }}
-                            />
+                            <Tooltip
+                              TransitionComponent={Fade}
+                              TransitionProps={{ timeout: 400 }}
+                              title={dates![index]}
+                            >
+                              <Checkbox
+                                checked={selectedItems.includes(nrFactura)}
+                                onChange={() => handleSelect(nrFactura)}
+                                sx={{
+                                  "& .MuiButtonBase-root-MuiCheckbox-root": {},
+                                }}
+                              />
+                            </Tooltip>
                           );
                         }}
                         control={control}
