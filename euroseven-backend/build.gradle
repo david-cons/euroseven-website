@@ -35,6 +35,11 @@ dependencies {
     implementation 'com.stripe:stripe-java:23.6.0'
     implementation 'org.apache.pdfbox:pdfbox:2.0.25'
     implementation 'com.google.cloud:google-cloud-storage:2.22.0'
+    // https://mvnrepository.com/artifact/org.apache.poi/poi
+    implementation 'org.apache.poi:poi:5.2.4'
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+    implementation 'org.apache.poi:poi-ooxml:5.2.4'
+
 
 }
 

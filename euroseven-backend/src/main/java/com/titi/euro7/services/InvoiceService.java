@@ -8,6 +8,10 @@ import com.titi.euro7.entities.User;
 import com.titi.euro7.repositories.InvoiceRepository;
 import com.titi.euro7.repositories.PaymentRepository;
 import com.titi.euro7.repositories.UserRepository;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import static com.titi.euro7.services.UserService.isNumeric;
@@ -53,8 +55,43 @@ public class InvoiceService {
     }
 
 
-    public Invoice uploadInvoice(Invoice invoice) {
-        return invoiceRepository.save(invoice);
+    public void uploadInvoice(Invoice invoice) {
+
+        log.info("Saving invoice with Nr" + invoice.getNrFactura());
+        User user = userRepository.findByCodClient(invoice.getCodClient());
+        if (user == null) {
+            log.info("User with codClient " + invoice.getCodClient() + " does not have an account, saving invoice.");
+            invoiceRepository.save(invoice);
+        }
+        else {
+            try {
+                if (user.getRestDePlataTotal() < 0) {
+                    invoice.setRestDePlata(invoice.getRestDePlata() + user.getRestDePlataTotal());
+                    user.setRestDePlataTotal(0.0);
+                    if (invoice.getRestDePlata() == 0) {
+                        invoice.setPaid(true);
+                    } else {
+                        user.setRestDePlataTotal(invoice.getRestDePlata());
+                    }
+                } else {
+                    invoice.setRestDePlata(invoice.getPrice());
+                    invoice.setPaid(false);
+                    user.setRestDePlataTotal(user.getRestDePlataTotal() + invoice.getRestDePlata());
+                }
+//                if (invoice.getCreated_date().isEqual(LocalDate.now())) {
+//                    user.setIndexVechi(invoice.getIndexVechi());
+//                    user.setIndexNou(invoice.getIndexNou());
+//                }
+                user.setIndexVechi(invoice.getIndexVechi());
+                user.setIndexNou(invoice.getIndexNou());
+                userRepository.save(user);
+                invoiceRepository.save(invoice);
+                log.info("Saved user and invoice");
+            } catch (java.time.format.DateTimeParseException e) {
+                log.info("Error parsing the date: " + e.getMessage());
+            }
+        }
+
     }
 
     public Invoice createInvoice(Invoice invoice) {
@@ -68,22 +105,22 @@ public class InvoiceService {
             invoice.setDue_date(invoice.getCreated_date().plusMonths(1));
             invoice.setPaid(false);
             invoice.setRestDePlata(invoice.getPrice());
-            invoice.setIndexVechi(0.0); // TODO: Change This
-            invoice.setIndexNou(0.0); // TODO: Change This
 
-            if (user.getSaldo() <= invoice.getPrice()) {
-                invoice.setRestDePlata(invoice.getRestDePlata() - user.getSaldo());
-                user.setSaldo(0.0);
+            if (user.getRestDePlataTotal() < 0) {
+                invoice.setRestDePlata(invoice.getRestDePlata() + user.getRestDePlataTotal());
+                user.setRestDePlataTotal(0.0);
                 if (invoice.getRestDePlata() == 0) {
                     invoice.setPaid(true);
                 } else {
-                    user.setRestDePlataTotal(user.getRestDePlataTotal() + invoice.getRestDePlata());
+                    user.setRestDePlataTotal(invoice.getRestDePlata());
                 }
             } else {
-                invoice.setRestDePlata(0);
-                invoice.setPaid(true);
-                user.setSaldo(user.getSaldo() - invoice.getPrice());
+                invoice.setRestDePlata(invoice.getPrice());
+                invoice.setPaid(false);
+                user.setRestDePlataTotal(user.getRestDePlataTotal() + invoice.getRestDePlata());
             }
+            user.setIndexVechi(invoice.getIndexVechi());
+            user.setIndexNou(invoice.getIndexNou());
             userRepository.save(user);
         } catch (java.time.format.DateTimeParseException e) {
             log.info("Error parsing the date: " + e.getMessage());
@@ -101,7 +138,7 @@ public class InvoiceService {
         assert invoice != null;
         User user = userRepository.findByCodClient(invoice.getCodClient());
         if (invoice.getPaid()) {
-            user.setSaldo(user.getSaldo() + invoice.getPrice() - invoice.getRestDePlata());
+            user.setRestDePlataTotal(user.getRestDePlataTotal() + invoice.getPrice() - invoice.getRestDePlata());
         }
         user.setRestDePlataTotal(user.getRestDePlataTotal() - invoice.getRestDePlata());
         userRepository.save(user);
@@ -154,9 +191,9 @@ public class InvoiceService {
                 }
                 user.setRestDePlataTotal(user.getRestDePlataTotal() - payment.getAmount());
             } else {
-                invoice.setRestDePlata(0);
                 invoice.setPaid(true);
                 user.setRestDePlataTotal(user.getRestDePlataTotal() - invoice.getRestDePlata());
+                invoice.setRestDePlata(0);
             }
 
             payment.setDate(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
@@ -231,7 +268,7 @@ public class InvoiceService {
                // user.setRestDePlataTotal(user.getRestDePlataTotal() + priceDifference);
 
                 if (invoice.getRestDePlata() < 0) {
-                    user.setSaldo(user.getSaldo() - invoice.getRestDePlata()); // Convert negative value to positive
+                    user.setRestDePlataTotal(user.getRestDePlataTotal() - invoice.getRestDePlata()); // Convert negative value to positive
                     invoice.setRestDePlata(0);
                     invoice.setPaid(true);
                 }
@@ -301,5 +338,73 @@ public class InvoiceService {
     public List<Invoice> findAllByCodClient(Integer codClient) {
         return invoiceRepository.findAllByCodClient(codClient);
     }
+
+    public XSSFWorkbook exportInvoicesToXLSX(List<Invoice> invoices) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Facturi");
+
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {"ID", "Data Emisa", "Data Scadenta", "Suma", "Platita", "Nr. Factura", "Cod Client", "Rest de Plata", "Index Vechi", "Index Nou"};
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+        }
+
+        // Fill data rows
+        int rowNum = 1;
+
+        for (Invoice invoice : invoices) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(invoice.getId());
+            row.createCell(1).setCellValue(invoice.getCreated_date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            row.createCell(2).setCellValue(invoice.getDue_date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            row.createCell(3).setCellValue(invoice.getPrice());
+            row.createCell(4).setCellValue(invoice.getPaid());
+            row.createCell(5).setCellValue(invoice.getNrFactura());
+            row.createCell(6).setCellValue(invoice.getCodClient());
+            row.createCell(7).setCellValue(invoice.getRestDePlata());
+            row.createCell(8).setCellValue(invoice.getIndexVechi());
+            row.createCell(9).setCellValue(invoice.getIndexNou());
+
+        }
+        sheet.setColumnWidth(1, 200*15);
+        sheet.setColumnWidth(2, 200*15);
+        sheet.setColumnWidth(5, 200*15);
+        sheet.setColumnWidth(6, 200*15);
+        return workbook;
+    }
+
+
+    public XSSFWorkbook exportPaymentsToXLSX(List<Payment> payments) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Plati");
+
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {"ID", "Data", "Suma", "Cod Client", "Nume", "Nr. Factura", "Metoda de Plata"};
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+        }
+
+        // Fill data rows
+        int rowNum = 1;
+
+        for (Payment payment : payments) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(payment.getId());
+            row.createCell(1).setCellValue(payment.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            row.createCell(2).setCellValue(payment.getAmount());
+            row.createCell(3).setCellValue(payment.getCodClient());
+            row.createCell(4).setCellValue(payment.getUserName());
+            row.createCell(5).setCellValue(payment.getNrFactura());
+            row.createCell(6).setCellValue(payment.getPaymentMethod());
+
+        }
+        sheet.setColumnWidth(1, 200*25);
+        sheet.setColumnWidth(3, 200*15);
+        sheet.setColumnWidth(5, 200*15);
+        return workbook;
+    }
+
 
 }

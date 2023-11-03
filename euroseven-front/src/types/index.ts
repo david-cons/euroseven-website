@@ -3,7 +3,6 @@ export type UserEntity = {
   username: string; //email
   password: string;
   inactive?: boolean;
-  saldo?: number;
   role?: string;
   name?: string;
   codClient?: number;
@@ -13,6 +12,9 @@ export type UserEntity = {
   phone?: string;
   image?: string;
   restDePlataTotal?: number;
+  indexVechi?: number;
+  indexNou?: number;
+  defaultPassword?: Boolean;
 };
 
 export type InvoiceEntity = {
@@ -22,6 +24,7 @@ export type InvoiceEntity = {
   price?: number;
   file?: string;
   paid?: Boolean;
+  location?: string;
   nrFactura?: string;
   codClient?: number | null;
   restDePlata?: number;
@@ -39,4 +42,22 @@ export type PaymentEntity = {
   nrFactura?: number;
   incasariId?: number;
   paymentMethod?: string;
+};
+
+export type MeterReadingEntity = {
+  id?: number;
+  serieContor?: string;
+  indexVechi?: number;
+  indexNou?: number;
+  codClient?: number;
+  date?: string | null;
+  picture?: string | null;
+  accepted?: Boolean;
+};
+
+export type NotificationEntity = {
+  id?: number;
+  content?: string;
+  codClient?: number;
+  completed?: boolean;
 };

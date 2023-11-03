@@ -1,5 +1,6 @@
 import { UserEntity } from "../types";
 import axios from "../axios";
+import { AxiosResponse } from "axios";
 
 const URL = "http://localhost:8081/api/users";
 
@@ -128,8 +129,36 @@ export abstract class UserService {
     AddSaldoDTO: { amount: number }
   ): Promise<UserEntity> {
     return new Promise((resolve) => {
+      axios.post(URL + "/" + id + "/add-rdp", AddSaldoDTO).then((response) => {
+        resolve(response.data);
+      });
+    });
+  }
+
+  public static async exportUsers(
+    users: UserEntity[]
+  ): Promise<AxiosResponse<any>> {
+    return new Promise((resolve, reject) => {
       axios
-        .post(URL + "/" + id + "/add-saldo", AddSaldoDTO)
+        .post(`${URL}/export`, users, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public static async updatePassword(
+    id: number,
+    password: string
+  ): Promise<UserEntity> {
+    return new Promise((resolve) => {
+      axios
+        .post(URL + "/update-password/" + id, { password })
         .then((response) => {
           resolve(response.data);
         });

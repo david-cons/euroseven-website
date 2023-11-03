@@ -179,6 +179,40 @@ export abstract class InvoiceService {
     });
   }
 
+  public static async exportInvoices(
+    invoices: InvoiceEntity[]
+  ): Promise<AxiosResponse<any>> {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`${URL}/export`, invoices, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public static async exportPayments(
+    payments: PaymentEntity[]
+  ): Promise<AxiosResponse<any>> {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`${URL}/payments/export`, payments, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   public static async getAllInvoicesByCodClient(
     codClient: number
   ): Promise<InvoiceEntity[]> {

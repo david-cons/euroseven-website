@@ -83,16 +83,75 @@ export const UserHome: React.FC<{
         }}
       >
         <Stack direction="row" spacing={10}>
-          <HomeCard
-            title={"Sold"}
-            data={`${user?.saldo!} RON`}
-            icon={PaidOutlinedIcon}
-          />
-          <HomeCard
-            title={"Rest de Plată"}
-            data={`${user?.restDePlataTotal!} RON`}
-            icon={PaymentIcon}
-          />
+          <Paper
+            elevation={5}
+            className="card-single"
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              background: "white",
+              padding: "2rem",
+              width: "647px", // Adjust width based on screen size
+              height: "100px", // Adjust height based on screen size
+              borderRadius: "12px",
+              boxShadow: "0 8px 16px -8px rgba(0, 0, 0, 0.3)",
+              border: "0.1px solid #e0e0e0",
+              transition: "transform 0.2s ease-in-out",
+              "&:hover": {
+                transform: "scale(1.05)",
+              },
+              position: "relative",
+            }}
+          >
+              <Typography
+                fontFamily={"Catesque"}
+                sx={{ color: "#9499a2", textTransform: "uppercase", margin: "0 auto" }}
+              >
+                {"Rest de Plată"}
+              </Typography>
+              <Box
+                sx={{
+                  padding: "20px",
+                  position: "absolute",
+                  left: "0",
+                  top: "35px",
+                }}
+              >
+                <Box>
+                  <Typography
+                    fontFamily={"Catesque"}
+                    sx={{
+                      color: "#black",
+                      fontSize: "2rem",
+                      letterSpacing: "1.5px",
+                    }}
+                  >
+                    {`${user?.restDePlataTotal!} RON`}
+                  </Typography>
+                </Box>
+              </Box>
+            <Box sx={{ mt: "10px" }}>
+              <Icon
+                MUIIcon={PaymentIcon}
+                color={Number(user?.restDePlataTotal!) < 0 ? "green" : "red"}
+              />
+            </Box>
+            <Button
+              endIcon={<ArrowForwardIcon />}
+              sx={{
+                fontFamily: "Catesque",
+                textTransform: "none",
+                position: "absolute",
+                bottom: -15,
+                right: -10,
+                borderRadius: "15px",
+                margin: "15px",
+                color: "black",
+              }}
+            >
+              Vezi Detalii
+            </Button>
+          </Paper>
           <HomeCard
             title={"Facturi Restante"}
             data={countUnpaidInvoices}
@@ -107,8 +166,8 @@ export const UserHome: React.FC<{
           }}
         >
           <PlatiRecenteCard user={user} recentPayments={recentPayments} />
-          <IndexCard forIndexVechi={true} value={"24.833"} />
-          <IndexCard forIndexVechi={false} value={"24.900"} />
+          <IndexCard forIndexVechi={true} value={user?.indexVechi!} />
+          <IndexCard forIndexVechi={false} value={user?.indexNou!} />
         </Stack>
       </Box>
     </Box>

@@ -52,6 +52,11 @@ export const FormInputDropdown: React.FC<FormInputProps> = ({
           noOptionsText={"Nimic găsit."}
           filterOptions={filterOptions}
           disabled={disabled ? disabled : false}
+          ListboxProps={{
+            style: {
+              maxHeight: "100px",
+            },
+          }}
           renderInput={(params: any) => (
             <TextField
               {...params}

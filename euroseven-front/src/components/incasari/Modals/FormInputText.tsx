@@ -25,7 +25,7 @@ export const FormInputText = ({
           id={"amount"}
           size={"small"}
           type={"number"}
-          label={"Sumă"}
+          label={label}
           onChange={onChange}
           error={!!error}
           sx={{
@@ -58,21 +58,27 @@ export const FormInputText = ({
           inputProps={{
             step: 0.5,
           }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment
-                sx={{
-                  mt: "1px",
-                  userSelect: "none",
-                }}
-                position="start"
-              >
-                <Typography sx={{ fontFamily: "Catesque", color: "black" }}>
-                  RON
-                </Typography>
-              </InputAdornment>
-            ),
-          }}
+          InputProps={
+            name === "textValue"
+              ? {
+                  startAdornment: (
+                    <InputAdornment
+                      sx={{
+                        mt: "1px",
+                        userSelect: "none",
+                      }}
+                      position="start"
+                    >
+                      <Typography
+                        sx={{ fontFamily: "Catesque", color: "black" }}
+                      >
+                        RON
+                      </Typography>
+                    </InputAdornment>
+                  ),
+                }
+              : {}
+          }
         />
       )}
       defaultValue={""}

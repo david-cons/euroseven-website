@@ -30,4 +30,6 @@ export interface IFormInput {
   dropdownValue: string;
   sliderValue: number;
   fileValue: File | undefined;
+  indexVechiValue: string;
+  indexNouValue: string;
 }

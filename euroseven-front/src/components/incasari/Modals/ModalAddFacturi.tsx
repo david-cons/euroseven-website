@@ -13,6 +13,8 @@ const defaultValues = {
   dateValue: new Date(),
   dropdownValue: "",
   fileValue: undefined,
+  indexVechiValue: "",
+  indexNouValue: "",
 };
 
 export const ModalAddFacturi: React.FC<{
@@ -42,6 +44,8 @@ export const ModalAddFacturi: React.FC<{
       textValue: "",
       dateValue: new Date(),
       dropdownValue: "",
+      indexVechiValue: "",
+      indexNouValue: "",
     });
     setUser(undefined);
   };
@@ -76,11 +80,17 @@ export const ModalAddFacturi: React.FC<{
     const created_date = formatDate(getValues("dateValue"));
     const price = Number(getValues("textValue"));
     const codClient = Number(getValues("dropdownValue"));
+    const indexVechi = Number(getValues("indexVechiValue"));
+    const indexNou = Number(getValues("indexNouValue"));
+    const localitate = checkLocalitate(getValues("dropdownValue"));
     InvoiceService.createInvoice({
       created_date: created_date,
       price: price,
       file: file,
+      location: localitate,
       codClient: codClient,
+      indexVechi: indexVechi,
+      indexNou: indexNou,
     }).then((res) => {
       console.log(res);
       setFacturi!([...facturi!, res]);
@@ -90,6 +100,8 @@ export const ModalAddFacturi: React.FC<{
         dropdownValue: "",
         dateValue: new Date(),
         fileValue: undefined,
+        indexVechiValue: "",
+        indexNouValue: "",
       });
       handleOpenSnackbar();
       handleCloseModal();
@@ -143,7 +155,9 @@ export const ModalAddFacturi: React.FC<{
           label="Nume"
         />
 
-        <FormInputText name="textValue" control={control} label="Text Input" />
+        <FormInputText name="textValue" control={control} label="Sumă" />
+        <FormInputText name="indexVechiValue" control={control} label="Index Vechi" />
+        <FormInputText name="indexNouValue" control={control} label="Index Nou" />
         <FormInputDate label="Dată" name="dateValue" control={control} />
         <FormInputFile
           name="fileValue"
@@ -181,3 +195,13 @@ export const ModalAddFacturi: React.FC<{
     </Modal>
   );
 };
+
+function checkLocalitate(str: string): string {
+  if (/^[1-4]/.test(str)) {
+    return "SB";
+  } else if (/^5/.test(str)) {
+    return "BD";
+  } else {
+    return "BD";
+  }
+}

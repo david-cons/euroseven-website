@@ -20,7 +20,9 @@ import { TablePagination } from "@mui/material";
 export const UserInvoicesTable = (props: {
   codClient: number;
   setSelectedTab: React.Dispatch<React.SetStateAction<String>>;
+  filter: string;
 }) => {
+  const [allInvoices, setAllInvoices] = useState<InvoiceEntity[]>([]);
   const [invoices, setInvoices] = useState<InvoiceEntity[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -48,10 +50,10 @@ export const UserInvoicesTable = (props: {
       });
   };
 
-  const handleDownload = async (nrFactura: number) => {
+  const handleDownload = async (nrFactura: number, localitate: string) => {
     try {
       const axiosResponse = await InvoiceService.downloadInvoice(
-        `factura-${nrFactura}`
+        `factura-${localitate}-${nrFactura}`
       );
       const blobData = axiosResponse.data;
       // Create a blob URL
@@ -61,7 +63,7 @@ export const UserInvoicesTable = (props: {
       // Use a temporary <a> element to initiate the download
       const link = document.createElement("a");
       link.href = url;
-      link.download = `factura-${nrFactura}.pdf`;
+      link.download = `factura-${localitate}-${nrFactura}.pdf`;
       document.body.appendChild(link);
       link.click();
 
@@ -76,20 +78,30 @@ export const UserInvoicesTable = (props: {
       }
     }
   };
-
+  const fetchUserInvoices = async () => {
+    await InvoiceService.getAllInvoicesByCodClient(props.codClient)
+      .then((res) => {
+        setInvoices(res);
+        setAllInvoices(res);
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    const fetchUserInvoices = async () => {
-      await InvoiceService.getAllInvoicesByCodClient(props.codClient)
-        .then((res) => {
-          setInvoices(res);
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
     fetchUserInvoices();
   }, []);
+
+  useEffect(() => {
+    if (props.filter === "Restante") {
+      setInvoices(allInvoices.filter((invoice) => invoice.paid === false));
+    } else if (props.filter === "Plătite") {
+      setInvoices(allInvoices.filter((invoice) => invoice.paid === true));
+    } else if (props.filter === "Toate") {
+      setInvoices(allInvoices);
+    }
+  }, [props.filter, allInvoices]);
 
   return (
     <Box>
@@ -185,7 +197,10 @@ export const UserInvoicesTable = (props: {
                           mt: "5px",
                         }}
                         onClick={() =>
-                          handleDownload(Number(invoice.nrFactura))
+                          handleDownload(
+                            Number(invoice.nrFactura),
+                            invoice.location!
+                          )
                         }
                       >
                         <InvoiceElement
@@ -222,7 +237,10 @@ export const UserInvoicesTable = (props: {
                         <Button
                           variant="outlined"
                           onClick={() =>
-                            handleDownload(Number(invoice.nrFactura))
+                            handleDownload(
+                              Number(invoice.nrFactura),
+                              invoice.location!
+                            )
                           }
                           sx={{
                             fontFamily: "Catesque",

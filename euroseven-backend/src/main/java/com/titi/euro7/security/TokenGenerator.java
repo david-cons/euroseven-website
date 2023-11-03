@@ -59,6 +59,8 @@ public class TokenGenerator {
                 .issuedAt(now)
                 .expiresAt(now.plus(30, ChronoUnit.DAYS))
                 .subject(user.getId().toString())
+                .claim("username", user.getUsername())
+                .claim("role", user.getRole())
                 .build();
 
         return refreshTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
@@ -75,6 +77,7 @@ public class TokenGenerator {
         tokenDTO.setUserId(user.getId());
         tokenDTO.setAccessToken(createAccessToken(authentication));
 
+        System.out.println("hey");
         String refreshToken;
         if (authentication.getCredentials() instanceof Jwt jwt) {
             Instant now = Instant.now();

@@ -6,6 +6,7 @@ import { AdminHomePage } from "./pages/admin/AdminHomePage";
 import { IncasariHomePage } from "./pages/incasari/IncasariHomePage";
 import { useEffect } from "react";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 function App() {
   const removeFromLocalStorage = () => {
@@ -51,6 +52,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </div>

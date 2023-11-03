@@ -21,6 +21,7 @@ public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthen
 
     @Override
     public UsernamePasswordAuthenticationToken convert(Jwt jwt) {
+        log.info("JWT Claims: " + jwt.getClaims());
         User user = new User();
         user.setId(Long.parseLong(jwt.getSubject()));
         String role = jwt.getClaimAsString("role");
@@ -30,6 +31,7 @@ public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthen
         authorities.add(new SimpleGrantedAuthority(role));
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, jwt, authorities);
+        log.info("Converted UsernamePasswordAuthenticationToken: " + token);
 
         log.info(token.toString());
         return token;

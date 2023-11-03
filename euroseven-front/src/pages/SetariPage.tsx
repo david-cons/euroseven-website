@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
 import { UserEntity } from "../types";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { UserService } from "../services/UserService";
 
 export const SetariPage: React.FC<{
@@ -26,10 +26,11 @@ export const SetariPage: React.FC<{
   const [telefon, setTelefon] = useState<string | undefined>("");
   const [localitate, setLocalitate] = useState<string | undefined | null>("");
   const [adresa, setAdresa] = useState<string | undefined>("");
-  const [judet, setJudet] = useState<string>("");
+  const [judet, setJudet] = useState<string | undefined>("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
@@ -40,6 +41,7 @@ export const SetariPage: React.FC<{
     }
 
     setOpenSnackbar(false);
+    setOpenErrorSnackbar(false);
   };
 
   const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +64,10 @@ export const SetariPage: React.FC<{
 
   const changeNume = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNume(event.target.value);
+  };
+
+  const changeJudet = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setJudet(event.target.value);
   };
 
   const changeTelefon = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,6 +106,8 @@ export const SetariPage: React.FC<{
       setOpenSnackbar(true);
       if (res) {
         setUser(res);
+      } else {
+        setOpenErrorSnackbar(true);
       }
     });
   };
@@ -115,6 +123,7 @@ export const SetariPage: React.FC<{
     setUsername(user?.username);
     setTelefon(user?.phone);
     setLocalitate(user?.localitate);
+    setJudet(user?.judet);
     setAdresa(user?.address);
   }, [user]);
 
@@ -132,6 +141,20 @@ export const SetariPage: React.FC<{
           sx={{ width: "100%" }}
         >
           Contul tau a fost actualizat cu succes!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        sx={{ position: "absolute", bottom: 0, left: 0, padding: "20px" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Poza este goala sau de marime prea mare!
         </Alert>
       </Snackbar>
       <Container
@@ -213,7 +236,9 @@ export const SetariPage: React.FC<{
                   mb: "25px",
                 }}
               >
-                {user?.role === "ROLE_ADMIN" ? "Administrator" : "Incasari"}
+                {user?.role === "ROLE_ADMIN" && "Administrator"}
+                {user?.role === "ROLE_INCASARI" && "Incasari"}
+                {user?.role === "ROLE_USER" && "Client"}
               </Typography>
               <Divider sx={{ mt: "10px", width: "315px" }} />
               <Button
@@ -366,7 +391,8 @@ export const SetariPage: React.FC<{
                         fontFamily: "Catesque", // Font family
                         fontSize: "18px",
                       },
-                      "& .MuiInputLabel-root.Mui-disabled": { // Specifically target the disabled label
+                      "& .MuiInputLabel-root.Mui-disabled": {
+                        // Specifically target the disabled label
                         color: "black",
                       },
                       "& .MuiOutlinedInput-root": {
@@ -394,6 +420,38 @@ export const SetariPage: React.FC<{
                     label={"Telefon"}
                     value={telefon}
                     onChange={changeTelefon}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "black", // Label color
+                        fontFamily: "Catesque", // Font family
+                        fontSize: "18px",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#0054a6", // Border color
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "#0054a6", // Hover border color
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#0054a6", // Focused border color
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id={"judet"}
+                    name={"judet"}
+                    size={"small"}
+                    label={"Județ"}
+                    value={judet}
+                    onChange={changeJudet}
                     sx={{
                       "& .MuiInputBase-input": {
                         color: "black", // Text color
