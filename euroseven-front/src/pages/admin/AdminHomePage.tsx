@@ -21,7 +21,7 @@ import { UserService } from "../../services/UserService";
 import { UserEntity } from "../../types";
 import { useSelector } from "react-redux";
 import { SetariPage } from "../SetariPage";
-import { pages, idx } from "../../lunrjs/dataAdmin";
+import { pagesAdmin, idxAdmin } from "../../lunrjs/dataAdmin";
 import { IncasariInvoices } from "../incasari/IncasariInvoices";
 import { AdminIFactura } from "./AdminIFactura";
 
@@ -41,13 +41,13 @@ export const AdminHomePage: React.FC = () => {
   };
 
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<typeof pages>([]);
+  const [results, setResults] = useState<typeof pagesAdmin>([]);
 
   const [openSearch, setOpenSearch] = useState(false);
 
   const handleSearch = () => {
     if (query !== "" && query !== " ") {
-      const matchedPages = pages.filter((page) =>
+      const matchedPages = pagesAdmin.filter((page) =>
         page.content.toLowerCase().includes(query.toLowerCase())
       );
 

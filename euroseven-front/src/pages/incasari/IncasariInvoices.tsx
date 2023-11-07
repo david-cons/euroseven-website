@@ -162,16 +162,17 @@ export const IncasariInvoices: React.FC<{
     debouncedFetchSearchResults(searchText);
   }, [searchText]);
 
+  const fetchInvoices = async () => {
+    await InvoiceService.getAllInvoices()
+      .then((res) => {
+        setInvoices(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
-    const fetchInvoices = async () => {
-      await InvoiceService.getAllInvoices()
-        .then((res) => {
-          setInvoices(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
     fetchInvoices();
     if (createUser === true) {
       handleOpenModal();
@@ -246,6 +247,9 @@ export const IncasariInvoices: React.FC<{
           handleSearchInputChange={handleSearchInputChange}
           searchText={searchText}
           forWho="factura"
+          invoices={searchedInvoices.length > 0 ? searchedInvoices : invoices}
+          setInvoices={setInvoices}
+          fetchInvoices={fetchInvoices}
         />
         <Box
           sx={{

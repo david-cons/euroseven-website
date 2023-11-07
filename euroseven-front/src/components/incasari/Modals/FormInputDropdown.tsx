@@ -45,13 +45,22 @@ export const FormInputDropdown: React.FC<FormInputProps> = ({
   return (
     <Controller
       rules={{ required: true }}
-      render={({ field: { onChange, ...props } }) => (
+      render={({
+        field: { onChange, ...props },
+        fieldState: { error },
+        formState,
+      }) => (
         <Autocomplete
           {...props}
           options={coduriClient}
           noOptionsText={"Nimic găsit."}
           filterOptions={filterOptions}
           disabled={disabled ? disabled : false}
+          ListboxProps={{
+            style: {
+              maxHeight: "100px",
+            },
+          }}
           renderInput={(params: any) => (
             <TextField
               {...params}
@@ -59,6 +68,8 @@ export const FormInputDropdown: React.FC<FormInputProps> = ({
               name={"codClient"}
               size={"small"}
               id={"codClient"}
+              error={!!error}
+              helperText={error ? error.message : null}
               label={"Cod Client"}
               disabled={disabled ? disabled : false}
               type="number"

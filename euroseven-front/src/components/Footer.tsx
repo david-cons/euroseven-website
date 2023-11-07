@@ -22,9 +22,15 @@ export const Footer = () => {
         position: "relative",
       }}
     >
-      <Box sx={{ display: "flex", mt: "10vh" }}>
-        
-        <Stack spacing={2}>
+      <Box sx={{ display: "flex", mt: "10vh", textAlign: "left" }}>
+        <Stack
+          spacing={2}
+          direction="column"
+          alignItems="flex-start" // This aligns items to the left
+          sx={{
+            textAlign: "left",
+          }}
+        >
           <Typography
             variant="h6"
             component="div"
@@ -105,7 +111,14 @@ export const Footer = () => {
             Cariere
           </Button>
         </Stack>
-        <Stack spacing={2}>
+        <Stack
+          spacing={2}
+          direction="column"
+          alignItems="flex-start" // This aligns items to the left
+          sx={{
+            textAlign: "left",
+          }}
+        >
           <Typography
             variant="h6"
             component="div"
@@ -243,7 +256,14 @@ export const Footer = () => {
             <img src={anpc2} alt="anpc2" width="175px" height={"50px"} />
           </Paper>
         </Stack>
-        <Stack spacing={2}>
+        <Stack
+          spacing={2}
+          direction="column"
+          alignItems="flex-start" // This aligns items to the left
+          sx={{
+            textAlign: "left",
+          }}
+        >
           <Typography
             variant="h6"
             component="div"
@@ -336,7 +356,15 @@ export const Footer = () => {
             Sistem dinamic de achiziții
           </Button>
         </Stack>
-        <Stack spacing={2} sx={{ ml: "10vh" }}>
+        <Stack
+          spacing={2}
+          direction="column"
+          alignItems="flex-start" // This aligns items to the left
+          sx={{
+            textAlign: "left",
+            ml: "10vh"
+          }}
+        >
           <Typography
             variant="h6"
             component="div"

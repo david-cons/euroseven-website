@@ -64,23 +64,6 @@ export const AdminUsers: React.FC = () => {
       headerClassName: "super-app-theme--header",
     },
     {
-      field: "saldo",
-      headerName: "Sold",
-      width: 200,
-      headerClassName: "super-app-theme--header",
-      renderCell: (params) => {
-        return (
-          <div
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            {params.value + " RON"}
-          </div>
-        );
-      },
-    },
-    {
       field: "restDePlataTotal",
       headerName: "Rest De Plata",
       width: 200,
@@ -205,6 +188,7 @@ export const AdminUsers: React.FC = () => {
           handleSearchInputChange={handleSearchInputChange}
           searchText={searchText}
           forWho="utilizator"
+          users={searchedUsers.length > 0 ? searchedUsers : users}
         />
         <Euro7DataGrid
           searchText={searchText}

@@ -20,7 +20,9 @@ import { TablePagination } from "@mui/material";
 export const UserInvoicesTable = (props: {
   codClient: number;
   setSelectedTab: React.Dispatch<React.SetStateAction<String>>;
+  filter: string;
 }) => {
+  const [allInvoices, setAllInvoices] = useState<InvoiceEntity[]>([]);
   const [invoices, setInvoices] = useState<InvoiceEntity[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -48,10 +50,10 @@ export const UserInvoicesTable = (props: {
       });
   };
 
-  const handleDownload = async (nrFactura: number) => {
+  const handleDownload = async (nrFactura: number, localitate: string) => {
     try {
       const axiosResponse = await InvoiceService.downloadInvoice(
-        `factura-${nrFactura}`
+        `factura-${localitate}-${nrFactura}`
       );
       const blobData = axiosResponse.data;
       // Create a blob URL
@@ -61,7 +63,7 @@ export const UserInvoicesTable = (props: {
       // Use a temporary <a> element to initiate the download
       const link = document.createElement("a");
       link.href = url;
-      link.download = `factura-${nrFactura}.pdf`;
+      link.download = `factura-${localitate}-${nrFactura}.pdf`;
       document.body.appendChild(link);
       link.click();
 
@@ -76,224 +78,250 @@ export const UserInvoicesTable = (props: {
       }
     }
   };
-
+  const fetchUserInvoices = async () => {
+    await InvoiceService.getAllInvoicesByCodClient(props.codClient)
+      .then((res) => {
+        setInvoices(res);
+        setAllInvoices(res);
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    const fetchUserInvoices = async () => {
-      await InvoiceService.getAllInvoicesByCodClient(props.codClient)
-        .then((res) => {
-          setInvoices(res);
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
     fetchUserInvoices();
   }, []);
 
+  useEffect(() => {
+    if (props.filter === "Restante") {
+      setInvoices(allInvoices.filter((invoice) => invoice.paid === false));
+    } else if (props.filter === "Plătite") {
+      setInvoices(allInvoices.filter((invoice) => invoice.paid === true));
+    } else if (props.filter === "Toate") {
+      setInvoices(allInvoices);
+    }
+  }, [props.filter, allInvoices]);
+
   return (
     <Box>
-      <TableContainer
-        component={Box}
-        sx={{ mt: "4vh", "& *": { fontFamily: "Catesque" } }}
-      >
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="payments table">
-          <TableHead>
-            <TableRow sx={{ backgroundColor: "white" }}>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  width: "250px",
-                  fontStyle: "italic",
-                  fontFamily: "Catesque",
-                }}
-                align="left"
-              >
-                Descriere
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  width: "100px",
-                  fontStyle: "italic",
-                  fontFamily: "Catesque",
-                }}
-                align="left"
-              >
-                Dată
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  width: "100px",
-                  fontStyle: "italic",
-                  fontFamily: "Catesque",
-                }}
-                align="left"
-              >
-                Nr. Factură
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  width: "100px",
-                  fontStyle: "italic",
-                  fontFamily: "Catesque",
-                }}
-                align="left"
-              >
-                Sumă
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  width: "100px",
-                  fontStyle: "italic",
-                  fontFamily: "Catesque",
-                }}
-                align="left"
-              >
-                Rest de Plată
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  width: "200px",
-                  fontStyle: "italic",
-                  fontFamily: "Catesque",
-                }}
-                align="left"
-              >
-                Acțiuni
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {invoices &&
-              reverseArray(invoices)
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((invoice) => (
-                  <TableRow key={invoice.id}>
-                    <TableCell component="th" scope="row">
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "center",
-                          alignItems: "center",
-                          fontFamily: "Catesque",
-                          fontWeight: "bold",
-                          mt: "5px",
-                        }}
-                        onClick={() =>
-                          handleDownload(Number(invoice.nrFactura))
-                        }
-                      >
-                        <InvoiceElement
-                          color={invoice.paid === true ? "#0054a6" : "red"}
-                        />
-                        {`Factură ${invoice.created_date!.substring(3)}`}
-                      </Box>
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ fontFamily: "Catesque" }}
-                    >{`${invoice.due_date}`}</TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ fontFamily: "Catesque" }}
-                    >{`${invoice.nrFactura}`}</TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ fontFamily: "Catesque" }}
-                    >{`${invoice.price} RON`}</TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ fontFamily: "Catesque" }}
-                    >{`${invoice.restDePlata} RON`}</TableCell>
-                    <TableCell align="left">
-                      <Box
-                        sx={{
-                          display: "flex",
-                          float: "left",
-                          alignItems: "center",
-                          position: "relative",
-                        }}
-                      >
-                        <Button
-                          variant="outlined"
-                          onClick={() =>
-                            handleDownload(Number(invoice.nrFactura))
-                          }
+      {allInvoices.length > 0 ? (
+        <TableContainer
+          component={Box}
+          sx={{ mt: "4vh", "& *": { fontFamily: "Catesque" } }}
+        >
+          <Table
+            sx={{ minWidth: 650 }}
+            size="small"
+            aria-label="payments table"
+          >
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "white" }}>
+                <TableCell
+                  sx={{
+                    fontWeight: "bold",
+                    width: "250px",
+                    fontStyle: "italic",
+                    fontFamily: "Catesque",
+                  }}
+                  align="left"
+                >
+                  Descriere
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: "bold",
+                    width: "100px",
+                    fontStyle: "italic",
+                    fontFamily: "Catesque",
+                  }}
+                  align="left"
+                >
+                  Dată
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: "bold",
+                    width: "100px",
+                    fontStyle: "italic",
+                    fontFamily: "Catesque",
+                  }}
+                  align="left"
+                >
+                  Nr. Factură
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: "bold",
+                    width: "100px",
+                    fontStyle: "italic",
+                    fontFamily: "Catesque",
+                  }}
+                  align="left"
+                >
+                  Sumă
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: "bold",
+                    width: "100px",
+                    fontStyle: "italic",
+                    fontFamily: "Catesque",
+                  }}
+                  align="left"
+                >
+                  Rest de Plată
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: "bold",
+                    width: "200px",
+                    fontStyle: "italic",
+                    fontFamily: "Catesque",
+                  }}
+                  align="left"
+                >
+                  Acțiuni
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {invoices &&
+                reverseArray(invoices)
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((invoice) => (
+                    <TableRow key={invoice.id}>
+                      <TableCell component="th" scope="row">
+                        <Box
                           sx={{
+                            display: "flex",
+                            textAlign: "center",
+                            alignItems: "center",
                             fontFamily: "Catesque",
-                            mr: "15px",
-                            width: "100px",
-                            background: "#0054a6",
-                            color: "white",
-                            "&:hover": {
-                              background: "#0054a6",
-                              color: "white",
-                            },
+                            fontWeight: "bold",
+                            mt: "5px",
+                          }}
+                          onClick={() =>
+                            handleDownload(
+                              Number(invoice.nrFactura),
+                              invoice.location!
+                            )
+                          }
+                        >
+                          <InvoiceElement
+                            color={invoice.paid === true ? "#0054a6" : "red"}
+                          />
+                          {`Factură ${invoice.created_date!.substring(3)}`}
+                        </Box>
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ fontFamily: "Catesque" }}
+                      >{`${invoice.due_date}`}</TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ fontFamily: "Catesque" }}
+                      >{`${invoice.nrFactura}`}</TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ fontFamily: "Catesque" }}
+                      >{`${invoice.price} RON`}</TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ fontFamily: "Catesque" }}
+                      >{`${invoice.restDePlata} RON`}</TableCell>
+                      <TableCell align="left">
+                        <Box
+                          sx={{
+                            display: "flex",
+                            float: "left",
+                            alignItems: "center",
+                            position: "relative",
                           }}
                         >
-                          Descarcă
-                        </Button>
-                        {invoice.paid !== true && (
-                          <>
-                            <Button
-                              variant="outlined"
-                              onClick={() => checkoutInvoice(invoice.id!)}
-                              sx={{
-                                fontFamily: "Catesque",
-                                width: "100px",
+                          <Button
+                            variant="outlined"
+                            onClick={() =>
+                              handleDownload(
+                                Number(invoice.nrFactura),
+                                invoice.location!
+                              )
+                            }
+                            sx={{
+                              fontFamily: "Catesque",
+                              mr: "15px",
+                              width: "100px",
+                              background: "#0054a6",
+                              color: "white",
+                              "&:hover": {
                                 background: "#0054a6",
                                 color: "white",
-                                position: "relative",
-                                zIndex: 1,
-                                transition: "transform 0.3s ease",
-                                "&:hover": {
-                                  transform: "translateY(5px)",
+                              },
+                            }}
+                          >
+                            Descarcă
+                          </Button>
+                          {invoice.paid !== true && (
+                            <>
+                              <Button
+                                variant="outlined"
+                                onClick={() => checkoutInvoice(invoice.id!)}
+                                sx={{
+                                  fontFamily: "Catesque",
+                                  width: "100px",
                                   background: "#0054a6",
                                   color: "white",
-                                },
-                              }}
-                            >
-                              Plătește
-                            </Button>
-                            <Box
-                              sx={{
-                                content: '""',
-                                position: "absolute",
-                                bottom: -4,
-                                right: "6%",
-                                width: "35%",
-                                height: "6px",
-                                background: "#01386e",
-                                zIndex: "0",
-                                borderRadius: "3px",
-                              }}
-                            />
-                          </>
-                        )}
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
-          </TableBody>
-          <TablePagination
-            component="div"
-            count={invoices.length}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={[5]}
-            sx={{
-              fontFamily: "Catesque",
-            }}
-          />
-        </Table>
-      </TableContainer>
+                                  position: "relative",
+                                  zIndex: 1,
+                                  transition: "transform 0.3s ease",
+                                  "&:hover": {
+                                    transform: "translateY(5px)",
+                                    background: "#0054a6",
+                                    color: "white",
+                                  },
+                                }}
+                              >
+                                Plătește
+                              </Button>
+                              <Box
+                                sx={{
+                                  content: '""',
+                                  position: "absolute",
+                                  bottom: -4,
+                                  right: "6%",
+                                  width: "35%",
+                                  height: "6px",
+                                  background: "#01386e",
+                                  zIndex: "0",
+                                  borderRadius: "3px",
+                                }}
+                              />
+                            </>
+                          )}
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+            </TableBody>
+            <TablePagination
+              component="div"
+              count={invoices.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[5]}
+              sx={{
+                fontFamily: "Catesque",
+              }}
+            />
+          </Table>
+        </TableContainer>
+      ) : (
+        <Typography fontFamily={"Catesque"} sx={{ mt: "4vh" }}>
+          Nu există facturi
+        </Typography>
+      )}
     </Box>
   );
 };

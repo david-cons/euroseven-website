@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { InvoiceEntity, UserEntity } from "../../../types";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { FormInputDate, FormInputDropdown, FormInputText, IFormInput } from ".";
+import { FormInputDate, FormInputDropdown, FormInputText } from ".";
 import { useForm } from "react-hook-form";
 import { FormInputUsername } from "./FormInputUsername";
 import { FormInputFile } from "./FormInputFile";
 import { InvoiceService } from "../../../services/InvoiceService";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const defaultValues = {
   textValue: "",
@@ -13,7 +16,30 @@ const defaultValues = {
   dateValue: new Date(),
   dropdownValue: "",
   fileValue: undefined,
+  indexVechiValue: "",
+  indexNouValue: "",
 };
+
+export interface IFormInput {
+  textValue: string;
+  userNameValue: string;
+  dateValue: Date;
+  dropdownValue: string;
+  fileValue?: File | undefined;
+  indexVechiValue: string;
+  indexNouValue: string;
+}
+
+const validationSchema = yup
+  .object({
+    textValue: yup.string().required("Suma trebuie introdusa!"),
+    userNameValue: yup.string().required("Numele clientului trebuie completat"),
+    dateValue: yup.date().required("Data trebuie completata"),
+    dropdownValue: yup.string().required("Codul client trebuie ales!"),
+    indexVechiValue: yup.string().required("Indexul vechi trebuie completat!"),
+    indexNouValue: yup.string().required("Indexul nou trebuie completat!"),
+  })
+  .required();
 
 export const ModalAddFacturi: React.FC<{
   openModal: boolean;
@@ -30,6 +56,7 @@ export const ModalAddFacturi: React.FC<{
 }) => {
   const { handleSubmit, reset, control, setValue, getValues } =
     useForm<IFormInput>({
+      resolver: yupResolver(validationSchema),
       defaultValues: defaultValues,
     });
 
@@ -42,6 +69,8 @@ export const ModalAddFacturi: React.FC<{
       textValue: "",
       dateValue: new Date(),
       dropdownValue: "",
+      indexVechiValue: "",
+      indexNouValue: "",
     });
     setUser(undefined);
   };
@@ -76,20 +105,27 @@ export const ModalAddFacturi: React.FC<{
     const created_date = formatDate(getValues("dateValue"));
     const price = Number(getValues("textValue"));
     const codClient = Number(getValues("dropdownValue"));
+    const indexVechi = Number(getValues("indexVechiValue"));
+    const indexNou = Number(getValues("indexNouValue"));
+    const localitate = checkLocalitate(getValues("dropdownValue"));
     InvoiceService.createInvoice({
       created_date: created_date,
       price: price,
       file: file,
+      location: localitate,
       codClient: codClient,
+      indexVechi: indexVechi,
+      indexNou: indexNou,
     }).then((res) => {
       console.log(res);
       setFacturi!([...facturi!, res]);
       reset({
         textValue: "",
-        checkboxValue: [],
         dropdownValue: "",
         dateValue: new Date(),
         fileValue: undefined,
+        indexVechiValue: "",
+        indexNouValue: "",
       });
       handleOpenSnackbar();
       handleCloseModal();
@@ -143,7 +179,17 @@ export const ModalAddFacturi: React.FC<{
           label="Nume"
         />
 
-        <FormInputText name="textValue" control={control} label="Text Input" />
+        <FormInputText name="textValue" control={control} label="Sumă" />
+        <FormInputText
+          name="indexVechiValue"
+          control={control}
+          label="Index Vechi"
+        />
+        <FormInputText
+          name="indexNouValue"
+          control={control}
+          label="Index Nou"
+        />
         <FormInputDate label="Dată" name="dateValue" control={control} />
         <FormInputFile
           name="fileValue"
@@ -181,3 +227,13 @@ export const ModalAddFacturi: React.FC<{
     </Modal>
   );
 };
+
+function checkLocalitate(str: string): string {
+  if (/^[1-4]/.test(str)) {
+    return "SB";
+  } else if (/^5/.test(str)) {
+    return "BD";
+  } else {
+    return "BD";
+  }
+}

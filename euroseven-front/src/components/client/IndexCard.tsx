@@ -5,7 +5,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface IndexCardProps {
   forIndexVechi: boolean;
-  value: string;
+  value: number | undefined;
 }
 
 export const IndexCard: React.FC<IndexCardProps> = ({
@@ -31,7 +31,7 @@ export const IndexCard: React.FC<IndexCardProps> = ({
     >
       <Box
         sx={
-          forIndexVechi
+          !forIndexVechi
             ? { margin: "0 auto", transform: "scaleX(-1)" }
             : { margin: "0 auto" }
         }

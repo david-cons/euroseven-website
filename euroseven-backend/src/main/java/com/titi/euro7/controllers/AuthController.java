@@ -5,9 +5,11 @@ import com.titi.euro7.dto.SignupDTO;
 import com.titi.euro7.dto.TokenDTO;
 import com.titi.euro7.entities.User;
 import com.titi.euro7.security.TokenGenerator;
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,7 +18,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -36,6 +39,7 @@ public class AuthController {
     @Autowired
     DaoAuthenticationProvider daoAuthenticationProvider;
     @Autowired
+    @Qualifier("jwtRefreshTokenAuthProvider")
     JwtAuthenticationProvider refreshTokenAuthProvider;
 
     @PostMapping("/register")
@@ -84,9 +88,18 @@ public class AuthController {
 
     @PostMapping("/token")
     public ResponseEntity<TokenDTO> token(@RequestBody TokenDTO tokenDTO) {
-        Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
+        try {
+
+            System.out.println(tokenDTO.getRefreshToken());
+            Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
         Jwt jwt = (Jwt) authentication.getCredentials();
+        System.out.println(jwt);
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
+        }
+        catch(Error e) {
+            System.out.print(e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/role")
@@ -95,5 +108,10 @@ public class AuthController {
         String role = jwt.getClaimAsString("roles");
         role = role.substring(1, role.length() - 1);
         return ResponseEntity.ok(role);
+    }
+
+    @PostMapping("/decode/refresh")
+    public ResponseEntity<Map<String, Object>> decodeRefresh(@RequestBody TokenDTO token) {
+        return ResponseEntity.ok(tokenGenerator.decodeRefreshToken(token));
     }
 }

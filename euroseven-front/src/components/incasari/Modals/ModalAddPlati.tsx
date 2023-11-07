@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import React, { useEffect, useState } from "react";
-import { Box, Button, FormLabel, Modal, Typography } from "@mui/material";
-
+import { Alert, Box, Button, Modal, Snackbar, Typography } from "@mui/material";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   FormInputDropdown,
   FormInputMultiCheckbox,
@@ -12,12 +13,26 @@ import { FormInputUsername } from "./FormInputUsername";
 import { PaymentEntity, UserEntity } from "../../../types";
 import { InvoiceService } from "../../../services/InvoiceService";
 import { UserService } from "../../../services/UserService";
+
 const defaultValues = {
   textValue: "",
   userNameValue: "",
   checkboxValue: [],
   dropdownValue: "",
 };
+
+const validationSchema = yup
+  .object({
+    textValue: yup.string().required("Suma trebuie introdusa!"),
+    userNameValue: yup.string().required("Numele clientului trebuie completat"),
+    dropdownValue: yup.string().required("Codul client trebuie ales!"),
+    checkboxValue: yup
+      .array()
+      .min(1, "Trebuie selectata cel putin o factura")
+      .required("Trebuie selectata cel putin o factura"),
+  })
+  .required();
+
 export const ModalAddPlati: React.FC<{
   openModal: boolean;
   handleCloseModal: () => void;
@@ -35,6 +50,7 @@ export const ModalAddPlati: React.FC<{
 }) => {
   const { handleSubmit, reset, control, setValue, getValues } =
     useForm<IFormInput>({
+      resolver: yupResolver(validationSchema),
       defaultValues: defaultValues,
     });
 
@@ -42,6 +58,18 @@ export const ModalAddPlati: React.FC<{
   const [sume, setSume] = useState<string[]>([]);
   const [user, setUser] = useState<UserEntity | undefined>();
   const [dates, setDates] = useState<string[]>([]);
+  const [openErrorSnackbar, setOpenErrorSnackbar] = React.useState(false);
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenErrorSnackbar(false);
+  };
 
   const onSubmit = async (data: IFormInput) => {
     console.log(data);
@@ -51,7 +79,7 @@ export const ModalAddPlati: React.FC<{
     const amount = Number(getValues("textValue"));
     let remainingAmount = amount ? amount : 0;
     const userId = user?.id;
-    const paymentMethod = "cash"; // ???
+    const paymentMethod = "Cash"; // ???
 
     for (let i = 0; i < numarFacturi.length; i++) {
       const invoice = await InvoiceService.getInvoiceByNrFactura(
@@ -126,6 +154,15 @@ export const ModalAddPlati: React.FC<{
           textAlign: "center",
         }}
       >
+        <Snackbar
+          open={openErrorSnackbar}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            Trebuie alesă cel puțin o factură!
+          </Alert>
+        </Snackbar>
         <Typography variant="h4" fontFamily="Catesque" sx={{ mb: "5vh" }}>
           Înregistrează Plată
         </Typography>
@@ -161,7 +198,7 @@ export const ModalAddPlati: React.FC<{
             Nu există facturi restante
           </Typography>
         )}
-        <FormInputText name="textValue" control={control} label="Text Input" />
+        <FormInputText name="textValue" control={control} label="Sumă" />
         <FormInputUsername
           name="userNameValue"
           control={control}
@@ -178,11 +215,8 @@ export const ModalAddPlati: React.FC<{
           onClick={() => {
             reset({
               textValue: "",
-              radioValue: "",
               checkboxValue: [],
-              dateValue: new Date(),
               dropdownValue: "",
-              sliderValue: 0,
             });
             setNrFacturi([]);
             setUser(undefined);

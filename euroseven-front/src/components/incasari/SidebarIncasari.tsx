@@ -16,13 +16,13 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PaidIcon from "@mui/icons-material/Paid";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../services/AuthService";
+import GasMeterIcon from "@mui/icons-material/GasMeter";
 
 export const SidebarIncasari = (props: {
   handleTabChange(tab: string): void;
   selectedTab: String;
   name: string;
 }) => {
-  
   const navigate = useNavigate();
 
   const logOut = () => {
@@ -156,6 +156,34 @@ export const SidebarIncasari = (props: {
                   </ListItemIcon>
                   <ListItemText
                     primary="Facturi"
+                    sx={{
+                      "& .MuiListItemText-primary": {
+                        fontFamily: "Catesque",
+                      },
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem
+                disablePadding
+                sx={{
+                  color: props.selectedTab === "contor" ? "#509be4" : "#FFFFFF",
+                  mt: "10px",
+                }}
+              >
+                <ListItemButton onClick={() => props.handleTabChange("contor")}>
+                  <ListItemIcon>
+                    <GasMeterIcon
+                      sx={{
+                        color:
+                          props.selectedTab === "contor"
+                            ? "#509be4"
+                            : "#FFFFFF",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Contoare"
                     sx={{
                       "& .MuiListItemText-primary": {
                         fontFamily: "Catesque",

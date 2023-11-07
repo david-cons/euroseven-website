@@ -9,14 +9,13 @@ import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -32,9 +31,7 @@ import org.springframework.security.oauth2.server.resource.web.access.BearerToke
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -66,8 +63,39 @@ public class WebSecurity {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(antMatcher("/api/auth/register"), antMatcher("/api/auth/login")).permitAll()
-                        .requestMatchers(antMatcher("/api/users")).hasAnyAuthority("ROLE_ADMIN", "ROLE_INCASARI")
+                        .requestMatchers(
+                                antMatcher("/api/auth/register"),
+                                antMatcher("/api/auth/login"),
+                                antMatcher("/api/auth/token"))
+                        .permitAll()
+                        .requestMatchers(
+                                antMatcher("/api/users"),
+                                antMatcher("/api/invoices"),
+                                antMatcher("/api/invoices/create"),
+                                antMatcher("/api/invoices/delete/**"),
+                                antMatcher("/api/invoices/search"),
+                                antMatcher("/api/invoices/payments"),
+                                antMatcher("/api/invoices/nrFacturi/**"),
+                                antMatcher("/api/invoices/payments/search"),
+                                antMatcher("/api/invoices/update/**"),
+                                antMatcher("/api/invoices/upload"),
+                                antMatcher("/api/invoices/export"),
+                                antMatcher("/api/invoices/payments/export"),
+                                antMatcher("/api/meter-readings"),
+                                antMatcher("/api/meter-readings/accept/**"),
+                                antMatcher("/api/meter-readings/export"),
+                                antMatcher("/api/meter-readings/search"),
+                                antMatcher("/api/users/create"),
+                                antMatcher("/api/users/delete/**"),
+                                antMatcher("/api/users/search"),
+                                antMatcher("/api/users/update/**"),
+                                antMatcher("/api/users/coduriClienti"),
+                                antMatcher("/api/users/uploadExcel"),
+                                antMatcher("/api/users/export"))
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_INCASARI")
+                        .requestMatchers(
+                                antMatcher("/api/checkout/create-checkout-session/**"))
+                        .hasAuthority("ROLE_USER")
                         .anyRequest().authenticated()
                 )
                 .cors((cors) -> cors.configurationSource(request -> {
@@ -108,6 +136,7 @@ public class WebSecurity {
     }
 
     @Bean
+    @Qualifier("jwtRefreshTokenAuthProvider")
     JwtDecoder jwtRefreshTokenDecoder() {
         return NimbusJwtDecoder.withPublicKey(keyUtils.getRefreshTokenPublicKey()).build();
     }

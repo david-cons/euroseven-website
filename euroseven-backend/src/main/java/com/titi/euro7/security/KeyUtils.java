@@ -80,7 +80,7 @@ public class KeyUtils {
                 throw new RuntimeException(e);
             }
         } else {
-            if (Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.equals("prod"))) {
+            if (Arrays.asList(environment.getActiveProfiles()).contains("prod")) {
                 throw new RuntimeException("public and private keys don't exist");
             }
         }

@@ -9,7 +9,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { PaymentEntity, UserEntity } from "../../types";
+import { PaymentEntity } from "../../types";
 import { InvoiceService } from "../../services/InvoiceService";
 import axios from "../../axios";
 import { SearchBar } from "../../components/SearchBar";
@@ -87,6 +87,11 @@ export const IncasariPlati: React.FC<{
       ),
     },
     {
+      field: "paymentMethod",
+      headerName: "Metoda de Plata",
+      width: 150,
+    },
+    {
       field: "actions",
       headerName: "",
       width: 150,
@@ -142,17 +147,16 @@ export const IncasariPlati: React.FC<{
     debouncedFetchSearchResults(searchText);
   }, [searchText]);
 
+  const fetchPayments = async () => {
+    await InvoiceService.getAllPayments()
+      .then((res) => {
+        setPayments(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    const fetchPayments = async () => {
-      await InvoiceService.getAllPayments()
-        .then((res) => {
-          setPayments(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-
     fetchPayments();
     if (createPayment === true) {
       handleOpenModal();
@@ -229,6 +233,9 @@ export const IncasariPlati: React.FC<{
           handleSearchInputChange={handleSearchInputChange}
           searchText={searchText}
           forWho="plata"
+          payments={searchedPayments.length > 0 ? searchedPayments : payments}
+          setPayments={setPayments}
+          fetchPayments={fetchPayments}
         />
         <Box
           sx={{

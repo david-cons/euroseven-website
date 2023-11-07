@@ -1,6 +1,7 @@
 package com.titi.euro7.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -36,9 +37,6 @@ public class User implements UserDetails {
     @Column(name = "inactive")
     private Boolean inactive;
 
-    @Column(name = "saldo")
-    private double saldo;
-
     @Column(name = "role")
     private String role;
 
@@ -66,12 +64,21 @@ public class User implements UserDetails {
     @Column(name = "de_plata_total")
     private double restDePlataTotal;
 
+    @Column(name="index_vechi")
+    @Nullable
+    private double indexVechi;
+
+    @Column(name="index_nou")
+    @Nullable
+    private double indexNou;
+
+    @Column(name="is_default_password")
+    private boolean isDefaultPassword;
 
     public User(@NonNull String username, @NonNull String password) {
         this.username = username;
         this.password = password;
         this.inactive = false;
-        this.saldo = 0;
     }
 
     public User() {
@@ -79,31 +86,37 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return this.password;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

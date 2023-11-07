@@ -14,7 +14,9 @@ import com.titi.euro7.entities.Payment;
 import com.titi.euro7.services.InvoiceService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -82,7 +84,7 @@ public class InvoiceController {
             int nrFactura = (int) UUID.randomUUID().getMostSignificantBits();
             if (nrFactura < 0) { nrFactura = nrFactura * (-1); }
             invoice.setNrFactura(nrFactura);
-            String invoiceBucketName= "factura-" + invoice.getNrFactura();
+            String invoiceBucketName= "factura-"+invoice.getLocation()+"-"+invoice.getNrFactura();
             String urlInvoice = String.format("https://storage.googleapis.com/euro7/%s", invoiceBucketName);
             // Upload to Google Storage
             storage.create(BlobInfo.newBuilder(BUCKET_NAME, invoiceBucketName)
@@ -188,7 +190,7 @@ public class InvoiceController {
                 //System.out.println(text);
 
                 DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
+                String location;
                 LocalDate createdDate = LocalDate.parse(Objects.requireNonNull(extractValueAfterPattern(text, "Data emitere : ")), displayFormatter);
                 double price = Double.parseDouble(Objects.requireNonNull(extractValueAfterPattern(text, "REST DE PLATA ")).replace(",",""));
                 double restDePlata = Double.parseDouble(Objects.requireNonNull(extractValueAfterPattern(text, "Total de plata cu TVA ")).replace(",",""));
@@ -197,10 +199,12 @@ public class InvoiceController {
                 try {
                     Integer nrFactura = Integer.parseInt(Objects.requireNonNull(extractValueAfterPattern(text, "SB ")));
                     invoice.setNrFactura(nrFactura);
+                    location = "SB";
 
                 } catch (NullPointerException e) {
                     Integer nrFactura = Integer.parseInt(Objects.requireNonNull(extractValueAfterPattern(text, "BD ")));
                     invoice.setNrFactura(nrFactura);
+                    location = "BD";
                 }
                 double indexNou = 0;
                 double indexVechi = 0;
@@ -243,7 +247,7 @@ public class InvoiceController {
                 byte[] pdfBytes = pdfOutputStream.toByteArray();
                 pdfOutputStream.close();
 
-                String invoiceBucketName= "factura-"+invoice.getNrFactura();
+                String invoiceBucketName= "factura-"+location+"-"+invoice.getNrFactura();
                 String urlInvoice = String.format("https://storage.googleapis.com/euro7/%s", invoiceBucketName);
 
                 storage.create(BlobInfo.newBuilder(BUCKET_NAME, invoiceBucketName)
@@ -252,7 +256,7 @@ public class InvoiceController {
 
                 invoice.setFile(urlInvoice);
                 System.out.print(invoice + "\n");
-                //invoiceService.createInvoice(invoice);
+                invoiceService.uploadInvoice(invoice);
             }
         }
     }
@@ -276,6 +280,21 @@ public class InvoiceController {
     }
 
 
+    @PostMapping("/export")
+    public ResponseEntity<ByteArrayResource> exportInvoicesToXLSX(@RequestBody List<Invoice> invoices) throws IOException {
+        XSSFWorkbook workbook = invoiceService.exportInvoicesToXLSX(invoices);
+        return getByteArrayResourceResponseEntity(workbook, "facturi");
+    }
+
+
+
+    @PostMapping("/payments/export")
+    public ResponseEntity<ByteArrayResource> exportPaymentsToXLSX(@RequestBody List<Payment> payments) throws IOException {
+        XSSFWorkbook workbook = invoiceService.exportPaymentsToXLSX(payments);
+        return getByteArrayResourceResponseEntity(workbook,"plati");
+    }
+
+
     private String extractValueAfterPattern(String text, String patternStr) {
         Pattern pattern = Pattern.compile(Pattern.quote(patternStr) + "(\\S+)");
         Matcher matcher = pattern.matcher(text);
@@ -284,4 +303,20 @@ public class InvoiceController {
         }
         return null;
     }
+
+    public ResponseEntity<ByteArrayResource> getByteArrayResourceResponseEntity(XSSFWorkbook workbook, String fileName) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        workbook.write(bos);
+        workbook.close();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename="+fileName+".xlsx");
+        headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ByteArrayResource(bos.toByteArray()));
+    }
 }
+
