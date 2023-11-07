@@ -40,7 +40,7 @@ export const InputFormAutocomplete: React.FC<{
   }, []);
 
   return (
-    <Box sx={{ display: "flex", position: "relative", padding: "50px" }}>
+    <Box sx={{ display: "flex", position: "relative", padding: "0 50px 50px 50px", }}>
       <Controller
         rules={{ required: true }}
         render={({ field: { onChange, ...props } }) => (

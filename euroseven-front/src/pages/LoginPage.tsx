@@ -1,4 +1,12 @@
-import { Box, Typography, TextField, Button, Link } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Link,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import "./LoginPage.css";
 import f1 from "../assets/f1.jpeg";
 import logo1 from "../assets/logo1.png";
@@ -17,7 +25,18 @@ import React from "react";
 export const LoginPage: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
+  const handleCloseSnackbar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenErrorSnackbar(false);
+  };
   const navigate = useNavigate();
   const dispatch: ThunkDispatch<{}, {}, AnyAction> = useDispatch();
 
@@ -55,6 +74,7 @@ export const LoginPage: React.FC = () => {
           }
         })
         .catch((error: Error) => {
+          setOpenErrorSnackbar(true);
           dispatch(authenticationFailure(error.message));
         });
     }
@@ -74,6 +94,20 @@ export const LoginPage: React.FC = () => {
   return (
     <Box className="login-page">
       <Box className="login-left">
+        <Snackbar
+          open={openErrorSnackbar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          sx={{ position: "absolute", bottom: 0, left: 0, padding: "20px" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            Parolă sau email greșită!
+          </Alert>
+        </Snackbar>
         <Box sx={{ position: "absolute", top: 0, left: 0, padding: "25px" }}>
           <img
             src={logo1}

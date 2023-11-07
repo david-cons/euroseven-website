@@ -2,7 +2,6 @@ import {
   Modal,
   Box,
   Typography,
-  InputAdornment,
   TextField,
   Button,
 } from "@mui/material";

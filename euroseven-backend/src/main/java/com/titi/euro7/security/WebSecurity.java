@@ -63,8 +63,39 @@ public class WebSecurity {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(antMatcher("/api/auth/register"), antMatcher("/api/auth/login"), antMatcher("/api/auth/token")).permitAll()
-                        .requestMatchers(antMatcher("/api/users")).hasAnyAuthority("ROLE_ADMIN", "ROLE_INCASARI")
+                        .requestMatchers(
+                                antMatcher("/api/auth/register"),
+                                antMatcher("/api/auth/login"),
+                                antMatcher("/api/auth/token"))
+                        .permitAll()
+                        .requestMatchers(
+                                antMatcher("/api/users"),
+                                antMatcher("/api/invoices"),
+                                antMatcher("/api/invoices/create"),
+                                antMatcher("/api/invoices/delete/**"),
+                                antMatcher("/api/invoices/search"),
+                                antMatcher("/api/invoices/payments"),
+                                antMatcher("/api/invoices/nrFacturi/**"),
+                                antMatcher("/api/invoices/payments/search"),
+                                antMatcher("/api/invoices/update/**"),
+                                antMatcher("/api/invoices/upload"),
+                                antMatcher("/api/invoices/export"),
+                                antMatcher("/api/invoices/payments/export"),
+                                antMatcher("/api/meter-readings"),
+                                antMatcher("/api/meter-readings/accept/**"),
+                                antMatcher("/api/meter-readings/export"),
+                                antMatcher("/api/meter-readings/search"),
+                                antMatcher("/api/users/create"),
+                                antMatcher("/api/users/delete/**"),
+                                antMatcher("/api/users/search"),
+                                antMatcher("/api/users/update/**"),
+                                antMatcher("/api/users/coduriClienti"),
+                                antMatcher("/api/users/uploadExcel"),
+                                antMatcher("/api/users/export"))
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_INCASARI")
+                        .requestMatchers(
+                                antMatcher("/api/checkout/create-checkout-session/**"))
+                        .hasAuthority("ROLE_USER")
                         .anyRequest().authenticated()
                 )
                 .cors((cors) -> cors.configurationSource(request -> {

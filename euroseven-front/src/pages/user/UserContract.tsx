@@ -25,20 +25,61 @@ export const UserContract: React.FC<{}> = ({}) => {
       >
         CONTRACTUL TĂU
       </Typography>
-      <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", mt: "5vh" }}>
-        <Box sx={{textAlign: "left" }}>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          mt: "5vh",
+        }}
+      >
+        <Box sx={{ textAlign: "left" }}>
           <Typography fontFamily={"Catesque"}>Contract:</Typography>
-          <Typography fontFamily={"Catesque"} sx={{mt: "6px"}}>Tip de Contract:</Typography>
-          <Typography fontFamily={"Catesque"} sx={{mt: "6px"}}>Durată:</Typography>
-          <Typography fontFamily={"Catesque"} sx={{mt: "6px"}}>Dată Inceput:</Typography>
-          <Typography fontFamily={"Catesque"} sx={{mt: "6px"}}>Dată Terminare:</Typography>
+          <Typography fontFamily={"Catesque"} sx={{ mt: "6px" }}>
+            Tip de Contract:
+          </Typography>
+          <Typography fontFamily={"Catesque"} sx={{ mt: "6px" }}>
+            Durată:
+          </Typography>
+          <Typography fontFamily={"Catesque"} sx={{ mt: "6px" }}>
+            Dată Inceput:
+          </Typography>
+          <Typography fontFamily={"Catesque"} sx={{ mt: "6px" }}>
+            Dată Terminare:
+          </Typography>
         </Box>
-        <Box sx={{textAlign: "right"}}>
-          <Typography fontFamily={"Catesque"} fontWeight={"bold"}>Nr. 12324</Typography>
-          <Typography fontFamily={"Catesque"} fontWeight={"bold"} sx={{mt: "5px"}}>Fix</Typography>
-          <Typography fontFamily={"Catesque"} fontWeight={"bold"} sx={{mt: "5px"}}>1 an</Typography>
-          <Typography fontFamily={"Catesque"} fontWeight={"bold"} sx={{mt: "5px"}}>01/01/2023</Typography>
-          <Typography fontFamily={"Catesque"} fontWeight={"bold"} sx={{mt: "5px"}}>01/01/2024</Typography>
+        <Box sx={{ textAlign: "right" }}>
+          <Typography fontFamily={"Catesque"} fontWeight={"bold"}>
+            Nr. 12324
+          </Typography>
+          <Typography
+            fontFamily={"Catesque"}
+            fontWeight={"bold"}
+            sx={{ mt: "5px" }}
+          >
+            Fix
+          </Typography>
+          <Typography
+            fontFamily={"Catesque"}
+            fontWeight={"bold"}
+            sx={{ mt: "5px" }}
+          >
+            1 an
+          </Typography>
+          <Typography
+            fontFamily={"Catesque"}
+            fontWeight={"bold"}
+            sx={{ mt: "5px" }}
+          >
+            01/01/2023
+          </Typography>
+          <Typography
+            fontFamily={"Catesque"}
+            fontWeight={"bold"}
+            sx={{ mt: "5px" }}
+          >
+            01/01/2024
+          </Typography>
         </Box>
       </Box>
     </Box>

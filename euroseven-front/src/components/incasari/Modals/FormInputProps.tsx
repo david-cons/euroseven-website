@@ -23,13 +23,9 @@ export interface FormInputProps {
 
 export interface IFormInput {
   textValue: string;
-  radioValue: string;
-  checkboxValue: string[];
   userNameValue: string;
-  dateValue: Date;
+  checkboxValue: any[];
   dropdownValue: string;
-  sliderValue: number;
-  fileValue: File | undefined;
-  indexVechiValue: string;
-  indexNouValue: string;
 }
+
+

@@ -27,7 +27,8 @@ type AuthenticationAction =
       };
     }
   | { type: "AUTHENTICATION_FAILURE"; payload: string }
-  | { type: "LOGOUT" };
+  | { type: "LOGOUT" }
+  | { type: "NOT_AUTHORIZED" };
 
 const authenticationReducer = (
   state: AuthenticationState = initialState,
@@ -56,6 +57,11 @@ const authenticationReducer = (
       };
     case "LOGOUT":
       return initialState;
+    case "NOT_AUTHORIZED":
+      return {
+        ...state,
+        error: "You are not authorized to access this resource.",
+      };
     default:
       return state;
   }

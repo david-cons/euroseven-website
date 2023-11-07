@@ -9,7 +9,7 @@ export const FormInputDate = ({ name, control, label }: FormInputProps) => {
       <Controller
         name={name}
         control={control}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
           <DatePicker
             label={label}
             value={value}
@@ -40,10 +40,10 @@ export const FormInputDate = ({ name, control, label }: FormInputProps) => {
                 "& .MuiButtonBase-root": {
                   color: "#0054a6",
                   "&:hover": {
-                    backgroundColor: "transparent"
+                    backgroundColor: "transparent",
                   },
-                }
-              }
+                },
+              },
             }}
           />
         )}

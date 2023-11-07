@@ -19,11 +19,12 @@ export const FormInputUsername = ({ name, control, label }: FormInputProps) => {
           id={"name"}
           size={"small"}
           label={label}
+          error={!!error}
+          helperText={error ? error.message : null}
           onChange={(data) => {
             onChange(data);
           }}
           disabled
-          error={!!error}
           sx={{
             "& input:disabled": {
               color: "black", // Text color

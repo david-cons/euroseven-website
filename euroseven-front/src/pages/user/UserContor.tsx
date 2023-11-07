@@ -11,35 +11,77 @@ import { Controller, useForm } from "react-hook-form";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { UserEntity } from "../../types";
 import { MeterReadingService } from "../../services/MeterReadingService";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const defaultValues = {
   serieContorValue: "",
-  indexVechiValue: "",
-  indexNouValue: "",
-  imagineValue: undefined,
+  indexVechiValue: 0,
+  indexNouValue: 0,
+  imagineValue: null,
 };
 
+const validationSchema = yup
+  .object({
+    serieContorValue: yup.string().required("Serie contor trebuie completată"),
+    indexVechiValue: yup
+      .number()
+      .required("Index vechi trebuie completat")
+      .typeError("Index vechi trebuie sa fie un număr"),
+    indexNouValue: yup
+      .number()
+      .required("Index nou trebuie completat")
+      .typeError("Index nou trebuie sa fie un număr")
+      .moreThan(
+        yup.ref("indexVechiValue"),
+        "Index Nou trebuie sa fie mai mare decăt Index Vechi"
+      ),
+    imagineValue: yup
+      .string()
+      .required("Imaginea trebuie completată")
+      .nullable(),
+    // Since file validation cannot be done directly with yup, it will be handled separately
+  })
+  .required();
+
 interface IFormInput {
-  serieContorValue: string | undefined;
-  indexVechiValue: string | undefined;
-  indexNouValue: string | undefined;
-  imagineValue: string | undefined;
+  serieContorValue: string;
+  indexVechiValue: number;
+  indexNouValue: number;
+  imagineValue: string | null;
 }
 
 export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
-  const { handleSubmit, reset, control, setValue, getValues } =
-    useForm<IFormInput>({
-      defaultValues: defaultValues,
-    });
+  const {
+    handleSubmit,
+    reset,
+    control,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: defaultValues,
+  });
 
   const [file, setFile] = useState<File | null>(null);
 
-
-    
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
-    setFile(selectedFile);
+    if (selectedFile) {
+      // Check the file type
+      if (!selectedFile.type.startsWith("image/")) {
+        alert("File is not an image.");
+        return;
+      }
+      // Check the file size
+      if (selectedFile.size > 5242880) {
+        // 5 MB in bytes
+        alert("File size exceeds 5MB.");
+        return;
+      }
+      setFile(selectedFile);
+    }
   };
 
   const formatDate = (date: Date | null): string => {
@@ -113,6 +155,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
             label={"Serie Contor"}
             onChange={onChange}
             error={!!error}
+            helperText={error ? error.message : null}
             sx={{
               "& .MuiInputBase-input": {
                 color: "black", // Text color
@@ -163,6 +206,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
             label={"Index Vechi"}
             onChange={onChange}
             error={!!error}
+            helperText={error ? error.message : null}
             sx={{
               "& .MuiInputBase-input": {
                 color: "black", // Text color
@@ -210,7 +254,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
             }}
           />
         )}
-        defaultValue={""}
+        defaultValue={0}
       />
       <Controller
         name={"indexNouValue"}
@@ -231,6 +275,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
             label={"Index Nou"}
             onChange={onChange}
             error={!!error}
+            helperText={error ? error.message : null}
             sx={{
               "& .MuiInputBase-input": {
                 color: "black", // Text color
@@ -278,7 +323,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
             }}
           />
         )}
-        defaultValue={""}
+        defaultValue={0}
       />
 
       <Controller
@@ -306,9 +351,10 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
               value={""}
               type="file"
             />
+            {error && <Typography color="error">{error.message}</Typography>}
           </Button>
         )}
-        defaultValue={""}
+        defaultValue={null}
       />
 
       {file && (
@@ -332,8 +378,8 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
         onClick={() => {
           reset({
             serieContorValue: "",
-            indexVechiValue: "",
-            indexNouValue: "",
+            indexVechiValue: 0,
+            indexNouValue: 0,
             imagineValue: undefined,
           });
           setFile(null);

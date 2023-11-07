@@ -12,6 +12,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { IndexCard } from "../../components/client/IndexCard";
 import { PlatiRecenteCard } from "../../components/client/PlatiRecenteCard";
 import { HomeCard } from "../../components/client/HomeCard";
+import PeopleAlt from "@mui/icons-material/PeopleAlt";
 
 export const UserHome: React.FC<{
   user: UserEntity | null;
@@ -91,7 +92,7 @@ export const UserHome: React.FC<{
               justifyContent: "space-between",
               background: "white",
               padding: "2rem",
-              width: "647px", // Adjust width based on screen size
+              width: "250px", // Adjust width based on screen size
               height: "100px", // Adjust height based on screen size
               borderRadius: "12px",
               boxShadow: "0 8px 16px -8px rgba(0, 0, 0, 0.3)",
@@ -101,14 +102,30 @@ export const UserHome: React.FC<{
                 transform: "scale(1.05)",
               },
               position: "relative",
+              textAlign: "left",
             }}
           >
-              <Typography
-                fontFamily={"Catesque"}
-                sx={{ color: "#9499a2", textTransform: "uppercase", margin: "0 auto" }}
+            <Box>
+              <Box
+                sx={{
+                  padding: "20px",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  mt: "10px",
+                }}
               >
-                {"Rest de Plată"}
-              </Typography>
+                <Typography
+                  fontFamily={"Catesque"}
+                  sx={{
+                    color: "#9499a2",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {"Rest de Plată"}
+                </Typography>
+              </Box>
+
               <Box
                 sx={{
                   padding: "20px",
@@ -130,6 +147,7 @@ export const UserHome: React.FC<{
                   </Typography>
                 </Box>
               </Box>
+            </Box>
             <Box sx={{ mt: "10px" }}>
               <Icon
                 MUIIcon={PaymentIcon}
@@ -157,6 +175,121 @@ export const UserHome: React.FC<{
             data={countUnpaidInvoices}
             icon={DescriptionIcon}
           />
+          <Paper
+            elevation={5}
+            className="card-single"
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center", // Centers items on the cross-axis (vertically if the flex-direction is row)
+              background: "white",
+              padding: "2rem",
+              width: "250px",
+              height: "100px",
+              borderRadius: "12px",
+              boxShadow: "0 8px 16px -8px rgba(0, 0, 0, 0.3)",
+              border: "0.1px solid #e0e0e0",
+              transition: "transform 0.2s ease-in-out",
+              "&:hover": {
+                transform: "scale(1.05)",
+              },
+              position: "relative",
+              textAlign: "left",
+              whiteSpace: "nowrap", // This ensures the content does not wrap
+            }}
+          >
+            <Box sx={{ width: "100%" }}>
+              <Typography
+                component="div" // Make sure to use div to properly encapsulate nested elements
+                fontFamily={"Catesque"}
+                sx={{
+                  color: "#9499a2",
+                  textTransform: "uppercase",
+                  padding: "20px",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }}
+              >
+                Detalii
+              </Typography>
+
+              <Box
+                sx={{
+                  padding: "20px",
+                  position: "absolute",
+                  left: "0",
+                  top: "35px",
+                  width: "100%",
+                }}
+              >
+                {/* Separate Typography components for each line */}
+                <Typography
+                  fontFamily={"Catesque"}
+                  sx={{
+                    display: "flex", // Use flexbox to layout the label and value
+                    alignItems: "center",
+                    color: "#black",
+                    letterSpacing: "1.5px",
+                  }}
+                >
+                  <Typography
+                    component="span" // Use span to keep inline with text
+                    sx={{
+                      color: "#0054a6",
+                      fontFamily: "Catesque",
+                      fontWeight: "bold",
+                      mr: "5px",
+                    }}
+                  >
+                    Cod Client:
+                  </Typography>
+                  {user?.codClient}
+                </Typography>
+
+                <Typography
+                  fontFamily={"Catesque"}
+                  sx={{
+                    display: "flex", // Use flexbox to layout the label and value
+                    alignItems: "center",
+                    color: "#black",
+                    letterSpacing: "1.5px",
+                    marginTop: "10px", // Add margin to separate from the previous line
+                  }}
+                >
+                  <Typography
+                    component="span" // Use span to keep inline with text
+                    sx={{
+                      color: "#0054a6",
+                      fontFamily: "Catesque",
+                      fontWeight: "bold",
+                      mr: "5px",
+                    }}
+                  >
+                    Nume:{" "}
+                  </Typography>
+                  {user?.name}
+                </Typography>
+
+                <Typography
+                  fontFamily={"Catesque"}
+                  sx={{
+                    color: "#0054a6",
+                    letterSpacing: "1.5px",
+                    fontWeight: "bold",
+                    marginTop: "10px", // Add margin to separate from the previous line
+                  }}
+                >
+                  {user?.judet}
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* This icon box should probably be aligned with the flex container. */}
+            <Box>
+              <Icon MUIIcon={PeopleAlt} color={"black"} />
+            </Box>
+          </Paper>
         </Stack>
         <Stack
           direction="row"

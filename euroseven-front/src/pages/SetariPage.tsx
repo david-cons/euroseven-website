@@ -15,6 +15,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import { UserEntity } from "../types";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { UserService } from "../services/UserService";
+import { ModalChangeParola } from "../components/ModalChangePassword";
 
 export const SetariPage: React.FC<{
   user: UserEntity | null;
@@ -31,6 +32,15 @@ export const SetariPage: React.FC<{
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
@@ -273,7 +283,7 @@ export const SetariPage: React.FC<{
             background: "white",
             padding: "2rem",
             width: "750px",
-            height: "350px",
+            height: "450px",
             borderRadius: "12px",
             boxShadow: "0 8px 16px -8px rgba(0, 0, 0, 0.3)",
             border: "0.1px solid #e0e0e0",
@@ -512,7 +522,7 @@ export const SetariPage: React.FC<{
                   <TextField
                     id={"address"}
                     size={"small"}
-                    label={"Adresa"}
+                    label={"Adresă"}
                     value={adresa}
                     onChange={changeAdresa}
                     sx={{
@@ -539,6 +549,15 @@ export const SetariPage: React.FC<{
                     }}
                   />
                 </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant={"outlined"}
+                    sx={{ color: "#0054a6", width: "225px" }}
+                    onClick={handleOpenModal}
+                  >
+                    Schimbă Parolă
+                  </Button>
+                </Grid>
               </Grid>
             </Box>
             <Button
@@ -562,6 +581,15 @@ export const SetariPage: React.FC<{
               Salveaza
             </Button>
           </form>
+          {openModal && (
+            <ModalChangeParola
+              open={openModal}
+              handleClose={handleCloseModal}
+              userId={user?.id}
+              setUser={setUser}
+              setOpenSnackbar={setOpenSnackbar}
+            />
+          )}
         </Paper>
       </Container>
     </Box>

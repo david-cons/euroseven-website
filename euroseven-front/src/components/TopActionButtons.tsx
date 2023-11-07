@@ -50,7 +50,7 @@ export const TopActionButtons: React.FC<{
       }}
     >
       <MaterialUISwitch defaultChecked={false} sx={{ mt: "3px" }} />
-      <IconButton aria-label="cart" onClick={handleClick}>
+      <IconButton aria-label="cart" onClick={handleClick} sx={{mr: "3px"}}>
         <StyledBadge badgeContent={notifications.length} color="secondary">
           <NotificationsIcon />
         </StyledBadge>
