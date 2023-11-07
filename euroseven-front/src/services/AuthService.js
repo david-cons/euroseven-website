@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://34.147.113.108:8081/api/auth/";
+const API_URL = "http://localhost:8081/api/auth/";
 
 export const authenticateUser = (username, password) => {
   return (dispatch) => {
