@@ -17,7 +17,7 @@ public class StripeService {
 
         long stripePrice = Math.round(amount * 100); // Convert to cents
 
-        String YOUR_DOMAIN = "http://localhost:3000/client/home";
+        String YOUR_DOMAIN = "http://34.147.113.108:3000/client/home";
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
