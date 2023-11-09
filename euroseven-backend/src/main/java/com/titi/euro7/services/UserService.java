@@ -94,17 +94,30 @@ public class UserService {
             return null;
         }
         user.setName(name);
-        user.setAddress(address);
-        user.setJudet(judet);
-        user.setLocalitate(localitate);
+        if (address != null && !address.equals("")) {
+            user.setAddress(address);
+        }
+        if (judet != null && !judet.equals("")) {
+            user.setJudet(judet);
+        }
+        if (localitate != null && !localitate.equals("")) {
+            user.setLocalitate(localitate);
+        }
         user.setPhone(phone);
-        if (!name.isEmpty() && !address.isEmpty() && !judet.isEmpty() && !localitate.isEmpty() && !phone.isEmpty()) {
-            List<Notification> userNotifications = notificationRepository.findUncompletedByCodClient(user.getCodClient());
-            for (Notification notification : userNotifications) {
-                if (notification.getContent().equals("Completează-ți profilul") || notification.getContent().equals("Completeza-ti profilul.")) {
+        if (!name.isEmpty()) {
+            assert address != null;
+            if (!address.isEmpty()) {
+                assert judet != null;
+                assert localitate != null;
+                if (!judet.isEmpty() && !localitate.isEmpty() && !phone.isEmpty()) {
+                    List<Notification> userNotifications = notificationRepository.findUncompletedByCodClient(user.getCodClient());
+                    for (Notification notification : userNotifications) {
+                        if (notification.getContent().equals("Completează-ți profilul") || notification.getContent().equals("Completeza-ti profilul.")) {
 
-                    notification.setCompleted(true);
-                    notificationRepository.save(notification);
+                            notification.setCompleted(true);
+                            notificationRepository.save(notification);
+                        }
+                    }
                 }
             }
         }

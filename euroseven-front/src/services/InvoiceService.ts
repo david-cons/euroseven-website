@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import axios from "../axios";
 import { InvoiceEntity, PaymentEntity } from "../types";
 
-const URL = "http://34.147.113.108:8081/api/invoices";
+const URL = "http://localhost:8081/api/invoices";
 
 export abstract class InvoiceService {
   public static async getAllInvoices(): Promise<InvoiceEntity[]> {

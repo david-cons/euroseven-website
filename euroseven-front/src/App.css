@@ -98,8 +98,8 @@ a#menu-icon {
   color: #0054a6;
   transition: transform 0.5s;
   height: 5px;
-  margin-top: 32px;
   margin-right: 9px;
+  margin-bottom: 10px;
 }
 
 a#menu-icon:hover {

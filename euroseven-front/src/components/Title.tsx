@@ -1,8 +1,27 @@
 import { Box, Typography, Button } from "@mui/material";
 import logo1 from "../assets/logo1.png";
 import { useNavigate } from "react-router-dom";
-export const Title = () => {
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+export const Title = (props: { role: string | null }) => {
+
+  const {role} = props;
   const navigate = useNavigate();
+
+
+  const intraInCont = () => {
+    if (role) {
+      if (role === "ROLE_ADMIN") {
+        navigate("/admin/home");
+      } else if (role === "ROLE_INCASARI") {
+        navigate("/incasari/home");
+      } else if (role === "ROLE_USER") {
+        navigate("/client/home");
+      }
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <Box
       sx={{
@@ -70,9 +89,7 @@ export const Title = () => {
           },
           fontFamily: "Catesque",
         }}
-        onClick={() => {
-          navigate("/login");
-        }}
+        onClick={intraInCont}
       >
         Intra in Cont
       </Button>

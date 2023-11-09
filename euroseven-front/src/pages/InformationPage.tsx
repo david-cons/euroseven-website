@@ -23,7 +23,7 @@ export const InformationPage: React.FC = () => {
           backgroundColor: "white",
         }}
       >
-        <Title />
+        <Title role={null} />
       </Box>
       <Box
         className="jumbotron-container"

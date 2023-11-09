@@ -2,7 +2,7 @@ import { UserEntity } from "../types";
 import axios from "../axios";
 import { AxiosResponse } from "axios";
 
-const URL = "http://34.147.113.108:8081/api/users";
+const URL = "http://localhost:8081/api/users";
 
 export abstract class UserService {
   public static async getAllUsers(): Promise<UserEntity[]> {
@@ -41,9 +41,9 @@ export abstract class UserService {
     id: number | undefined,
     name: string,
     address: string | undefined,
-    judet: string | undefined | null,
-    localitate: string | undefined | null,
-    phone: string | undefined
+    judet?: string | undefined | null,
+    localitate?: string | undefined | null,
+    phone?: string | undefined
   ): Promise<UserEntity> {
     return new Promise((resolve) => {
       axios

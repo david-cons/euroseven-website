@@ -11,6 +11,7 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
+import { reverseArray } from "../../utils";
 
 export const RecentPaymentsTable = (props: {
   recentPayments: PaymentEntity[] | null;
@@ -20,14 +21,16 @@ export const RecentPaymentsTable = (props: {
   return (
     <Box>
       {recentPayments && recentPayments.length === 0 ? (
-        <Typography fontFamily="Catesque" sx={{mt: "5vh"}}>Nici-o plată.</Typography>
+        <Typography fontFamily="Catesque" sx={{ mt: "5vh" }}>
+          Nici-o plată.
+        </Typography>
       ) : (
         <TableContainer
           component={Box}
           sx={{ mt: "5vh", "& *": { fontFamily: "Catesque" } }}
         >
           <Table
-            sx={{ minWidth: 650 }}
+            sx={{ minWidth: 675 }}
             size="small"
             aria-label="payments table"
           >
@@ -49,7 +52,7 @@ export const RecentPaymentsTable = (props: {
             </TableHead>
             <TableBody>
               {recentPayments &&
-                recentPayments.map((payment) => (
+                reverseArray(recentPayments).map((payment) => (
                   <StyledTableRow key={payment.nrFactura}>
                     <StyledTableCell component="th" scope="row">
                       {`Nr. ${payment.nrFactura}`}

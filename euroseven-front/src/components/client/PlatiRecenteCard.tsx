@@ -20,7 +20,7 @@ export const PlatiRecenteCard: React.FC<PlatiRecenteCardProps> = ({
         justifyContent: "space-between",
         background: "white",
         padding: "2rem",
-        width: "650px", // Adjust width based on screen size
+        width: "675px", // Adjust width based on screen size
         height: "250px", // Adjust height based on screen size
         borderRadius: "12px",
         boxShadow: "0 8px 16px -8px rgba(0, 0, 0, 0.3)",

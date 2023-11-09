@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import { CustomErrorPage } from "./pages/Error500";
 import { InformationPage } from "./pages/InformationPage";
+import CookieConsent from "react-cookie-consent";
 
 function App() {
   const authenticated = useSelector(
@@ -43,6 +44,17 @@ function App() {
   return (
     <div className="App">
       <div className="content">
+        <CookieConsent
+          location="bottom"
+          buttonText="Accept"
+          cookieName="myAwesomeCookieName"
+          style={{ background: "#2B373B" }}
+          buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+          expires={150}
+        >
+          Folosim cookie-uri pentru a îmbunătăți experiența de navigare și
+          pentru a analiza traficul pe site.
+        </CookieConsent>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />

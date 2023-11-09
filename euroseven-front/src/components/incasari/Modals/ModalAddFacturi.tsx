@@ -16,7 +16,6 @@ const defaultValues = {
   dateValue: new Date(),
   dropdownValue: "",
   fileValue: undefined,
-  indexVechiValue: "",
   indexNouValue: "",
 };
 
@@ -26,7 +25,6 @@ export interface IFormInput {
   dateValue: Date;
   dropdownValue: string;
   fileValue?: File | undefined;
-  indexVechiValue: string;
   indexNouValue: string;
 }
 
@@ -36,7 +34,6 @@ const validationSchema = yup
     userNameValue: yup.string().required("Numele clientului trebuie completat"),
     dateValue: yup.date().required("Data trebuie completata"),
     dropdownValue: yup.string().required("Codul client trebuie ales!"),
-    indexVechiValue: yup.string().required("Indexul vechi trebuie completat!"),
     indexNouValue: yup.string().required("Indexul nou trebuie completat!"),
   })
   .required();
@@ -69,7 +66,6 @@ export const ModalAddFacturi: React.FC<{
       textValue: "",
       dateValue: new Date(),
       dropdownValue: "",
-      indexVechiValue: "",
       indexNouValue: "",
     });
     setUser(undefined);
@@ -105,7 +101,6 @@ export const ModalAddFacturi: React.FC<{
     const created_date = formatDate(getValues("dateValue"));
     const price = Number(getValues("textValue"));
     const codClient = Number(getValues("dropdownValue"));
-    const indexVechi = Number(getValues("indexVechiValue"));
     const indexNou = Number(getValues("indexNouValue"));
     const localitate = checkLocalitate(getValues("dropdownValue"));
     InvoiceService.createInvoice({
@@ -114,7 +109,6 @@ export const ModalAddFacturi: React.FC<{
       file: file,
       location: localitate,
       codClient: codClient,
-      indexVechi: indexVechi,
       indexNou: indexNou,
     }).then((res) => {
       console.log(res);
@@ -124,7 +118,6 @@ export const ModalAddFacturi: React.FC<{
         dropdownValue: "",
         dateValue: new Date(),
         fileValue: undefined,
-        indexVechiValue: "",
         indexNouValue: "",
       });
       handleOpenSnackbar();
@@ -180,11 +173,6 @@ export const ModalAddFacturi: React.FC<{
         />
 
         <FormInputText name="textValue" control={control} label="Sumă" />
-        <FormInputText
-          name="indexVechiValue"
-          control={control}
-          label="Index Vechi"
-        />
         <FormInputText
           name="indexNouValue"
           control={control}

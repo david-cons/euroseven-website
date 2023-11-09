@@ -88,7 +88,6 @@ public class WebSecurity {
                                 antMatcher("/api/users/create"),
                                 antMatcher("/api/users/delete/**"),
                                 antMatcher("/api/users/search"),
-                                antMatcher("/api/users/update/**"),
                                 antMatcher("/api/users/coduriClienti"),
                                 antMatcher("/api/users/uploadExcel"),
                                 antMatcher("/api/users/export"))
@@ -100,7 +99,7 @@ public class WebSecurity {
                 )
                 .cors((cors) -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.addAllowedOrigin("http://34.147.113.108:3000");
+                    corsConfiguration.addAllowedOrigin("http://localhost:3000");
                     corsConfiguration.addAllowedHeader("*");
                     corsConfiguration.addAllowedMethod("*");
                     corsConfiguration.setAllowCredentials(true);

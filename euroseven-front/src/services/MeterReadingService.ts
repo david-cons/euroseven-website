@@ -15,11 +15,18 @@ export abstract class MeterReadingService {
 
   public static async createMeterReading(
     meterReading: MeterReadingEntity
-  ): Promise<MeterReadingEntity> {
-    return new Promise((resolve) => {
-      axios.post(URL + "/create", meterReading).then((response) => {
-        resolve(response.data);
-      });
+  ): Promise<MeterReadingEntity | null> {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(URL + "/create", meterReading)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          // Handle the error according to your needs, logging, or processing it further
+          console.error("Error in createMeterReading:", error);
+          reject(error); // Reject the promise on error
+        });
     });
   }
 

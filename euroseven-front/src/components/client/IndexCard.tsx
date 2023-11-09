@@ -20,7 +20,7 @@ export const IndexCard: React.FC<IndexCardProps> = ({
         display: "flex",
         background: "white",
         padding: "2rem",
-        width: "105px", // Adjust width based on screen size
+        width: "275px", // Adjust width based on screen size
         height: "250px", // Adjust height based on screen size
         borderRadius: "12px",
         boxShadow: "0 8px 16px -8px rgba(0, 0, 0, 0.3)",
@@ -44,7 +44,16 @@ export const IndexCard: React.FC<IndexCardProps> = ({
           fontWeight={"bold"}
           sx={{ mt: "15px" }}
         >
-          {!forIndexVechi ? `Index Nou \n (cm)` : `Index Vechi \n (cm)`}
+          {!forIndexVechi ? `Index` : `Index Vechi \n (cm)`}
+        </Typography>
+      </Box>
+      <Box sx={{ margin: "0 auto" }}>
+        <Typography
+          fontFamily={"Catesque"}
+          fontWeight={"bold"}
+          sx={{ mt: "5px" }}
+        >
+          {!forIndexVechi && `(cm)`}
         </Typography>
       </Box>
       <Box sx={{ margin: "0 auto" }}>
@@ -53,7 +62,7 @@ export const IndexCard: React.FC<IndexCardProps> = ({
         </Typography>
       </Box>
 
-      <Box sx={{ margin: "0 auto", mt: "7vh" }}>
+      <Box sx={{ margin: "0 auto", mt: "5vh" }}>
         <Button
           endIcon={<ArrowForwardIcon />}
           variant="contained"
@@ -61,7 +70,8 @@ export const IndexCard: React.FC<IndexCardProps> = ({
             fontFamily: "Catesque",
             textTransform: "none",
             borderRadius: "15px",
-            color: "black",
+            color: "white",
+            width: "150px",
           }}
         >
           Vezi
