@@ -19,6 +19,8 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import GasMeterIcon from "@mui/icons-material/GasMeter";
 import SpeedIcon from "@mui/icons-material/Speed";
 import HelpIcon from "@mui/icons-material/Help";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store";
 
 export const SidebarUser = (props: {
   handleTabChange(tab: string): void;
@@ -27,10 +29,11 @@ export const SidebarUser = (props: {
   codClient: number;
 }) => {
   const navigate = useNavigate();
-
+  const dispatch: AppDispatch = useDispatch();
   const logOut = () => {
-    logout();
-    navigate("/login");
+    dispatch(logout()).then(() => {
+      navigate("/login");
+    });
   };
 
   return (
@@ -44,7 +47,17 @@ export const SidebarUser = (props: {
       }}
     >
       <Box sx={{ alignItems: "center", justifyContent: "center" }}>
-        <img src={logo2} alt="logo" style={{ marginTop: "10px" }} />
+        <Box
+          sx={{
+            marginTop: "10px",
+            "&:hover": {
+              cursor: "pointer",
+            },
+          }}
+          onClick={() => navigate("/")}
+        >
+          <img src={logo2} alt="logo" />
+        </Box>
         <Box
           sx={{
             borderRadius: "10px",
@@ -91,8 +104,32 @@ export const SidebarUser = (props: {
               </Typography>
             </Box>
           </Box>
-          <Box sx={{ mt: "5vh", height: "100%", position: "relative" }}>
+          <Box sx={{ mt: "1vh", height: "100%", position: "relative" }}>
             <List>
+              <ListItem
+                disablePadding
+                sx={{
+                  color: "#FFFFFF",
+                  mb: "5vh",
+                }}
+              >
+                <ListItemButton
+                  onClick={() => navigate("/")}
+                  sx={{
+                    background: "#252e3e",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <ListItemText
+                    primary="Pagină Principală"
+                    sx={{
+                      "& .MuiListItemText-primary": {
+                        fontFamily: "Catesque",
+                      },
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
               <ListItem
                 disablePadding
                 sx={{

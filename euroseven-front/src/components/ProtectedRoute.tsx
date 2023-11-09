@@ -4,16 +4,14 @@ import { Navigate } from "react-router-dom";
 
 interface PrivateRouteProps {
   children: any;
-  roleName: string; 
+  roleName: string;
 }
 
 export const ProtectedRoute: React.FC<PrivateRouteProps> = ({
   children,
-  roleName
+  roleName,
 }) => {
-
   const role = useSelector((state: any) => state.authentication.role);
-
 
   if (role !== roleName) {
     return <Navigate to={"/login"} replace />;
@@ -21,4 +19,3 @@ export const ProtectedRoute: React.FC<PrivateRouteProps> = ({
 
   return children;
 };
-

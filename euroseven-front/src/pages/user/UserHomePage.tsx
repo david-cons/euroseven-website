@@ -30,6 +30,7 @@ import { UserConsum } from "./UserConsum";
 import { UserContract } from "./UserContract";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 import { pagesClient } from "../../lunrjs/dataAdmin";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const UserHomePage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<String>(
@@ -54,6 +55,26 @@ export const UserHomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [results, setResults] = useState<typeof pagesClient>([]);
   const [openSearch, setOpenSearch] = useState<Boolean>(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleBackButtonEvent = (e: any) => {
+      e.preventDefault();
+      if (window.history.state && window.history.state.idx > 0) {
+        // User is attempting to go back - we navigate them to root
+        navigate('/');
+      }
+    };
+
+    // Add event listener for back button
+    window.addEventListener('popstate', handleBackButtonEvent);
+
+    return () => {
+      // Remove event listener
+      window.removeEventListener('popstate', handleBackButtonEvent);
+    };
+  }, [navigate]);
 
   const handleSearch = () => {
     if (searchQuery !== "" && searchQuery !== " ") {

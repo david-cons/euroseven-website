@@ -1,6 +1,17 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import React, { useEffect, useState } from "react";
-import { Alert, Box, Button, Modal, Snackbar, Typography } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  MenuItem,
+  Modal,
+  Snackbar,
+  TextField,
+  Typography,
+  createFilterOptions,
+} from "@mui/material";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -14,10 +25,12 @@ import { PaymentEntity, UserEntity } from "../../../types";
 import { InvoiceService } from "../../../services/InvoiceService";
 import { UserService } from "../../../services/UserService";
 
+const paymentOptions: string[] = ["Numerar", "OP", "POS-SB", "POS-BD"];
 const defaultValues = {
   textValue: "",
   userNameValue: "",
   checkboxValue: [],
+  paymentMethodValue: "",
   dropdownValue: "",
 };
 
@@ -26,6 +39,7 @@ const validationSchema = yup
     textValue: yup.string().required("Suma trebuie introdusa!"),
     userNameValue: yup.string().required("Numele clientului trebuie completat"),
     dropdownValue: yup.string().required("Codul client trebuie ales!"),
+    paymentMethodValue: yup.string().required("Metoda de plata trebuie aleasa"),
     checkboxValue: yup
       .array()
       .min(1, "Trebuie selectata cel putin o factura")
@@ -79,7 +93,7 @@ export const ModalAddPlati: React.FC<{
     const amount = Number(getValues("textValue"));
     let remainingAmount = amount ? amount : 0;
     const userId = user?.id;
-    const paymentMethod = "Cash"; // ???
+    const paymentMethod = getValues("paymentMethodValue");
 
     for (let i = 0; i < numarFacturi.length; i++) {
       const invoice = await InvoiceService.getInvoiceByNrFactura(
@@ -204,6 +218,105 @@ export const ModalAddPlati: React.FC<{
           control={control}
           label="Nume"
         />
+        <Controller
+          render={({
+            field: { onChange, ...props },
+            fieldState: { error },
+            formState,
+          }) => (
+            <Autocomplete
+              {...props}
+              options={paymentOptions}
+              filterOptions={filterOptions}
+              ListboxProps={{
+                style: {
+                  maxHeight: "135px",
+                },
+              }}
+              renderInput={(params: any) => (
+                <TextField
+                  {...params}
+                  required
+                  name={"paymentMethodValue"}
+                  size={"small"}
+                  id={"paymentMethodValue"}
+                  type="text"
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label={"Metodă de plată"}
+                  sx={{
+                    "& input:disabled": {
+                      color: "black", // Text color
+                      fontFamily: "Catesque", // Font family
+                      WebkitTextFillColor: "black",
+                    },
+                    "& input::-webkit-outer-spin-button": {
+                      "-webkit-appearance": "none",
+                      margin: 0,
+                    },
+                    "& input::-webkit-inner-spin-button": {
+                      "-webkit-appearance": "none",
+                      margin: 0,
+                    },
+                    "& .MuiInputBase-input": {
+                      color: "black", // Text color
+                      fontFamily: "Catesque", // Font family
+                    },
+
+                    "& .MuiInputLabel-root": {
+                      color: "black", // Label color
+                      fontFamily: "Catesque", // Font family
+                      fontSize: "18px",
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#0054a6", // Focused border color
+                      },
+                      "&.Mui-disabled": {
+                        color: "black", // Label color for disabled state
+                      },
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#0054a6", // Border color for disabled input
+                      },
+                      "& fieldset": {
+                        borderColor: "#0054a6", // Border color
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#0054a6", // Hover border color
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#0054a6", // Focused border color
+                      },
+                    },
+                    "& .MuiAutocomplete-endAdornment": {
+                      "& .MuiButtonBase-root": {
+                        color: "#0054a6",
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                        },
+                      },
+                    },
+                    userSelect: "none",
+                  }}
+                />
+              )}
+              onChange={(_, data) => {
+                onChange(data);
+              }}
+              renderOption={(props, option) => (
+                <MenuItem
+                  {...props}
+                  sx={{ fontFamily: "Catesque", fontSize: "16px" }} // Apply the desired font family and font size
+                >
+                  {option}
+                </MenuItem>
+              )}
+            />
+          )}
+          defaultValue={""}
+          name={"paymentMethodValue"}
+          control={control}
+        />
         <Button
           onClick={handleSubmit(onSubmit)}
           variant={"contained"}
@@ -217,6 +330,7 @@ export const ModalAddPlati: React.FC<{
               textValue: "",
               checkboxValue: [],
               dropdownValue: "",
+              paymentMethodValue: "",
             });
             setNrFacturi([]);
             setUser(undefined);
@@ -234,3 +348,8 @@ export const ModalAddPlati: React.FC<{
     </Modal>
   );
 };
+
+const filterOptions = createFilterOptions({
+  matchFrom: "start",
+  stringify: (option: string) => option,
+});

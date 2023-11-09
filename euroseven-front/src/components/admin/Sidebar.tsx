@@ -18,6 +18,8 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PaidIcon from "@mui/icons-material/Paid";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../services/AuthService";
+import { AppDispatch } from "../../store";
+import { useDispatch } from "react-redux";
 
 export const Sidebar = (props: {
   handleTabChange(tab: string): void;
@@ -25,10 +27,11 @@ export const Sidebar = (props: {
 }) => {
   const navigate = useNavigate();
 
-
+  const dispatch: AppDispatch = useDispatch();
   const logOut = () => {
-    logout();
-    navigate("/login");
+    dispatch(logout()).then(() => {
+      navigate("/login");
+    });
   };
 
   return (
@@ -42,7 +45,17 @@ export const Sidebar = (props: {
       }}
     >
       <Box sx={{ alignItems: "center", justifyContent: "center" }}>
-        <img src={logo2} alt="logo" style={{ marginTop: "10px" }} />
+        <Box
+          sx={{
+            marginTop: "10px",
+            "&:hover": {
+              cursor: "pointer",
+            },
+          }}
+          onClick={() => navigate("/")}
+        >
+          <img src={logo2} alt="logo" />
+        </Box>
         <Box
           sx={{
             borderRadius: "10px",
@@ -81,8 +94,32 @@ export const Sidebar = (props: {
               Administrator
             </Typography>
           </Box>
-          <Box sx={{ mt: "5vh", height: "100%", position: "relative" }}>
+          <Box sx={{ mt: "1vh", height: "100%", position: "relative" }}>
             <List>
+              <ListItem
+                disablePadding
+                sx={{
+                  color: "#FFFFFF",
+                  mb: "5vh",
+                }}
+              >
+                <ListItemButton
+                  onClick={() => navigate("/")}
+                  sx={{
+                    background: "#252e3e",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <ListItemText
+                    primary="Pagină Principală"
+                    sx={{
+                      "& .MuiListItemText-primary": {
+                        fontFamily: "Catesque",
+                      },
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
               <ListItem
                 disablePadding
                 sx={{

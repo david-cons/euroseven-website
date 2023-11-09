@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { Icon } from "../../components/Icon";
 import { PaymentEntity, UserEntity } from "../../types";
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { InvoiceService } from "../../services/InvoiceService";
 import { RecentPaymentsTable } from "../../components/client/RecentPaymentsTable";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
@@ -154,6 +154,24 @@ export const UserHome: React.FC<{
                 color={Number(user?.restDePlataTotal!) < 0 ? "green" : "red"}
               />
             </Box>
+            {user?.restDePlataTotal! > 0 && (
+              <Button
+                variant="contained"
+                sx={{
+                  fontFamily: "Catesque",
+                  textTransform: "none",
+                  position: "absolute",
+                  borderRadius: "15px",
+                  margin: "15px",
+                  height: "20px",
+                  color: "white",
+                  bottom: -5,
+                  left: 0,
+                }}
+              >
+                Plătește Tot
+              </Button>
+            )}
             <Button
               endIcon={<ArrowForwardIcon />}
               sx={{
@@ -209,6 +227,7 @@ export const UserHome: React.FC<{
                   position: "absolute",
                   top: 0,
                   left: 0,
+                  boxSizing: "border-box",
                 }}
               >
                 Detalii
@@ -221,6 +240,7 @@ export const UserHome: React.FC<{
                   left: "0",
                   top: "35px",
                   width: "100%",
+                  boxSizing: "border-box",
                 }}
               >
                 {/* Separate Typography components for each line */}
@@ -271,17 +291,7 @@ export const UserHome: React.FC<{
                   {user?.name}
                 </Typography>
 
-                <Typography
-                  fontFamily={"Catesque"}
-                  sx={{
-                    color: "#0054a6",
-                    letterSpacing: "1.5px",
-                    fontWeight: "bold",
-                    marginTop: "10px", // Add margin to separate from the previous line
-                  }}
-                >
-                  {user?.judet}
-                </Typography>
+                <ResponsiveTypography text={user?.address} />
               </Box>
             </Box>
 
@@ -299,10 +309,99 @@ export const UserHome: React.FC<{
           }}
         >
           <PlatiRecenteCard user={user} recentPayments={recentPayments} />
-          <IndexCard forIndexVechi={true} value={user?.indexVechi!} />
           <IndexCard forIndexVechi={false} value={user?.indexNou!} />
         </Stack>
       </Box>
     </Box>
+  );
+};
+
+interface ResponsiveTypographyProps {
+  text: string | undefined;
+}
+
+const ResponsiveTypography: React.FC<ResponsiveTypographyProps> = ({
+  text,
+}) => {
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [fontSize, setFontSize] = useState(25); // Start with a default font size
+
+  const adjustFontSize = () => {
+    if (textRef.current && textRef.current.parentElement) {
+      let currentFontSize = fontSize;
+      const parentPadding =
+        parseFloat(
+          getComputedStyle(textRef.current.parentElement).paddingLeft
+        ) +
+        parseFloat(
+          getComputedStyle(textRef.current.parentElement).paddingRight
+        );
+      const availableWidth =
+        textRef.current.parentElement.offsetWidth - parentPadding;
+      textRef.current.style.fontSize = `${currentFontSize}px`;
+
+      while (
+        textRef.current.scrollWidth > availableWidth &&
+        currentFontSize > 1
+      ) {
+        currentFontSize--;
+        textRef.current.style.fontSize = `${currentFontSize}px`;
+      }
+
+      if (currentFontSize !== fontSize) {
+        setFontSize(currentFontSize);
+      }
+    }
+  };
+
+  // Adjust font size on mount and whenever text changes
+  useLayoutEffect(adjustFontSize, [text]);
+
+  // Adjust font size when container size changes
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(adjustFontSize);
+    if (textRef.current && textRef.current.parentElement) {
+      resizeObserver.observe(textRef.current.parentElement);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [textRef]);
+
+  return (
+    <Typography
+      fontFamily={"Catesque"}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        color: "#black",
+        letterSpacing: "1.5px",
+        marginTop: "10px",
+      }}
+    >
+      <Typography
+        component="span"
+        sx={{
+          color: "#0054a6",
+          fontFamily: "Catesque",
+          fontWeight: "bold",
+          mr: "5px",
+        }}
+      >
+        Adresa:
+      </Typography>
+      <span
+        ref={textRef}
+        style={{
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          fontSize: `${fontSize}px`, // Apply dynamic font size
+        }}
+      >
+        {text}
+      </span>
+    </Typography>
   );
 };

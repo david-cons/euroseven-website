@@ -8,11 +8,15 @@ import { NewsSection } from "../components/NewsSection";
 import { Footer } from "../components/Footer";
 import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
+import { RootState } from "../store";
+import { useSelector } from "react-redux";
 
 export const LandingPage = () => {
+  const role = useSelector((state: RootState) => state.authentication.role);
+
   return (
     <Box>
-      <Title />
+      <Title role={role} />
       <Box
         sx={{
           height: "4vh",
@@ -45,7 +49,7 @@ export const LandingPage = () => {
             031 67 56
           </Typography>
         </Box>
-        
+
         <Box
           sx={{
             display: "flex",

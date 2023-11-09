@@ -1,9 +1,12 @@
 import axios from "axios";
+import { RootState, persistor } from "../store";
+import { Dispatch, AnyAction } from "redux";
+import { ThunkAction } from "redux-thunk";
 
 const API_URL = "http://localhost:8081/api/auth/";
 
-export const authenticateUser = (username, password) => {
-  return (dispatch) => {
+export const authenticateUser = (username: string, password: string) => {
+  return (dispatch: Dispatch<AnyAction>) => {
     return axios
       .post(API_URL + "login", {
         username,
@@ -31,11 +34,11 @@ export const authenticateUser = (username, password) => {
 };
 
 export const registerUser = (
-  username,
-  password,
-  email,
-  firstName,
-  lastName
+  username: string,
+  password: string,
+  email: string,
+  firstName: string,
+  lastName: string
 ) => {
   return axios
     .post(API_URL + "register", {
@@ -86,31 +89,48 @@ export const registerUser = (
 //   }, 12000); // call every 4 minutes (240000 milliseconds)
 // };
 
-export const authenticationSuccess = (userId, token, refreshToken, role) => {
+export const authenticationSuccess = (
+  userId: any,
+  token: any,
+  refreshToken: any,
+  role: any
+) => {
   return {
     type: "AUTHENTICATION_SUCCESS",
     payload: { userId, token, refreshToken, role },
   };
 };
 
-export const authenticationFailure = (error) => {
+export const authenticationFailure = (error: any) => {
   return {
     type: "AUTHENTICATION_FAILURE",
     payload: error,
   };
 };
 
-export const logout = () => {
-  localStorage.removeItem("role");
-  localStorage.removeItem("token");
-  localStorage.removeItem("selectedTab");
-  localStorage.removeItem("persist:root");
+export const logOutSuccess = (): AnyAction => {
   return {
     type: "LOGOUT",
   };
 };
 
-export const getRole = async (token) => {
+export const logout = (): ThunkAction<
+  Promise<void>,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    localStorage.removeItem("selectedTab");
+    await persistor.purge();
+    dispatch(logOutSuccess());
+    return;
+  };
+};
+
+export const getRole = async (token: any) => {
   return axios
     .get(API_URL + "role?token=" + token)
     .then((response) => {

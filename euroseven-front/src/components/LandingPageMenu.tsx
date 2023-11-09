@@ -22,9 +22,8 @@ export const LandingPageMenu = (props: LandingPageMenuProps) => {
         border: "0.5px solid black",
         top: "1",
         right: "0",
-        mt: "10px",
-        mr: "37px",
-        
+        mt: "8px",
+        mr: "12px",
       }}
     >
       <Box
@@ -33,7 +32,6 @@ export const LandingPageMenu = (props: LandingPageMenuProps) => {
           height: "6vh",
           borderBottom: "0.5px solid rgb(240,240,240, .5)",
           position: "relative",
-          
         }}
       >
         <Button

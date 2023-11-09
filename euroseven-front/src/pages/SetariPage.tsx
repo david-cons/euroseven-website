@@ -33,6 +33,9 @@ export const SetariPage: React.FC<{
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  // const [adresaDisabled, setAdresaDisabled] = useState(false);
+  // const [judetDisabled, setJudetDisabled] = useState(false);
+  // const [localitateDisabled, setLocalitateDisabled] = useState(false);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -461,8 +464,14 @@ export const SetariPage: React.FC<{
                     size={"small"}
                     label={"Județ"}
                     value={judet}
+                    disabled={user?.judet !== "" && user?.judet ? true : false}
                     onChange={changeJudet}
                     sx={{
+                      "& input:disabled": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                        WebkitTextFillColor: "black",
+                      },
                       "& .MuiInputBase-input": {
                         color: "black", // Text color
                         fontFamily: "Catesque", // Font family
@@ -471,6 +480,10 @@ export const SetariPage: React.FC<{
                         color: "black", // Label color
                         fontFamily: "Catesque", // Font family
                         fontSize: "18px",
+                      },
+                      "& .MuiInputLabel-root.Mui-disabled": {
+                        // Specifically target the disabled label
+                        color: "black",
                       },
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
@@ -481,6 +494,9 @@ export const SetariPage: React.FC<{
                         },
                         "&.Mui-focused fieldset": {
                           borderColor: "#0054a6", // Focused border color
+                        },
+                        "&.Mui-disabled fieldset": {
+                          borderColor: "#0054a6", // Disabled border color
                         },
                       },
                     }}
@@ -493,8 +509,16 @@ export const SetariPage: React.FC<{
                     size={"small"}
                     label={"Localitate"}
                     value={localitate}
+                    disabled={
+                      user?.localitate !== "" && user?.localitate ? true : false
+                    }
                     onChange={changeLocalitate}
                     sx={{
+                      "& input:disabled": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                        WebkitTextFillColor: "black",
+                      },
                       "& .MuiInputBase-input": {
                         color: "black", // Text color
                         fontFamily: "Catesque", // Font family
@@ -503,6 +527,10 @@ export const SetariPage: React.FC<{
                         color: "black", // Label color
                         fontFamily: "Catesque", // Font family
                         fontSize: "18px",
+                      },
+                      "& .MuiInputLabel-root.Mui-disabled": {
+                        // Specifically target the disabled label
+                        color: "black",
                       },
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
@@ -513,6 +541,9 @@ export const SetariPage: React.FC<{
                         },
                         "&.Mui-focused fieldset": {
                           borderColor: "#0054a6", // Focused border color
+                        },
+                        "&.Mui-disabled fieldset": {
+                          borderColor: "#0054a6", // Disabled border color
                         },
                       },
                     }}
@@ -525,7 +556,15 @@ export const SetariPage: React.FC<{
                     label={"Adresă"}
                     value={adresa}
                     onChange={changeAdresa}
+                    disabled={
+                      user?.address !== "" && user?.address ? true : false
+                    }
                     sx={{
+                      "& input:disabled": {
+                        color: "black", // Text color
+                        fontFamily: "Catesque", // Font family
+                        WebkitTextFillColor: "black",
+                      },
                       "& .MuiInputBase-input": {
                         color: "black", // Text color
                         fontFamily: "Catesque", // Font family
@@ -534,6 +573,10 @@ export const SetariPage: React.FC<{
                         color: "black", // Label color
                         fontFamily: "Catesque", // Font family
                         fontSize: "18px",
+                      },
+                      "& .MuiInputLabel-root.Mui-disabled": {
+                        // Specifically target the disabled label
+                        color: "black",
                       },
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
@@ -544,6 +587,9 @@ export const SetariPage: React.FC<{
                         },
                         "&.Mui-focused fieldset": {
                           borderColor: "#0054a6", // Focused border color
+                        },
+                        "&.Mui-disabled fieldset": {
+                          borderColor: "#0054a6", // Disabled border color
                         },
                       },
                     }}

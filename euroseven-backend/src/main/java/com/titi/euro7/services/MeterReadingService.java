@@ -12,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,28 @@ public class MeterReadingService {
 
 
     public MeterReading createMeterReading(MeterReading meterReading) {
-        log.info("Created meter reading for codClient " + meterReading.getCodClient());
-        meterReading.setAccepted(false);
-        return meterReadingRepository.save(meterReading);
+        log.info("Creating meter reading for codClient " + meterReading.getCodClient());
+
+        List<MeterReading> meterReadingsOfClient = meterReadingRepository.findAllByCodClient(meterReading.getCodClient());
+
+        LocalDate now = LocalDate.now();
+        int currentMonth = now.getMonthValue();
+        int currentYear = now.getYear();
+
+        long countThisMonth = meterReadingsOfClient.stream()
+                .filter(reading -> reading.getDate() != null)
+                .filter(reading -> reading.getDate().getMonthValue() == currentMonth)
+                .filter(reading -> reading.getDate().getYear() == currentYear)
+                .count();
+
+        if (countThisMonth == 0 || countThisMonth == 1) {
+            meterReading.setAccepted(false);
+            return meterReadingRepository.save(meterReading);
+        } else {
+            // If the condition is not met, log the info and possibly throw an exception or return null
+           log.info("Didn't save meter reading due to limit exceeded!");
+            return null;
+        }
     }
 
     public List<MeterReading> getAllMeterReadings() {

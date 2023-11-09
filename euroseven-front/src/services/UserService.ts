@@ -41,9 +41,9 @@ export abstract class UserService {
     id: number | undefined,
     name: string,
     address: string | undefined,
-    judet: string | undefined | null,
-    localitate: string | undefined | null,
-    phone: string | undefined
+    judet?: string | undefined | null,
+    localitate?: string | undefined | null,
+    phone?: string | undefined
   ): Promise<UserEntity> {
     return new Promise((resolve) => {
       axios

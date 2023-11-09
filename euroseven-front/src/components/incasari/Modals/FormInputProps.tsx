@@ -25,6 +25,7 @@ export interface IFormInput {
   textValue: string;
   userNameValue: string;
   checkboxValue: any[];
+  paymentMethodValue: string;
   dropdownValue: string;
 }
 

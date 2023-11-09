@@ -88,7 +88,6 @@ public class WebSecurity {
                                 antMatcher("/api/users/create"),
                                 antMatcher("/api/users/delete/**"),
                                 antMatcher("/api/users/search"),
-                                antMatcher("/api/users/update/**"),
                                 antMatcher("/api/users/coduriClienti"),
                                 antMatcher("/api/users/uploadExcel"),
                                 antMatcher("/api/users/export"))

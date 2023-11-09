@@ -1,7 +1,9 @@
 import {
+  Alert,
   Box,
   Button,
   InputAdornment,
+  Snackbar,
   TextField,
   Typography,
   styled,
@@ -65,6 +67,30 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
   });
 
   const [file, setFile] = useState<File | null>(null);
+  const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
+  const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+
+  const handleCloseErrorSnackbar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenErrorSnackbar(false);
+  };
+
+  const handleCloseSuccessSnackbar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSuccessSnackbar(false);
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
@@ -95,22 +121,40 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
   };
 
   const onSubmit = async (data: IFormInput) => {
-    console.log(data);
-    console.log(file);
     if (file && user && user.codClient) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = async () => {
+        console.log("hey");
         const base64Image = reader.result?.toString().split(",")[1]; // we only want the Base64 part, not the preceding MIME type
         const currentDate: Date = new Date();
-        await MeterReadingService.createMeterReading({
+        MeterReadingService.createMeterReading({
           serieContor: data.serieContorValue!,
           indexVechi: Number(data.indexVechiValue!),
           indexNou: Number(data.indexNouValue!),
           date: formatDate(currentDate),
           codClient: user.codClient,
           picture: base64Image!, // use the Base64 string here
-        });
+        })
+          .then((res) => {
+            console.log("Received response:", res);
+            if (!res) {
+              setOpenErrorSnackbar(true);
+            } else {
+              setOpenSuccessSnackbar(true);
+            }
+            // reset({
+            //   serieContorValue: "",
+            //   indexVechiValue: 0,
+            //   indexNouValue: 0,
+            //   imagineValue: undefined,
+            // });
+            // setFile(null);
+          })
+          .catch((error) => {
+            console.error("Error creating meter reading:", error);
+            setOpenErrorSnackbar(true);
+          });
       };
     }
   };
@@ -133,6 +177,34 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
         textAlign: "center",
       }}
     >
+      <Snackbar
+        open={openErrorSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseErrorSnackbar}
+        sx={{ position: "absolute", bottom: 0, left: "50%", padding: "20px" }}
+      >
+        <Alert
+          onClose={handleCloseErrorSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Ai trimis mai mult de 2 citiri in ultima lună!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccessSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccessSnackbar}
+        sx={{ position: "absolute", bottom: 0, left: "50%", padding: "20px" }}
+      >
+        <Alert
+          onClose={handleCloseSuccessSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Citire înregistrată!
+        </Alert>
+      </Snackbar>
       <Typography variant="h4" fontFamily="Catesque" sx={{ mb: "5vh" }}>
         Citește Contor
       </Typography>

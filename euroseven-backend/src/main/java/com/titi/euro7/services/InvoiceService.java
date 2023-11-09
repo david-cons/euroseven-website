@@ -119,7 +119,8 @@ public class InvoiceService {
                 invoice.setPaid(false);
                 user.setRestDePlataTotal(user.getRestDePlataTotal() + invoice.getRestDePlata());
             }
-            user.setIndexVechi(invoice.getIndexVechi());
+            invoice.setIndexVechi(user.getIndexNou());
+            user.setIndexVechi(user.getIndexNou());
             user.setIndexNou(invoice.getIndexNou());
             userRepository.save(user);
         } catch (java.time.format.DateTimeParseException e) {
