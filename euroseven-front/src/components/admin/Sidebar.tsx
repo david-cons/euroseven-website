@@ -108,6 +108,7 @@ export const Sidebar = (props: {
                   sx={{
                     background: "#252e3e",
                     borderRadius: "10px",
+                    textAlign: "center",
                   }}
                 >
                   <ListItemText

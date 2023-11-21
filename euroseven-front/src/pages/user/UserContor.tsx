@@ -8,7 +8,7 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { UserEntity } from "../../types";
@@ -54,14 +54,7 @@ interface IFormInput {
 }
 
 export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
-  const {
-    handleSubmit,
-    reset,
-    control,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm<IFormInput>({
+  const { handleSubmit, reset, control, setValue } = useForm<IFormInput>({
     resolver: yupResolver(validationSchema),
     defaultValues: defaultValues,
   });
@@ -69,6 +62,8 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
   const [file, setFile] = useState<File | null>(null);
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
   const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+
+  const [imageError, setImageError] = useState("");
 
   const handleCloseErrorSnackbar = (
     event?: React.SyntheticEvent | Event,
@@ -80,6 +75,12 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
 
     setOpenErrorSnackbar(false);
   };
+
+  useEffect(() => {
+    if (user && user.indexNou) {
+      setValue("indexVechiValue", user.indexNou);
+    }
+  }, [user, setValue]);
 
   const handleCloseSuccessSnackbar = (
     event?: React.SyntheticEvent | Event,
@@ -143,19 +144,23 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
             } else {
               setOpenSuccessSnackbar(true);
             }
-            // reset({
-            //   serieContorValue: "",
-            //   indexVechiValue: 0,
-            //   indexNouValue: 0,
-            //   imagineValue: undefined,
-            // });
-            // setFile(null);
+            reset({
+              serieContorValue: "",
+              indexVechiValue: 0,
+              indexNouValue: 0,
+              imagineValue: undefined,
+            });
+            setFile(null);
+            setImageError("");
           })
           .catch((error) => {
             console.error("Error creating meter reading:", error);
             setOpenErrorSnackbar(true);
+            setImageError("");
           });
       };
+    } else {
+      setImageError("Imaginea trebuie completată");
     }
   };
 
@@ -165,13 +170,8 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
         display: "grid",
         gridRowGap: "20px",
         padding: "50px",
-        margin: "10px 300px",
-        position: "absolute" as "absolute",
-        top: "50%",
-        left: "30%",
-        transform: "translate(-50%, -50%)",
-        width: "70vh",
-        minHeight: "20vh",
+        width: "600px",
+        height: "450px",
         bgcolor: "background.paper",
         boxShadow: 24,
         textAlign: "center",
@@ -270,24 +270,23 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
           <TextField
             {...props}
             required
-            // disabled={disabled ? disabled : false}
             name={"indexVechiValue"}
             id={"indexVechiValue"}
             size={"small"}
             type={"number"}
             label={"Index Vechi"}
             onChange={onChange}
+            disabled={user && user.indexNou !== 0 ? true : false}
             error={!!error}
             helperText={error ? error.message : null}
             sx={{
-              "& .MuiInputBase-input": {
-                color: "black", // Text color
-                fontFamily: "Catesque", // Font family
-              },
               "& input:disabled": {
                 color: "black", // Text color
                 fontFamily: "Catesque", // Font family
                 WebkitTextFillColor: "black",
+              },
+              "& .MuiInputLabel-root.Mui-disabled": {
+                color: "black", // This will make the label color black when the TextField is disabled
               },
               "& .MuiInputLabel-root": {
                 color: "black", // Label color
@@ -302,6 +301,9 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
                   borderColor: "#0054a6", // Hover border color
                 },
                 "&.Mui-focused fieldset": {
+                  borderColor: "#0054a6", // Focused border color
+                },
+                "&.Mui-disabled fieldset": {
                   borderColor: "#0054a6", // Focused border color
                 },
               },
@@ -319,7 +321,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
                   position="end"
                 >
                   <Typography sx={{ fontFamily: "Catesque", color: "black" }}>
-                    cm
+                    mc
                   </Typography>
                 </InputAdornment>
               ),
@@ -388,7 +390,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
                   position="end"
                 >
                   <Typography sx={{ fontFamily: "Catesque", color: "black" }}>
-                    cm
+                    mc
                   </Typography>
                 </InputAdornment>
               ),
@@ -410,7 +412,12 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
             component="label"
             variant="text"
             startIcon={<CloudUploadIcon />}
-            sx={{ width: "30%", color: "#0054a6", margin: "0 auto" }}
+            sx={{
+              width: "50%",
+              color: "#0054a6",
+              margin: "0 auto",
+              display: "flex",
+            }}
           >
             Incarca Imagine
             <VisuallyHiddenInput
@@ -423,15 +430,20 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
               value={""}
               type="file"
             />
-            {error && <Typography color="error">{error.message}</Typography>}
           </Button>
         )}
         defaultValue={null}
       />
+      {imageError !== "" && (
+        <Typography color="error" fontFamily={"Catesque"}>
+          {imageError}
+        </Typography>
+      )}
 
       {file && (
         <Box sx={{ margin: "0 auto", width: "50%" }}>
           <img
+            alt="contor"
             src={URL.createObjectURL(file)}
             width={"200px"}
             height={"200px"}
@@ -455,6 +467,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
             imagineValue: undefined,
           });
           setFile(null);
+          setImageError("");
         }}
         variant={"outlined"}
         sx={{

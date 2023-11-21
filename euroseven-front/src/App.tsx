@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { LandingPage } from "./pages/LandingPage";
 import { LoginPage } from "./pages/LoginPage";
 import { UserHomePage } from "./pages/user/UserHomePage";
@@ -12,24 +12,9 @@ import { RootState } from "./store";
 import { CustomErrorPage } from "./pages/Error500";
 import { InformationPage } from "./pages/InformationPage";
 import CookieConsent from "react-cookie-consent";
+import { ContactPage } from "./pages/ContactPage";
 
 function App() {
-  const authenticated = useSelector(
-    (state: RootState) => state.authentication.authenticated
-  );
-  const navigate = useNavigate(); // if you're using react-router
-
-  useEffect(() => {
-    if (
-      !authenticated &&
-      window.location.pathname !== "/login" &&
-      window.location.pathname !== "/" &&
-      window.location.pathname !== "/test"
-    ) {
-      navigate("/login");
-    }
-  }, [authenticated, navigate]);
-
   const removeFromLocalStorage = () => {
     localStorage.removeItem("selectedTab");
   };
@@ -53,13 +38,15 @@ function App() {
           expires={150}
         >
           Folosim cookie-uri pentru a îmbunătăți experiența de navigare și
-          pentru a analiza traficul pe site.
+          pentru a analiza traficul pe site. Prin navigarea pe acest site, iti
+          exprimi acordul asupra folosirii cookie-urilor.
         </CookieConsent>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<UserHomePage />} />
           <Route path="/test" element={<InformationPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route
             path="/admin/home"
             element={

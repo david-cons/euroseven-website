@@ -31,6 +31,7 @@ import { UserContract } from "./UserContract";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 import { pagesClient } from "../../lunrjs/dataAdmin";
 import { useLocation, useNavigate } from "react-router-dom";
+import ResponsiveAppBar from "../../components/client/ResponsiveAppBar";
 
 export const UserHomePage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<String>(
@@ -63,16 +64,16 @@ export const UserHomePage: React.FC = () => {
       e.preventDefault();
       if (window.history.state && window.history.state.idx > 0) {
         // User is attempting to go back - we navigate them to root
-        navigate('/');
+        navigate("/");
       }
     };
 
     // Add event listener for back button
-    window.addEventListener('popstate', handleBackButtonEvent);
+    window.addEventListener("popstate", handleBackButtonEvent);
 
     return () => {
       // Remove event listener
-      window.removeEventListener('popstate', handleBackButtonEvent);
+      window.removeEventListener("popstate", handleBackButtonEvent);
     };
   }, [navigate]);
 
@@ -194,11 +195,12 @@ export const UserHomePage: React.FC = () => {
     <Box
       sx={{
         width: "100%",
-        minHeight: "calc(100vh - 64px)",
+        height: "100%",
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "center",
+        overflowY: "hidden",
       }}
     >
       <SidebarUser
@@ -207,17 +209,25 @@ export const UserHomePage: React.FC = () => {
         name={user && user.name ? user.name : "ERROR"}
         codClient={user && user.codClient ? user.codClient : 0}
       />
+      <ResponsiveAppBar
+        handleTabChange={handleTabClick}
+        selectedTab={selectedTab}
+        photo={user ? user.image : ""}
+      />
       <Box
         sx={{
-          flex: "0 0 85%",
-          height: "100vh",
+          height: "911px",
           position: "relative",
-          width: "85vh",
+          width: `calc(100% - 260px)`,
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
           backgroundColor: "#f8f9fe",
           overflowY: "hidden",
+          "@media (max-width: 800px)": {
+            width: "100%",
+            flex: "0 0 100%",
+          },
         }}
       >
         {isDefaultPassword && userId && (
@@ -353,7 +363,7 @@ export const UserHomePage: React.FC = () => {
           size="large"
           onClick={handleOpenChat}
           sx={{
-            position: "fixed",
+            position: "absolute",
             bottom: "2%",
             right: "2%",
             zIndex: 1,

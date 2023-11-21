@@ -29,13 +29,15 @@ export const InformationPage: React.FC = () => {
         className="jumbotron-container"
         sx={{
           width: "100%",
-          height: "89vh",
+          minHeight: "89vh",
           overflow: "hidden", // Prevent horizontal scrollbar
           position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <img
-          height="100%"
           src={information}
           alt="jumbotron"
           style={{
@@ -46,6 +48,7 @@ export const InformationPage: React.FC = () => {
             top: 0, // Position images at the top
             left: 0, // Position images at the left
             animation: "zoom-in 20s ease-in-out",
+            flexShrink: 0,
           }}
           draggable="false"
           unselectable="on"

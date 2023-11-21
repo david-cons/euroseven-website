@@ -4,90 +4,126 @@ import logo2 from "../assets/logo2.png";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const JumbotronOverlay = () => {
   const [isBoxVisible, setIsBoxVisible] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const boxRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setIsBoxVisible(!isBoxVisible);
     setIsOpen(!isOpen);
   };
   return (
-    <Box>
+    <Box
+      sx={{
+        width: "100%",
+        minHeight: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Box
-        className="jumbotron-overlay"
         sx={{
-          position: "absolute",
-          top: "5%",
-          left: "50%",
-          width: "100%",
-          transform: "translate(-50%, -50%)",
-          padding: "20px",
-          color: "#fff" /* Text color */,
           display: "flex",
+          justifyContent: "space-between",
         }}
       >
-        <img height="100px" src={logo2} alt="logo2" />
+        <Box
+          className="overlay-logo"
+          sx={{
+            width: "100%",
+            display: "flex",
+            "@media (max-height:600px)": {
+              // Adjust 600px to the threshold you need
+              display: "none",
+            },
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              padding: "10px",
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+            onClick={() => navigate("/")}
+          >
+            <img
+              height="100px"
+              src={logo2}
+              alt="logo2"
+              className="overlay-logo"
+            />
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            position: "absolute",
+            right: 0,
+            top: 10,
+          }}
+        >
+          <IconButton
+            sx={{
+              height: "30px",
+              mr: "10px",
+            }}
+          >
+            <PermIdentityIcon
+              sx={{
+                width: "30px",
+                height: "35px",
+                color: "#0054a6",
+              }}
+            />
+          </IconButton>
+          <IconButton
+            sx={{
+              height: "30px",
+              mr: "10px",
+            }}
+          >
+            <SearchIcon
+              sx={{
+                width: "30px",
+                height: "35px",
+                color: "#0054a6",
+              }}
+            />
+          </IconButton>
+          <a
+            id="menu-icon"
+            className={isOpen ? "close" : ""}
+            onClick={handleClick}
+            style={{ zIndex: isOpen ? 2 : 1 }}
+          >
+            <div className="bar"></div>
+            <div className="bar"></div>
+            <div className="bar"></div>
+          </a>
+        </Box>
       </Box>
-      <Box
-        sx={{
-          mt: "15vh",
-          position: "absolute",
-          top: "10%",
-          left: "1%",
-          alignItems: "left",
-          justifyContent: "left",
-          textAlign: "left",
-          display: "flex",
-        }}
-      >
+
+      <Box sx={{ width: "10%", mt: "4vh", pl: "25px" }}>
         <Stack direction="column" spacing={5}>
           {[
-            "Clienti Rezidentiali",
+            "Clienți Casnici",
             "Clienti Business",
-            "Electripedia",
             "Servicii Online",
             "Informatii Utile",
-            "Plafonare",
+            "Consultare Consum",
           ].map((buttonText) => (
             <AnimatedButton key={buttonText} variant="text">
               {buttonText}
             </AnimatedButton>
           ))}
         </Stack>
-      </Box>
-      <Box sx={{ position: "absolute", right: 0, top: "0" }}>
-        <IconButton>
-          <PermIdentityIcon
-            sx={{
-              mr: "10px",
-              width: "30px",
-              height: "35px",
-              color: "#0054a6",
-            }}
-          />
-        </IconButton>
-        <IconButton>
-          <SearchIcon
-            sx={{
-              mr: "12px",
-              width: "30px",
-              height: "35px",
-              color: "#0054a6",
-            }}
-          />
-        </IconButton>
-        <a
-          id="menu-icon"
-          className={isOpen ? "close" : ""}
-          onClick={handleClick}
-          style={{ zIndex: isOpen ? 2 : 1 }}
-        >
-          <div className="bar"></div>
-          <div className="bar"></div>
-          <div className="bar"></div>
-        </a>
       </Box>
 
       {isBoxVisible && <LandingPageMenu boxRef={boxRef} isOpen={isOpen} />}

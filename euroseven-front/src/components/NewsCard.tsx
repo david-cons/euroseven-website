@@ -1,11 +1,20 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, styled, SxProps, Theme } from "@mui/material";
 
-export const NewsCard = () => {
+// Define the props for NewsCard
+interface NewsCardProps {
+  sx?: SxProps<Theme>; // This allows you to pass sx props
+}
+
+const StyledBox = styled(Box)<NewsCardProps>(({ theme, ...props }) => ({
+  ...props.sx, // Apply the sx prop styles
+}));
+
+export const NewsCard: React.FC<NewsCardProps> = (props) => {
   return (
-    <Box
+    <StyledBox
       sx={{
-        width: "30vh",
-        height: "60vh",
+        width: "300px",
+        height: "600px",
         backgroundColor: "white",
         mr: "5vh",
         borderBottom: "5px solid #0054a6",
@@ -17,6 +26,10 @@ export const NewsCard = () => {
         "&:hover": {
           transform: "scale(1.05)", // Grow by 5% on hover
         },
+        "@media (max-width: 600px)": {
+          mr: "0vh",
+        },
+        ...props.sx,
       }}
     >
       <Typography
@@ -71,6 +84,6 @@ export const NewsCard = () => {
       >
         Detalii
       </Button>
-    </Box>
+    </StyledBox>
   );
 };

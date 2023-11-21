@@ -313,6 +313,7 @@ export const UserInvoicesTable = (props: {
               rowsPerPageOptions={[5]}
               sx={{
                 fontFamily: "Catesque",
+                width: "195px",
               }}
             />
           </Table>

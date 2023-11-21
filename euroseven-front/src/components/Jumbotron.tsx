@@ -8,7 +8,7 @@ import { Box } from "@mui/material";
 import { JumbotronOverlay } from "./JumbotronOverlay";
 
 export const Jumbotron = () => {
-  const images = useMemo(() => {
+  const images: string[] = useMemo(() => {
     return [j1, f5, j3, j4, j5];
   }, []);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
@@ -93,8 +93,9 @@ export const Jumbotron = () => {
 
     // Reset opacity for all images
     const imageElements = document.querySelectorAll(
-      ".jumbotron"
+      ".jumbotron:not(.jumbotron-overlay)"
     ) as NodeListOf<HTMLImageElement>;
+
     imageElements.forEach((imageElement) => {
       imageElement.style.opacity = "0";
     });
@@ -111,16 +112,18 @@ export const Jumbotron = () => {
     <Box
       className="jumbotron-container"
       sx={{
-        width: "100%",
-        height: "89vh",
-        overflow: "hidden", // Prevent horizontal scrollbar
+        minWidth: "100%",
+        minHeight: "89vh",
+        overflow: "hidden",
         position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       {images.map((image, index) => (
         <img
           key={index}
-          height="100%"
           src={image}
           alt="jumbotron"
           className={`jumbotron ${index === currentImageIndex ? "active" : ""}`}
@@ -128,13 +131,14 @@ export const Jumbotron = () => {
             width: "100%", // Maintain aspect ratio and cover the container
             height: "100%",
             objectFit: "cover",
-            position: "absolute", // Ensure images are absolutely positioned
-            top: 0, // Position images at the top
-            left: 0, // Position images at the left
+            position: "absolute",
+            top: 0,
+            left: 0,
             opacity: index === currentImageIndex ? 1 : 0, // Apply the fade-in effect to the active image
             animation:
               index === currentImageIndex ? "zoom-in 20s ease-in-out" : "none", // Apply the zoom-in animation to the active image
             transition: "opacity 1s ease",
+            flexShrink: 0,
           }}
           ref={jumbotronImageRef}
           onMouseDown={handleMouseDown}

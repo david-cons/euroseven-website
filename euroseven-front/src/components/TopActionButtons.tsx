@@ -13,8 +13,7 @@ import { MaterialUISwitch } from "./admin/MaterialUISwitch";
 import { StyledBadge } from "./admin/StyledBadge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { NotificationEntity } from "../types";
-import { useEffect, useState } from "react";
-import { NotificationService } from "../services/NotificationService";
+import { useState } from "react";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 
 export const TopActionButtons: React.FC<{
@@ -47,10 +46,13 @@ export const TopActionButtons: React.FC<{
         right: 0,
         padding: "20px",
         display: "flex",
+        "@media (max-width: 800px)": {
+          display: "none",
+        },
       }}
     >
       <MaterialUISwitch defaultChecked={false} sx={{ mt: "3px" }} />
-      <IconButton aria-label="cart" onClick={handleClick} sx={{mr: "3px"}}>
+      <IconButton aria-label="cart" onClick={handleClick} sx={{ mr: "3px" }}>
         <StyledBadge badgeContent={notifications.length} color="secondary">
           <NotificationsIcon />
         </StyledBadge>

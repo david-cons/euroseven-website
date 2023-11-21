@@ -33,7 +33,7 @@ public class Invoice {
 
     private String file;
 
-    private Boolean paid;
+    private Boolean paid; // SCADENTA/RESTANTA
 
     @Column(name = "location")
     private String location;

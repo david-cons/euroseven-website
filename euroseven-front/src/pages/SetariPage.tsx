@@ -174,7 +174,7 @@ export const SetariPage: React.FC<{
         sx={{
           width: "100%",
           position: "relative",
-          height: "8vh",
+          height: "73px",
           textAlign: "left",
         }}
       >
@@ -186,7 +186,14 @@ export const SetariPage: React.FC<{
           Setări
         </Typography>
       </Container>
-      <Container sx={{ display: "flex" }}>
+      <Container
+        sx={{
+          display: "flex",
+          "@media (max-width:600px)": {
+            flexDirection: "column",
+          },
+        }}
+      >
         <Paper
           elevation={5}
           className="card-single"
@@ -320,7 +327,16 @@ export const SetariPage: React.FC<{
             </Typography>
           </Box>
           <form onSubmit={handleSubmit}>
-            <Box sx={{ flexGrow: 1, mt: "10vh" }}>
+            <Box
+              sx={{
+                flexGrow: 1,
+                mt: "100px",
+                "@media (max-width:600px)": {
+                  mr: "50vw",
+                  width: "40%",
+                },
+              }}
+            >
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <TextField
@@ -598,7 +614,7 @@ export const SetariPage: React.FC<{
                 <Grid item xs={6}>
                   <Button
                     variant={"outlined"}
-                    sx={{ color: "#0054a6", width: "225px" }}
+                    sx={{ color: "#0054a6", width: "auto" }}
                     onClick={handleOpenModal}
                   >
                     Schimbă Parolă
@@ -621,6 +637,11 @@ export const SetariPage: React.FC<{
                 mb: "10px",
                 mr: "20px",
                 fontFamily: "Catesque",
+                "@media (max-width:600px)": {
+                  right: "unset",
+                  left: 5,
+                  bottom: 10,
+                },
               }}
               type="submit"
             >

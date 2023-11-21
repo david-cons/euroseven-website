@@ -49,7 +49,9 @@ export const IncasariHome: React.FC<{
   };
 
   return (
-    <Box sx={{ height: "100%", width: "100%", mt: "15vh", overflow: "hidden" }}>
+    <Box
+      sx={{ height: "100%", width: "100%", mt: "150px", overflow: "hidden" }}
+    >
       <Grid container spacing={3} sx={{ margin: "0 auto" }}>
         <Grid item xs={4}>
           <NavCard

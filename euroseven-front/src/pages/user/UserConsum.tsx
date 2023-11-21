@@ -17,7 +17,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  PointElement
+  PointElement,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 ChartJS.register(
@@ -70,7 +70,7 @@ const data = {
   ],
   datasets: [
     {
-      label: "consum (cm)",
+      label: "consum (mc)",
       data: [
         "18",
         "16",
@@ -86,19 +86,19 @@ const data = {
         "12",
       ],
       backgroundColor: "red",
-      borderColor: "#0054a6"
+      borderColor: "#0054a6",
     },
-   
   ],
 };
 moment.locale("ro"); // Set locale to Romanian
 
-export const UserConsum: React.FC<{}> = ({}) => {
+export const UserConsum: React.FC = () => {
   const [filter, setFilter] = useState("general");
-  const [months, setMonths] = useState(moment.months());
+
+  const months = moment.months();
 
   const handleChange = (event: SelectChangeEvent) => {
-    const currentFilter = event.target.value as string;
+    // const currentFilter = event.target.value as string;
     setFilter(event.target.value as string);
   };
 
@@ -108,13 +108,8 @@ export const UserConsum: React.FC<{}> = ({}) => {
         display: "grid",
         gridRowGap: "20px",
         padding: "50px",
-        margin: "10px 300px",
-        position: "absolute" as "absolute",
-        top: "50%",
-        left: "30%",
-        transform: "translate(-50%, -50%)",
-        width: "80vh",
-        minHeight: "20vh",
+        width: "580px",
+        height: "500px",
         bgcolor: "background.paper",
         boxShadow: 24,
         textAlign: "center",
@@ -131,6 +126,8 @@ export const UserConsum: React.FC<{}> = ({}) => {
         onChange={handleChange}
         IconComponent={() => <ArrowDropDownIcon style={{ color: "#0054a6" }} />}
         sx={{
+          width: "100%",
+          height: "35px",
           "& .MuiInputBase-input": {
             color: "black", // Text color
             fontFamily: "Catesque", // Font family
@@ -162,7 +159,7 @@ export const UserConsum: React.FC<{}> = ({}) => {
       <Line
         options={options}
         data={data}
-        style={{ padding: "30px", marginTop: "15px" }}
+        style={{ padding: "30px", marginTop: "15px", width: "100%" }}
       />
     </Box>
   );

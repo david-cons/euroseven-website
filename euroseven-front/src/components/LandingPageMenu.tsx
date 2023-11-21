@@ -14,22 +14,22 @@ export const LandingPageMenu = (props: LandingPageMenuProps) => {
     <Box
       ref={boxRef}
       sx={{
-        width: "40vh",
-        height: "61vh",
+        width: "350px",
+        height: "470px",
         backgroundColor: "#0054a6",
         zIndex: isOpen ? 1 : -1,
         position: "absolute",
         border: "0.5px solid black",
-        top: "1",
-        right: "0",
+        top: -5,
+        right: -10,
         mt: "8px",
-        mr: "12px",
+        mr: "8px",
       }}
     >
       <Box
         sx={{
           width: "100%",
-          height: "6vh",
+          height: "60px",
           borderBottom: "0.5px solid rgb(240,240,240, .5)",
           position: "relative",
         }}
@@ -56,10 +56,11 @@ export const LandingPageMenu = (props: LandingPageMenuProps) => {
         </Button>
       </Box>
       <MenuListItem label={"EURO7 la tine acasă"} />
-      <MenuListItem label={"MyEURO7"} />
-      <MenuListItem label={"Contract Online"} />
+      <MenuListItem label={"MySeven"} />
       <MenuListItem label={"Despre Noi"} />
-      <MenuListItem label={"Contact"} />
+      <MenuListItem label={"Informații Utile"} />
+      <MenuListItem label={"Documente"} />
+      <MenuListItem label={"Plafonare"} />
       <MenuListItem label={"Etică"} />
       <MenuListItem label={"Legal"} />
       <MenuListItem label={"Întrebări Frecvente"} />
