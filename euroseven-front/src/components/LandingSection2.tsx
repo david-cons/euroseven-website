@@ -10,7 +10,7 @@ export const LandingSection2 = () => {
     <Box
       sx={{
         backgroundColor: "#F4F4F4",
-        minWidth: "80%",
+        width: "80%",
         minHeight: "80vh",
         margin: "0 auto",
         mt: "10vh",

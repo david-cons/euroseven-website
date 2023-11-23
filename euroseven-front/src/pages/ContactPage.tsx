@@ -1,17 +1,17 @@
 import { Title } from "../components/Title";
 import information from "../assets/information.jpg";
-import placeholder from "../assets/placeholder.png";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
+  Button,
+  FormControl,
+  InputLabel,
+  NativeSelect,
   Typography,
 } from "@mui/material";
 import { JumbotronOverlay } from "../components/JumbotronOverlay";
 import { Footer } from "../components/Footer";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import NotificationsActiveOutlinedIcon from "@mui/icons-material/NotificationsActiveOutlined";
 
 export const ContactPage: React.FC = () => {
   return (
@@ -20,6 +20,7 @@ export const ContactPage: React.FC = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        overflowX: "hidden",
       }}
     >
       <Box
@@ -90,10 +91,12 @@ export const ContactPage: React.FC = () => {
       <Box
         sx={{
           width: "98%",
-          minHeight: "600px",
+          minHeight: "700px",
           bgcolor: "background.paper",
           boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
           margin: "0 auto",
+          mt: "40px",
+          mb: "40px",
           display: "flex",
           flexDirection: "column",
         }}
@@ -101,7 +104,7 @@ export const ContactPage: React.FC = () => {
         <Box
           sx={{
             width: "100%",
-            minHeight: "80%",
+            minHeight: "60%",
             display: "flex",
             "@media (max-width:600px)": {
               flexDirection: "column",
@@ -264,7 +267,7 @@ export const ContactPage: React.FC = () => {
                 fontFamily={"Catesque"}
                 fontSize={"1rem"}
                 color={"white"}
-                sx={{ ml: "80px" }}
+                sx={{ ml: "100px" }}
               >
                 Adresa
               </Typography>
@@ -347,7 +350,7 @@ export const ContactPage: React.FC = () => {
               <Typography
                 fontFamily={"Catesque"}
                 fontSize={"1rem"}
-                sx={{ ml: "80px" }}
+                sx={{ ml: "100px" }}
               >
                 Com. Bolintin Deal , Jud. Giurgiu
               </Typography>
@@ -359,7 +362,6 @@ export const ContactPage: React.FC = () => {
                 display: "flex",
                 textAlign: "center",
                 alignItems: "center",
-                whiteSpace: "nowrap",
               }}
             >
               <Typography
@@ -428,7 +430,7 @@ export const ContactPage: React.FC = () => {
               <Typography
                 fontFamily={"Catesque"}
                 fontSize={"1rem"}
-                sx={{ ml: "80px" }}
+                sx={{ ml: "100px" }}
               >
                 Com. Sabareni , Jud. Giurgiu
               </Typography>
@@ -440,7 +442,6 @@ export const ContactPage: React.FC = () => {
                 display: "flex",
                 textAlign: "center",
                 alignItems: "center",
-                whiteSpace: "nowrap",
               }}
             >
               <Typography
@@ -473,7 +474,90 @@ export const ContactPage: React.FC = () => {
             </Box>
           </Box>
         </Box>
+        <Box
+          sx={{
+            width: "100%",
+            minHeight: "200px",
+            padding: "20px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "start",
+            justifyContent: "left",
+            textAlign: "left",
+            gap: "20px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              gap: "20px",
+            }}
+          >
+            <NotificationsActiveOutlinedIcon
+              sx={{
+                color: "#0054a6",
+                height: "60px",
+                width: "60px",
+              }}
+            />
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "6px",
+                  height: "50px",
+                  backgroundColor: "#0054a6",
+                  mr: "15px",
+                }}
+              />
+              <Typography fontFamily={"Catesque"} fontSize={"2rem"}>
+                Urgențe
+              </Typography>
+            </Box>
+          </Box>
+          <Box sx={{ width: "100%", mr: "25px" }}>
+            <Typography fontFamily={"Catesque"} fontSize={"1rem"}>
+              În cazul în care simți miros de gaze naturale sau observi
+              defecțiuni tehnice în alimentarea cu gaze naturale sau
+              electricitate, anunță operatorul de distribuție sau de rețea din
+              zona ta.
+            </Typography>
+          </Box>
+          <Box sx={{ width: "100%", display: "flex", gap: "150px" }}>
+            <Button
+              variant="contained"
+              sx={{
+                background: "#0054a6",
+                color: "white",
+                fontFamily: "Catesque",
+              }}
+            >
+              Electricitate
+            </Button>
+            <FormControl sx={{ width: "30%" }}>
+              <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                Localitate
+              </InputLabel>
+              <NativeSelect
+                defaultValue={""}
+                inputProps={{
+                  name: "localitate",
+                  id: "uncontrolled-native",
+                }}
+              >
+                <option value={"BD"}>Bolintin-Deal, Giurgiu</option>
+                <option value={"SB"}>Săbăreni, Giurgiu</option>
+              </NativeSelect>
+            </FormControl>
+          </Box>
+        </Box>
       </Box>
+      <Footer />
     </Box>
   );
 };

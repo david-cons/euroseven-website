@@ -35,10 +35,6 @@ export const JumbotronOverlay = () => {
           sx={{
             width: "100%",
             display: "flex",
-            "@media (max-height:600px)": {
-              // Adjust 600px to the threshold you need
-              display: "none",
-            },
           }}
         >
           <Box
@@ -110,7 +106,7 @@ export const JumbotronOverlay = () => {
         </Box>
       </Box>
 
-      <Box sx={{ width: "10%", mt: "4vh", pl: "25px" }}>
+      <Box sx={{ width: "178px", mt: "4vh", pl: "25px" }}>
         <Stack direction="column" spacing={5}>
           {[
             "Clienți Casnici",

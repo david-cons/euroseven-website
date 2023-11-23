@@ -26,8 +26,8 @@ export const NewsCard: React.FC<NewsCardProps> = (props) => {
         "&:hover": {
           transform: "scale(1.05)", // Grow by 5% on hover
         },
-        "@media (max-width: 600px)": {
-          mr: "0vh",
+        "@media (max-width: 1200px)": {
+          mr: "unset",
         },
         ...props.sx,
       }}

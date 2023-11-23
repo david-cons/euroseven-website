@@ -41,6 +41,7 @@ export const Footer: React.FC = () => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            textAlign: "center",
             mb: "3vh",
             "@media (max-width: 1344px)": {
               // Adjust this pixel value as needed
@@ -72,6 +73,7 @@ export const Footer: React.FC = () => {
               flexDirection: "column", // Changes layout to column
               alignItems: "center", // Aligns items in the center for the column layout
               textAlign: "center",
+              ml: "unset",
             },
           }}
         >
@@ -557,6 +559,7 @@ export const Footer: React.FC = () => {
               // Adjust this pixel value as needed
               flexDirection: "column", // Changes layout to column
               alignItems: "center", // Aligns items in the center for the column layout
+              textAlign: "center",
             },
           }}
         >
@@ -568,7 +571,16 @@ export const Footer: React.FC = () => {
             ©EuroSeven
           </Typography>
 
-          <Box sx={{ display: "flex", gap: "1vh", mr: "4vh" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "1vh",
+              mr: "4vh",
+              "@media (max-width: 1344px)": {
+                mb: "unset",
+              },
+            }}
+          >
             <Typography
               fontFamily={"Catesque"}
               component="a"
@@ -582,6 +594,9 @@ export const Footer: React.FC = () => {
                 ":hover": {
                   cursor: "pointer",
                   color: "#0054a6",
+                },
+                "@media (max-width: 1344px)": {
+                  ml: "unset",
                 },
               }}
             >

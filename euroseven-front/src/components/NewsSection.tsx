@@ -3,12 +3,12 @@ import { NewsCard } from "./NewsCard";
 import { useState, useEffect } from "react";
 
 export const NewsSection = () => {
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 600);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 1200);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 600);
+      setIsSmallScreen(window.innerWidth < 1200);
     };
 
     // Add event listener
@@ -47,7 +47,7 @@ export const NewsSection = () => {
           color: "black",
           position: "absolute",
           top: 0,
-          mt: "5vh",
+          mt: "45.55px",
           borderBottom: "1px solid #0054a6",
         }}
       >
@@ -56,7 +56,6 @@ export const NewsSection = () => {
       <Box
         sx={{
           display: "flex",
-          mt: "3vh",
           margin: "0 auto",
           flexDirection: isSmallScreen ? "column" : "row",
         }}
@@ -80,7 +79,10 @@ export const NewsSection = () => {
               display: "flex",
               flexDirection: "row",
               margin: "0 auto",
-              mt: "8vh",
+              position: "absolute",
+              bottom: 25,
+              left: "50%",
+              transform: "translateX(-50%)",
             }}
           >
             {[...Array(4)].map((_, index) => (

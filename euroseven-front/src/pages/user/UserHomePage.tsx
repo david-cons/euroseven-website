@@ -11,7 +11,6 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  Modal,
   TextField,
   Typography,
 } from "@mui/material";
@@ -30,7 +29,7 @@ import { UserConsum } from "./UserConsum";
 import { UserContract } from "./UserContract";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 import { pagesClient } from "../../lunrjs/dataAdmin";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ResponsiveAppBar from "../../components/client/ResponsiveAppBar";
 
 export const UserHomePage: React.FC = () => {

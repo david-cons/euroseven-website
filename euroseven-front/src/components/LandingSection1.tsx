@@ -3,20 +3,18 @@ import card1 from "../assets/card1.jpeg";
 import card2 from "../assets/card2.jpeg";
 import card4 from "../assets/card4.jpg";
 import { Box, ThemeProvider, Typography, createTheme } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
+import Grid from "@mui/material/Unstable_Grid2";
 export const LandingSection1 = () => {
   return (
     <Box
       sx={{
         backgroundColor: "#F4F4F4",
         width: "80%",
-        minWidth: "600px",
         display: "flex",
         flexDirection: "column",
         margin: "0 auto",
-        mt: "10vh",
-        justifyContent: "space-between",
-        minHeight: "40vh",
+        mt: "80px",
+        position: "relative",
       }}
     >
       <Typography
@@ -26,6 +24,7 @@ export const LandingSection1 = () => {
           fontWeight: "bold",
           width: "50%",
           margin: "0 auto",
+          mt: "25px",
         }}
       >
         DESCOPERA OFERTELE DEDICATE
@@ -38,17 +37,17 @@ export const LandingSection1 = () => {
               sm: 640,
               md: 1000,
               lg: 1600,
-              xl: 2000,
+              xl: 1800,
             },
           },
         })}
       >
         <Grid
           container
-          spacing={5}
-          sx={{ margin: "0 auto", mb: "5vh", mr: "10vh" }}
+          spacing={{ xs: 5, sm: 5, md: 1, lg: 1, xl: 5 }}
+          sx={{ margin: "0 auto" }}
         >
-          <Grid xs={4} md={12} lg={4} sx={{ mr: "10px" }}>
+          <Grid xs={12} sm={12} md={4} lg={4} xl={4}>
             <LandingCard
               image={card1}
               title={"Plăteşte Factura Online"}
@@ -58,7 +57,7 @@ export const LandingSection1 = () => {
               buttonText={"Plăteşte"}
             />
           </Grid>
-          <Grid xs={"auto"} md={12} lg={4} sx={{ mr: "10px", ml: "10px" }}>
+          <Grid xs={12} sm={12} md={4} lg={4} xl={4}>
             <LandingCard
               image={card2}
               title={"Oferte"}
@@ -68,7 +67,7 @@ export const LandingSection1 = () => {
               buttonText={"Vezi"}
             />
           </Grid>
-          <Grid xs={"auto"} md={12} lg={4} sx={{ mr: "10px" }}>
+          <Grid xs={12} sm={12} md={4} lg={4} xl={4}>
             <LandingCard
               image={card4}
               title={"Infomații Suplimentare"}

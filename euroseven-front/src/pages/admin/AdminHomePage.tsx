@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Button,
   IconButton,
   List,
   ListItem,
@@ -16,12 +15,12 @@ import { useEffect, useState } from "react";
 import Search from "@mui/icons-material/Search";
 import { StyledAvatar } from "../../components/StyledAvatar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { AdminHome, AdminUsers, AdminNews, AdminInvoices } from "./";
+import { AdminHome, AdminUsers, AdminNews } from "./";
 import { UserService } from "../../services/UserService";
 import { UserEntity } from "../../types";
 import { useSelector } from "react-redux";
 import { SetariPage } from "../SetariPage";
-import { pagesAdmin, idxAdmin } from "../../lunrjs/dataAdmin";
+import { pagesAdmin } from "../../lunrjs/dataAdmin";
 import { IncasariInvoices } from "../incasari/IncasariInvoices";
 import { AdminIFactura } from "./AdminIFactura";
 
@@ -78,24 +77,29 @@ export const AdminHomePage: React.FC = () => {
     <Box
       sx={{
         width: "100%",
-        minHeight: "calc(100vh - 64px)",
+        height: "100%",
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "center",
+        overflowY: "hidden",
       }}
     >
       <Sidebar handleTabChange={handleTabClick} selectedTab={selectedTab} />
       <Box
         sx={{
-          flex: "0 0 85%",
-          height: "100vh",
+          height: "911px",
           position: "relative",
-          width: "85vh",
+          width: `calc(100% - 260px)`,
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
           backgroundColor: "#f8f9fe",
+          overflowY: "hidden",
+          "@media (max-width: 800px)": {
+            width: "100%",
+            flex: "0 0 100%",
+          },
         }}
       >
         <Box>

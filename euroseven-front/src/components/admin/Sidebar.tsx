@@ -37,11 +37,14 @@ export const Sidebar = (props: {
   return (
     <Box
       sx={{
-        flex: "0 0 15%",
-        height: "100vh",
-        width: "15vh",
+        height: "911px",
+        width: "260px",
         backgroundColor: "#1c2536",
         position: "relative",
+        overflowY: "hidden",
+        "@media (max-width: 800px)": {
+          display: "none",
+        },
       }}
     >
       <Box sx={{ alignItems: "center", justifyContent: "center" }}>
@@ -59,8 +62,8 @@ export const Sidebar = (props: {
         <Box
           sx={{
             borderRadius: "10px",
-            height: "8vh",
-            width: "25vh",
+            height: "75px",
+            width: "225px",
             backgroundColor: "#252e3e",
             margin: "0 auto",
             textAlign: "left",

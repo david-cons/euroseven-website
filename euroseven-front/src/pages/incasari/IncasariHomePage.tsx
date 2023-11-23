@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { NotificationEntity, UserEntity } from "../../types";
+import { UserEntity } from "../../types";
 import { useSelector } from "react-redux";
 import { UserService } from "../../services/UserService";
 import {
-  Avatar,
   Box,
-  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -13,10 +11,6 @@ import {
   TextField,
 } from "@mui/material";
 import { SidebarIncasari } from "../../components/incasari/SidebarIncasari";
-import { StyledAvatar } from "../../components/StyledAvatar";
-import { MaterialUISwitch } from "../../components/admin/MaterialUISwitch";
-import { StyledBadge } from "../../components/admin/StyledBadge";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import Search from "@mui/icons-material/Search";
 import { SetariPage } from "../SetariPage";
 import { IncasariHome } from "./IncasariHome";
@@ -86,7 +80,7 @@ export const IncasariHomePage: React.FC = () => {
     <Box
       sx={{
         width: "100%",
-        minHeight: "calc(100vh - 64px)",
+        height: "100%",
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
@@ -101,14 +95,18 @@ export const IncasariHomePage: React.FC = () => {
       />
       <Box
         sx={{
-          flex: "0 0 85%",
-          height: "100vh",
+          height: "911px",
           position: "relative",
-          width: "85vh",
+          width: `calc(100% - 260px)`,
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
           backgroundColor: "#f8f9fe",
+          overflowY: "hidden",
+          "@media (max-width: 800px)": {
+            width: "100%",
+            flex: "0 0 100%",
+          },
         }}
       >
         <Box>
