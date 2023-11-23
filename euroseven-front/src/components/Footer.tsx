@@ -1,481 +1,645 @@
 import logo2 from "../assets/logo2.png";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import anpc1 from "../assets/anpc1.png";
 import anpc2 from "../assets/anpc2.png";
 import {
   Box,
   Stack,
   Typography,
-  Button,
   Paper,
-  TextField,
+  Divider,
+  IconButton,
+  InputBase,
 } from "@mui/material";
-export const Footer = () => {
+import React from "react";
+export const Footer: React.FC = () => {
   return (
     <Box
       sx={{
         width: "100%",
-        height: "75vh",
+        minHeight: "75vh",
         backgroundColor: "#282424",
         display: "flex",
         justifyContent: "center",
         textAlign: "center",
+        overflow: "hidden",
         position: "relative",
+        "@media (max-width: 1344px)": {
+          // Adjust this pixel value as needed
+          flexDirection: "column", // Changes layout to column
+          alignItems: "center", // Aligns items in the center for the column layout
+        },
       }}
     >
-      <Box sx={{ display: "flex", mt: "10vh", textAlign: "left" }}>
-        <Stack
-          spacing={2}
-          direction="column"
-          alignItems="flex-start" // This aligns items to the left
-          sx={{
-            textAlign: "left",
-          }}
-        >
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{
-              color: "white",
-              fontWeight: "bold",
-              letterSpacing: "1px",
-              mt: "5vh",
-              fontSize: "18px",
-            }}
-          >
-            EuroSeven
-          </Typography>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-                color: "white",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Noutati
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Business News
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Despre Noi
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Etica
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Cariere
-          </Button>
-        </Stack>
-        <Stack
-          spacing={2}
-          direction="column"
-          alignItems="flex-start" // This aligns items to the left
-          sx={{
-            textAlign: "left",
-          }}
-        >
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{
-              color: "white",
-              fontWeight: "bold",
-              letterSpacing: "1px",
-              mt: "5vh",
-              fontSize: "18px",
-            }}
-          >
-            Utile
-          </Typography>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Cont Client
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Plata Online
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Transmitere Index
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Intrebari Frecvente
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Factura pe email
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            ANPC
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            ANRE
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Contact
-          </Button>
-          <Paper
-            elevation={0}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              padding: "20px",
-              backgroundColor: "transparent",
-              margin: "0 auto",
-            }}
-          >
-            <img
-              src={anpc1}
-              alt="anpc1"
-              width="175px"
-              height={"50px"}
-              style={{ marginBottom: "20px" }}
-            />
-            <img src={anpc2} alt="anpc2" width="175px" height={"50px"} />
-          </Paper>
-        </Stack>
-        <Stack
-          spacing={2}
-          direction="column"
-          alignItems="flex-start" // This aligns items to the left
-          sx={{
-            textAlign: "left",
-          }}
-        >
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{
-              color: "white",
-              fontWeight: "bold",
-              letterSpacing: "1px",
-              mt: "5vh",
-              fontSize: "18px",
-            }}
-          >
-            Legislative
-          </Typography>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              fontSize: "12px",
-              color: "#0054a6",
-            }}
-          >
-            Contracte si Conditii Generale
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              fontSize: "12px",
-              color: "#0054a6",
-            }}
-          >
-            Legislatie
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Tarife
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Serviciu Universal
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Sistem calificare achiziții
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: "transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-              },
-              color: "#0054a6",
-              fontSize: "12px",
-            }}
-          >
-            Sistem dinamic de achiziții
-          </Button>
-        </Stack>
-        <Stack
-          spacing={2}
-          direction="column"
-          alignItems="flex-start" // This aligns items to the left
-          sx={{
-            textAlign: "left",
-            ml: "10vh"
-          }}
-        >
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{
-              color: "white",
-              fontWeight: "bold",
-              letterSpacing: "1px",
-              mt: "5vh",
-              fontSize: "18px",
-            }}
-          >
-            Newsletter
-          </Typography>
-          <form style={{ display: "flex", flexDirection: "column" }}>
-            <TextField
-              variant="outlined"
-              label="Email"
-              required
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#0054a6",
-                  },
-                },
-                "& .MuiOutlinedInput-input": {
-                  color: "white",
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#0054a6",
-                },
-                "& .MuiInputLabel-outlined": {
-                  color: "white",
-                },
-                color: "#0054a6",
-              }}
-            />
-            <TextField
-              variant="outlined"
-              label="Prenume"
-              required
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#0054a6",
-                  },
-                },
-                "& .MuiOutlinedInput-input": {
-                  color: "white",
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#0054a6",
-                },
-                "& .MuiInputLabel-outlined": {
-                  color: "white",
-                },
-                mt: "20px",
-              }}
-            />
-            <TextField
-              variant="outlined"
-              label="Nume"
-              required
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#0054a6",
-                  },
-                },
-                "& .MuiOutlinedInput-input": {
-                  color: "white",
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#0054a6",
-                },
-                "& .MuiInputLabel-outlined": {
-                  color: "white",
-                },
-                mt: "20px",
-              }}
-            />
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#0054a6",
-                fontSize: "12px",
-                mt: "20px",
-              }}
-            >
-              Aboneaza-te
-            </Button>
-          </form>
-        </Stack>
-      </Box>
       <Box
         sx={{
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-          padding: "15px",
-          color: "#666666",
+          width: "70%",
+          margin: "0 auto",
         }}
       >
-        <img
-          src={logo2}
-          alt="footer-logo"
-          height={"100px"}
-          style={{ padding: "20px" }}
-        />
-        <Typography>
-          © 2023 EuroSeven Industry - Toate drepturile rezervate
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            textAlign: "center",
+            mb: "3vh",
+            "@media (max-width: 1344px)": {
+              // Adjust this pixel value as needed
+              flexDirection: "column", // Changes layout to column
+              alignItems: "center", // Aligns items in the center for the column layout
+            },
+          }}
+        >
+          <img alt="logo-footer" src={logo2} width={"200px"} height={"100px"} />
+          <Typography
+            fontSize={"1.5rem"}
+            sx={{ color: "white", mt: "3vh", mr: "4vh" }}
+            fontFamily={"Catesque"}
+          >
+            {"Dăm energie casei tale, ca tu să pui lumea \n în mișcare."}
+          </Typography>
+        </Box>
+        <Divider variant="middle" sx={{ background: "gray" }} />
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            ml: "4vh",
+            mt: "6vh",
+            textAlign: "left",
+            gap: "10vh",
+            "@media (max-width: 1344px)": {
+              // Adjust this pixel value as needed
+              flexDirection: "column", // Changes layout to column
+              alignItems: "center", // Aligns items in the center for the column layout
+              textAlign: "center",
+              ml: "unset",
+            },
+          }}
+        >
+          <Stack spacing={1} direction={"column"}>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1.2rem"}
+              color={"#0054a6"}
+              sx={{ pb: "2vh" }}
+            >
+              Euro Seven
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Despre noi
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Presa
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Contact
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Puncte de Lucru
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Energie electrica
+            </Typography>
+          </Stack>
+          <Stack spacing={1} direction={"column"}>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1.2rem"}
+              color={"#0054a6"}
+              sx={{ pb: "2vh" }}
+            >
+              Utile
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Intrebari frecvente
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Reclamatii
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Cont client
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Plata online
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Factura electronica
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Tarife reglementate
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Reluarea furnizarii
+            </Typography>
+          </Stack>
+          <Stack spacing={1} direction={"column"}>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1.2rem"}
+              color={"#0054a6"}
+              sx={{ pb: "2vh" }}
+            >
+              Informatii Legislative
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Legislatie
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Contract și condiții generale
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Furnizor de ultimă instanță (FUI)
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              ANRE
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              POSF
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Comparator preț gaze naturale
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Comparator preț energie electrică
+            </Typography>
+          </Stack>
+          <Stack spacing={1} direction={"column"}>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1.2rem"}
+              color={"#0054a6"}
+              sx={{ pb: "2vh" }}
+            >
+              Distribuție
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Anunțuri
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Servicii
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Contract și condiții generale
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Legislație
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Firme autorizate
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              color={"white"}
+              component="a"
+              href="#"
+              sx={{
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Abrevieri
+            </Typography>
+          </Stack>
+          <Stack spacing={2} direction={"column"} sx={{ mr: "5vh" }}>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1.2rem"}
+              color={"#0054a6"}
+              sx={{ pb: "2vh" }}
+            >
+              Abonare la newsletter
+            </Typography>
+            <Paper
+              component="form"
+              sx={{
+                p: "2px 4px",
+                display: "flex",
+                alignItems: "center",
+                width: 250,
+              }}
+            >
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Adresa Email"
+                inputProps={{ "aria-label": "search google maps" }}
+              />
+              <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+                <ArrowForwardIcon sx={{ color: "#0054a6" }} />
+              </IconButton>
+            </Paper>
+            <img alt="anpc" src={anpc1} height={"65px"} width={"260px"} />
+            <img alt="anpc1" src={anpc2} height={"65px"} width={"260px"} />
+          </Stack>
+        </Box>
+        <Divider variant="middle" sx={{ background: "gray", mt: "6vh" }} />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mt: "2vh",
+            mb: "2vh",
+            "@media (max-width: 1344px)": {
+              // Adjust this pixel value as needed
+              flexDirection: "column", // Changes layout to column
+              alignItems: "center", // Aligns items in the center for the column layout
+              textAlign: "center",
+            },
+          }}
+        >
+          <Typography
+            fontFamily={"Catesque"}
+            fontSize={"1rem"}
+            sx={{ color: "white", ml: "4vh", mt: "2vh" }}
+          >
+            ©EuroSeven
+          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              gap: "1vh",
+              mr: "4vh",
+              "@media (max-width: 1344px)": {
+                mb: "unset",
+              },
+            }}
+          >
+            <Typography
+              fontFamily={"Catesque"}
+              component="a"
+              href="#"
+              fontSize={"1rem"}
+              sx={{
+                color: "white",
+                ml: "4vh",
+                mt: "2vh",
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+                "@media (max-width: 1344px)": {
+                  ml: "unset",
+                },
+              }}
+            >
+              Termeni și Condiții
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              component="a"
+              href="#"
+              sx={{
+                color: "white",
+                ml: "4vh",
+                mt: "2vh",
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              GDPR
+            </Typography>
+            <Typography
+              fontFamily={"Catesque"}
+              fontSize={"1rem"}
+              component="a"
+              href="#"
+              sx={{
+                color: "white",
+                ml: "4vh",
+                mt: "2vh",
+                textDecoration: "none",
+                ":hover": {
+                  cursor: "pointer",
+                  color: "#0054a6",
+                },
+              }}
+            >
+              Cookies
+            </Typography>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

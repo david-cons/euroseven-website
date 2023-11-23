@@ -6,7 +6,6 @@ import {
   Alert,
   Box,
   Button,
-  Modal,
   Snackbar,
   Typography,
   debounce,
@@ -15,8 +14,9 @@ import axios from "../../axios";
 import { MeterReadingService } from "../../services/MeterReadingService";
 import { SearchBar } from "../../components/SearchBar";
 import { ModalContorPicture } from "../../components/incasari/Modals/ModalContorPicture";
+import { reverseArray } from "../../utils";
 
-export const IncasariContor: React.FC<{}> = ({}) => {
+export const IncasariContor: React.FC = () => {
   const [meterReadings, setMeterReadings] = useState<MeterReadingEntity[]>([]);
 
   const [meterReadingId, setMeterReadingId] = useState<number>();
@@ -148,10 +148,6 @@ export const IncasariContor: React.FC<{}> = ({}) => {
   ) => {
     setSearchText(event.target.value);
   };
-  const handleOpenSnackbar = () => {
-    setOpenSnackbar(true);
-  };
-
   const handleAprobaContor = async (id: number, codClient: number) => {
     await MeterReadingService.acceptMeterReading(id, codClient).then((res) => {
       console.log(res);
@@ -210,7 +206,7 @@ export const IncasariContor: React.FC<{}> = ({}) => {
         <ModalContorPicture
           openModal={openModal}
           handleCloseModal={handleCloseModal}
-          meterReadingId={meterReadingId!}
+          meterReadingId={meterReadingId}
         />
       )}
       <Box
@@ -246,7 +242,11 @@ export const IncasariContor: React.FC<{}> = ({}) => {
           }}
         >
           <DataGrid
-            rows={searchText === "" ? meterReadings : searchedMeterReadings}
+            rows={
+              searchText === ""
+                ? reverseArray(meterReadings)
+                : searchedMeterReadings
+            }
             columns={columns}
             initialState={{
               pagination: {

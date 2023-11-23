@@ -1,10 +1,14 @@
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { Icon } from "../../components/Icon";
 import { PaymentEntity, UserEntity } from "../../types";
-import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { InvoiceService } from "../../services/InvoiceService";
-import { RecentPaymentsTable } from "../../components/client/RecentPaymentsTable";
-import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import PaymentIcon from "@mui/icons-material/Payment";
 import DescriptionIcon from "@mui/icons-material/Description";
 import test1 from "../../assets/test1.jpg";
@@ -36,11 +40,11 @@ export const UserHome: React.FC<{
   }, [user]);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", overflowY: "hidden" }}>
       <Box
         sx={{
           width: "100%",
-          height: "10vh",
+          height: "91px",
           background: "linear-gradient(to right,#006dee, #014bd0, #00249e)",
           position: "absolute",
           top: "10%",
@@ -60,7 +64,7 @@ export const UserHome: React.FC<{
       <Box
         sx={{
           width: "100%",
-          height: "89vh",
+          height: "810.79px",
           position: "absolute",
           background: "linear-gradient(to bottom,#FFFFFF,#dee2e6)",
           top: "20%",
@@ -80,10 +84,19 @@ export const UserHome: React.FC<{
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          mt: "20vh",
+          mt: "10rem",
         }}
       >
-        <Stack direction="row" spacing={10}>
+        <Stack
+          direction={{
+            xs: "column",
+            md: "column",
+            sm: "column",
+            lg: "row",
+            xl: "row",
+          }}
+          spacing={{ xs: 1, sm: 2, md: 1, lg: 1, xl: 10 }}
+        >
           <Paper
             elevation={5}
             className="card-single"
@@ -163,13 +176,13 @@ export const UserHome: React.FC<{
                   position: "absolute",
                   borderRadius: "15px",
                   margin: "15px",
-                  height: "20px",
+                  height: "30px",
                   color: "white",
-                  bottom: -5,
+                  bottom: -10,
                   left: 0,
                 }}
               >
-                Plătește Tot
+                Plătește
               </Button>
             )}
             <Button
@@ -214,6 +227,9 @@ export const UserHome: React.FC<{
               position: "relative",
               textAlign: "left",
               whiteSpace: "nowrap", // This ensures the content does not wrap
+              "@media (max-width: 1200px)": {
+                display: "none",
+              },
             }}
           >
             <Box sx={{ width: "100%" }}>
@@ -227,7 +243,6 @@ export const UserHome: React.FC<{
                   position: "absolute",
                   top: 0,
                   left: 0,
-                  boxSizing: "border-box",
                 }}
               >
                 Detalii
@@ -240,7 +255,6 @@ export const UserHome: React.FC<{
                   left: "0",
                   top: "35px",
                   width: "100%",
-                  boxSizing: "border-box",
                 }}
               >
                 {/* Separate Typography components for each line */}
@@ -294,18 +308,25 @@ export const UserHome: React.FC<{
                 <ResponsiveTypography text={user?.address} />
               </Box>
             </Box>
-
-            {/* This icon box should probably be aligned with the flex container. */}
             <Box>
               <Icon MUIIcon={PeopleAlt} color={"black"} />
             </Box>
           </Paper>
         </Stack>
         <Stack
-          direction="row"
-          spacing={3}
+          direction={{
+            xs: "column",
+            md: "column",
+            sm: "column",
+            lg: "row",
+            xl: "row",
+          }}
+          spacing={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 3 }}
           sx={{
             mt: "3vh",
+            "@media (max-width: 1000px)": {
+              display: "none",
+            },
           }}
         >
           <PlatiRecenteCard user={user} recentPayments={recentPayments} />
@@ -324,9 +345,9 @@ const ResponsiveTypography: React.FC<ResponsiveTypographyProps> = ({
   text,
 }) => {
   const textRef = useRef<HTMLSpanElement>(null);
-  const [fontSize, setFontSize] = useState(25); // Start with a default font size
+  const [fontSize, setFontSize] = useState(15); // Start with a default font size
 
-  const adjustFontSize = () => {
+  const adjustFontSize = useCallback(() => {
     if (textRef.current && textRef.current.parentElement) {
       let currentFontSize = fontSize;
       const parentPadding =
@@ -352,11 +373,9 @@ const ResponsiveTypography: React.FC<ResponsiveTypographyProps> = ({
         setFontSize(currentFontSize);
       }
     }
-  };
+  }, [fontSize, textRef]); // Add necessary dependencies here
 
-  // Adjust font size on mount and whenever text changes
-  useLayoutEffect(adjustFontSize, [text]);
-
+  useLayoutEffect(adjustFontSize, [text, fontSize, adjustFontSize]);
   // Adjust font size when container size changes
   useEffect(() => {
     const resizeObserver = new ResizeObserver(adjustFontSize);
@@ -367,7 +386,7 @@ const ResponsiveTypography: React.FC<ResponsiveTypographyProps> = ({
     return () => {
       resizeObserver.disconnect();
     };
-  }, [textRef]);
+  }, [textRef, adjustFontSize]);
 
   return (
     <Typography
@@ -396,7 +415,6 @@ const ResponsiveTypography: React.FC<ResponsiveTypographyProps> = ({
         style={{
           overflow: "hidden",
           whiteSpace: "nowrap",
-          textOverflow: "ellipsis",
           fontSize: `${fontSize}px`, // Apply dynamic font size
         }}
       >

@@ -1,12 +1,35 @@
 import { Box, Typography } from "@mui/material";
 import { NewsCard } from "./NewsCard";
+import { useState, useEffect } from "react";
 
 export const NewsSection = () => {
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 1200);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 1200);
+    };
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Call the handler right away so state gets updated with initial window size
+    handleResize();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const changeCard = (index: number) => {
+    setCurrentCardIndex(index);
+  };
+
   return (
     <Box
       sx={{
         width: "100%",
-        height: "100vh",
+        minHeight: "911px",
         mt: "4vh",
         background: "linear-gradient(to bottom,#FFFFFF,#dee2e6)",
         display: "flex",
@@ -24,17 +47,55 @@ export const NewsSection = () => {
           color: "black",
           position: "absolute",
           top: 0,
-          mt: "5vh",
+          mt: "45.55px",
           borderBottom: "1px solid #0054a6",
         }}
       >
         Noutăți
       </Typography>
-      <Box sx={{ display: "flex", mt: "3vh" }}>
-        <NewsCard />
-        <NewsCard />
-        <NewsCard />
-        <NewsCard />
+      <Box
+        sx={{
+          display: "flex",
+          margin: "0 auto",
+          flexDirection: isSmallScreen ? "column" : "row",
+        }}
+      >
+        {[...Array(4)].map((_, index) => (
+          <NewsCard
+            key={index}
+            sx={{
+              display: isSmallScreen
+                ? currentCardIndex === index
+                  ? "block"
+                  : "none"
+                : "block",
+            }}
+          />
+        ))}
+
+        {isSmallScreen && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              margin: "0 auto",
+              position: "absolute",
+              bottom: 25,
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            {[...Array(4)].map((_, index) => (
+              <div
+                key={index}
+                className={`circle ${
+                  index === currentCardIndex ? "active" : ""
+                }`}
+                onClick={() => changeCard(index)}
+              ></div>
+            ))}
+          </Box>
+        )}
       </Box>
     </Box>
   );

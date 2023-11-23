@@ -11,9 +11,9 @@ import "./LoginPage.css";
 import f1 from "../assets/f1.jpeg";
 import logo1 from "../assets/logo1.png";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AnyAction } from "redux";
 import {
   authenticateUser,
@@ -21,7 +21,6 @@ import {
   authenticationFailure,
 } from "../services/AuthService";
 import React from "react";
-import { RootState } from "../store";
 
 export const LoginPage: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -38,11 +37,11 @@ export const LoginPage: React.FC = () => {
     setOpenErrorSnackbar(false);
   };
 
-  const role = useSelector((state: any) => state.authentication.role);
+  //const role = useSelector((state: any) => state.authentication.role);
   const dispatch: ThunkDispatch<{}, {}, AnyAction> = useDispatch();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.authentication.authenticated
-  );
+  // const isAuthenticated = useSelector(
+  //   (state: RootState) => state.authentication.authenticated
+  // );
   const navigate = useNavigate();
 
   const changeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +51,17 @@ export const LoginPage: React.FC = () => {
   const changePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "ROLE_ADMIN") {
+      navigate("/admin/home");
+    } else if (role === "ROLE_INCASARI") {
+      navigate("/incasari/home");
+    } else if (role === "ROLE_USER") {
+      navigate("/client/home");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();

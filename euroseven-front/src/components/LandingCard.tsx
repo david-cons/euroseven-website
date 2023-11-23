@@ -11,16 +11,31 @@ export const LandingCard = (props: {
   return (
     <Box
       sx={{
-        mr: "20vh",
+        mr: "183px",
         position: "relative",
-        width: "50vh",
-        height: "25vh",
+        width: "455.5px",
+        height: "227.75px",
+        "@media (max-width: 1000px)": {
+          mr: "unset",
+        },
+        "@media (max-width: 1600px)": {
+          width: "318px",
+        },
+        "@media (max-width: 1450px)": {
+          width: "275px",
+        },
       }}
     >
       <Box
         sx={{
-          height: "25vh",
-          width: "35vh",
+          height: "227.75px",
+          width: "318.85px",
+          "@media (max-width: 1600px)": {
+            width: "275px",
+          },
+          "@media (max-width: 1450px)": {
+            width: "200px",
+          },
         }}
       >
         <img
@@ -36,15 +51,30 @@ export const LandingCard = (props: {
       </Box>
       <Box
         sx={{
-          width: "35vh",
-          height: "20vh",
+          width: "318.85px",
+          height: "183px",
           backgroundColor: "white",
           position: "absolute",
           top: "50%" /* Place the element vertically in the middle */,
-          left: "45%" /* Anchor the element to the right */,
+          left: {
+            xs: "calc(10% + 20px)",
+            sm: "15%",
+            md: "15%",
+            lg: "20%",
+            xl: "30%",
+          },
           transform: "translateY(-50%)" /* Adjust for vertical alignment */,
           textAlign: "center",
           borderRadius: "10px",
+          "@media (max-width: 500px)": {
+            left: "15%",
+          },
+          "@media (max-width: 1600px)": {
+            width: "275px",
+          },
+          "@media (max-width: 1150px)": {
+            width: "250px",
+          },
         }}
       >
         <Typography

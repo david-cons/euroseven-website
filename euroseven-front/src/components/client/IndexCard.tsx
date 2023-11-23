@@ -27,6 +27,9 @@ export const IndexCard: React.FC<IndexCardProps> = ({
         border: "0.1px solid #e0e0e0",
         position: "relative",
         flexDirection: "column",
+        "@media (max-width: 1200px)": {
+          display: "none",
+        },
       }}
     >
       <Box
@@ -44,7 +47,7 @@ export const IndexCard: React.FC<IndexCardProps> = ({
           fontWeight={"bold"}
           sx={{ mt: "15px" }}
         >
-          {!forIndexVechi ? `Index` : `Index Vechi \n (cm)`}
+          {!forIndexVechi ? `Index` : `Index Vechi \n (mc)`}
         </Typography>
       </Box>
       <Box sx={{ margin: "0 auto" }}>
@@ -53,7 +56,7 @@ export const IndexCard: React.FC<IndexCardProps> = ({
           fontWeight={"bold"}
           sx={{ mt: "5px" }}
         >
-          {!forIndexVechi && `(cm)`}
+          {!forIndexVechi && `(mc)`}
         </Typography>
       </Box>
       <Box sx={{ margin: "0 auto" }}>

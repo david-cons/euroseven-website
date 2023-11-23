@@ -9,7 +9,7 @@ export const MenuListItem = (props: { label: string }) => {
         label !== "A.N.P.C"
           ? {
               width: "100%",
-              height: "6vh",
+              height: "40px",
               borderBottom: "0.5px solid rgb(240,240,240, .5)",
               position: "relative",
               textAlign: "left",
@@ -21,7 +21,7 @@ export const MenuListItem = (props: { label: string }) => {
             }
           : {
               width: "100%",
-              height: "6vh",
+              height: "40px",
               position: "relative",
               textAlign: "left",
               ":hover": {
@@ -39,6 +39,7 @@ export const MenuListItem = (props: { label: string }) => {
           top: "50%",
           transform: "translateY(-50%)",
           left: "5%",
+          color: "white",
         }}
       >
         {label}

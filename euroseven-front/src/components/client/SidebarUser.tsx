@@ -39,11 +39,14 @@ export const SidebarUser = (props: {
   return (
     <Box
       sx={{
-        flex: "0 0 15%",
-        height: "100vh",
-        width: "15vh",
+        height: "911px",
+        width: "260px",
         backgroundColor: "#1c2536",
         position: "relative",
+        overflowY: "hidden",
+        "@media (max-width: 800px)": {
+          display: "none",
+        },
       }}
     >
       <Box sx={{ alignItems: "center", justifyContent: "center" }}>
@@ -61,8 +64,8 @@ export const SidebarUser = (props: {
         <Box
           sx={{
             borderRadius: "10px",
-            height: "8vh",
-            width: "25vh",
+            height: "75px",
+            width: "225px",
             backgroundColor: "#252e3e",
             margin: "0 auto",
             textAlign: "left",
@@ -104,7 +107,14 @@ export const SidebarUser = (props: {
               </Typography>
             </Box>
           </Box>
-          <Box sx={{ mt: "1vh", height: "100%", position: "relative" }}>
+          <Box
+            sx={{
+              mt: "10px",
+              height: "100%",
+              position: "relative",
+              width: "100%",
+            }}
+          >
             <List>
               <ListItem
                 disablePadding
@@ -118,6 +128,7 @@ export const SidebarUser = (props: {
                   sx={{
                     background: "#252e3e",
                     borderRadius: "10px",
+                    textAlign: "center",
                   }}
                 >
                   <ListItemText
@@ -137,7 +148,13 @@ export const SidebarUser = (props: {
                 }}
               >
                 <ListItemButton onClick={() => props.handleTabChange("acasa")}>
-                  <ListItemIcon>
+                  <ListItemIcon
+                  // sx={{
+                  //   "@media (max-width: 1200px)": {
+                  //     margin: "0 auto",
+                  //   },
+                  // }}
+                  >
                     <WindowIcon
                       sx={{
                         color:
@@ -151,6 +168,9 @@ export const SidebarUser = (props: {
                       "& .MuiListItemText-primary": {
                         fontFamily: "Catesque",
                       },
+                      // "@media (max-width: 1200px)": {
+                      //   display: "none",
+                      // },
                     }}
                   />
                 </ListItemButton>

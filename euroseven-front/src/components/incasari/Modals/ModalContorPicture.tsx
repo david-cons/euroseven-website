@@ -1,4 +1,4 @@
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, CircularProgress, Modal, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { MeterReadingEntity } from "../../../types";
 import { MeterReadingService } from "../../../services/MeterReadingService";
@@ -8,21 +8,26 @@ export const ModalContorPicture = (props: {
   handleCloseModal: () => void;
   meterReadingId: number;
 }) => {
-  const { openModal, handleCloseModal } = props;
+  const { openModal, handleCloseModal, meterReadingId } = props;
 
   const [meterReading, setMeterReading] = useState<MeterReadingEntity | null>();
   const [imgSrc, setImgSrc] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMeterReading = async () => {
-      await MeterReadingService.getMeterReadingById(props.meterReadingId).then(
+      setIsLoading(true);
+      await MeterReadingService.getMeterReadingById(meterReadingId).then(
         (res) => {
           setMeterReading(res);
+          setIsLoading(false);
         }
       );
     };
-    fetchMeterReading();
-  }, []);
+    if (meterReadingId) {
+      fetchMeterReading();
+    }
+  }, [meterReadingId]);
 
   useEffect(() => {
     const imageSrc = `data:image/jpeg;base64,${meterReading?.picture}`;
@@ -56,12 +61,16 @@ export const ModalContorPicture = (props: {
           Poza Contor
         </Typography>
         <Box>
-          <img
-            src={imgSrc}
-            alt="meter-reading"
-            height={"500px"}
-            width={"500px"}
-          />
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <img
+              src={imgSrc}
+              alt="meter-reading"
+              height={"500px"}
+              width={"500px"}
+            />
+          )}
         </Box>
       </Box>
     </Modal>

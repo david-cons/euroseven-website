@@ -2,19 +2,19 @@ import { LandingCard } from "./LandingCard";
 import card1 from "../assets/card1.jpeg";
 import card2 from "../assets/card2.jpeg";
 import card4 from "../assets/card4.jpg";
-import { Box, Typography } from "@mui/material";
-
+import { Box, ThemeProvider, Typography, createTheme } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 export const LandingSection1 = () => {
   return (
     <Box
       sx={{
         backgroundColor: "#F4F4F4",
-        width: "170vh",
-        height: "45vh",
-        margin: "0 auto",
-        mt: "10vh",
-        position: "relative",
+        width: "80%",
         display: "flex",
+        flexDirection: "column",
+        margin: "0 auto",
+        mt: "80px",
+        position: "relative",
       }}
     >
       <Typography
@@ -22,49 +22,61 @@ export const LandingSection1 = () => {
         component="div"
         sx={{
           fontWeight: "bold",
-          position: "absolute",
-          top: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          padding: "10px",
+          width: "50%",
+          margin: "0 auto",
+          mt: "25px",
         }}
       >
         DESCOPERA OFERTELE DEDICATE
       </Typography>
-
-      <Box
-        sx={{
-          width: "50vh",
-          height: "25vh",
-          mt: "7vh",
-          display: "flex",
-          padding: "25px",
-          ml: "2vh",
-        }}
+      <ThemeProvider
+        theme={createTheme({
+          breakpoints: {
+            values: {
+              xs: 300,
+              sm: 640,
+              md: 1000,
+              lg: 1600,
+              xl: 1800,
+            },
+          },
+        })}
       >
-        <LandingCard
-          image={card1}
-          title={"Plăteşte Factura Online"}
-          body={"Este simplu, rapid şi sigur să plăteşti online factura Euro7"}
-          buttonText={"Plăteşte"}
-        />
-        <LandingCard
-          image={card2}
-          title={"Oferte"}
-          body={
-            "Descoperă ofertele noastre si bucură-te de servicii premium la prețuri imbatabile."
-          }
-          buttonText={"Vezi"}
-        />
-        <LandingCard
-          image={card4}
-          title={"Infomații Suplimentare"}
-          body={
-            "Află răspunsurile la cele mai frecvente întrebări, precum și alte informații utile."
-          }
-          buttonText={"Vezi"}
-        />
-      </Box>
+        <Grid
+          container
+          spacing={{ xs: 5, sm: 5, md: 1, lg: 1, xl: 5 }}
+          sx={{ margin: "0 auto" }}
+        >
+          <Grid xs={12} sm={12} md={4} lg={4} xl={4}>
+            <LandingCard
+              image={card1}
+              title={"Plăteşte Factura Online"}
+              body={
+                "Este simplu, rapid şi sigur să plăteşti online factura Euro7"
+              }
+              buttonText={"Plăteşte"}
+            />
+          </Grid>
+          <Grid xs={12} sm={12} md={4} lg={4} xl={4}>
+            <LandingCard
+              image={card2}
+              title={"Oferte"}
+              body={
+                "Descoperă ofertele noastre si bucură-te de servicii premium"
+              }
+              buttonText={"Vezi"}
+            />
+          </Grid>
+          <Grid xs={12} sm={12} md={4} lg={4} xl={4}>
+            <LandingCard
+              image={card4}
+              title={"Infomații Suplimentare"}
+              body={"Află răspunsurile la cele mai frecvente întrebări"}
+              buttonText={"Vezi"}
+            />
+          </Grid>
+        </Grid>
+      </ThemeProvider>
     </Box>
   );
 };
