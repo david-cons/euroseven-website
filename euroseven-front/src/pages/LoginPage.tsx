@@ -112,7 +112,7 @@ export const LoginPage: React.FC = () => {
             Parolă sau email greșită!
           </Alert>
         </Snackbar>
-        <Box sx={{ position: "absolute", top: 0, left: 0, padding: "25px" }}>
+        <Box>
           <img
             src={logo1}
             alt="login-logo"

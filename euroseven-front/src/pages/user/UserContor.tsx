@@ -171,7 +171,7 @@ export const UserContor: React.FC<{ user: UserEntity | null }> = ({ user }) => {
         gridRowGap: "20px",
         padding: "50px",
         width: "600px",
-        height: "450px",
+        minHeight: "450px",
         bgcolor: "background.paper",
         boxShadow: 24,
         textAlign: "center",

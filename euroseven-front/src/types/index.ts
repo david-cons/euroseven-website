@@ -23,7 +23,7 @@ export type InvoiceEntity = {
   due_date?: string | null;
   price?: number;
   file?: string;
-  paid?: Boolean;
+  status?: string;
   location?: string;
   nrFactura?: string;
   codClient?: number | null;

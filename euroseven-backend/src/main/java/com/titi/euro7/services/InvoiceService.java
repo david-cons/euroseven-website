@@ -2,6 +2,7 @@ package com.titi.euro7.services;
 
 
 import com.titi.euro7.dto.InvoiceDTO;
+import com.titi.euro7.entities.INVOICE_STATUS;
 import com.titi.euro7.entities.Invoice;
 import com.titi.euro7.entities.Payment;
 import com.titi.euro7.entities.User;
@@ -13,6 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.titi.euro7.services.UserService.isNumeric;
 
@@ -69,13 +72,13 @@ public class InvoiceService {
                     invoice.setRestDePlata(invoice.getRestDePlata() + user.getRestDePlataTotal());
                     user.setRestDePlataTotal(0.0);
                     if (invoice.getRestDePlata() == 0) {
-                        invoice.setPaid(true);
+                        invoice.setStatus(INVOICE_STATUS.PLATITA);
                     } else {
                         user.setRestDePlataTotal(invoice.getRestDePlata());
                     }
                 } else {
                     invoice.setRestDePlata(invoice.getPrice());
-                    invoice.setPaid(false);
+                    invoice.setStatus(INVOICE_STATUS.SCADENTA);
                     user.setRestDePlataTotal(user.getRestDePlataTotal() + invoice.getRestDePlata());
                 }
 //                if (invoice.getCreated_date().isEqual(LocalDate.now())) {
@@ -103,20 +106,20 @@ public class InvoiceService {
         }
         try {
             invoice.setDue_date(invoice.getCreated_date().plusMonths(1));
-            invoice.setPaid(false);
+            invoice.setStatus(INVOICE_STATUS.SCADENTA);
             invoice.setRestDePlata(invoice.getPrice());
 
             if (user.getRestDePlataTotal() < 0) {
                 invoice.setRestDePlata(invoice.getRestDePlata() + user.getRestDePlataTotal());
                 user.setRestDePlataTotal(0.0);
                 if (invoice.getRestDePlata() == 0) {
-                    invoice.setPaid(true);
+                    invoice.setStatus(INVOICE_STATUS.PLATITA);
                 } else {
                     user.setRestDePlataTotal(invoice.getRestDePlata());
                 }
             } else {
                 invoice.setRestDePlata(invoice.getPrice());
-                invoice.setPaid(false);
+                invoice.setStatus(INVOICE_STATUS.SCADENTA);
                 user.setRestDePlataTotal(user.getRestDePlataTotal() + invoice.getRestDePlata());
             }
             invoice.setIndexVechi(user.getIndexNou());
@@ -138,7 +141,7 @@ public class InvoiceService {
         Invoice invoice = invoiceRepository.findById(id).orElse(null);
         assert invoice != null;
         User user = userRepository.findByCodClient(invoice.getCodClient());
-        if (invoice.getPaid()) {
+        if (invoice.getStatus() == INVOICE_STATUS.PLATITA) {
             user.setRestDePlataTotal(user.getRestDePlataTotal() + invoice.getPrice() - invoice.getRestDePlata());
         }
         user.setRestDePlataTotal(user.getRestDePlataTotal() - invoice.getRestDePlata());
@@ -188,11 +191,11 @@ public class InvoiceService {
             if (payment.getAmount() <= invoice.getRestDePlata()) {
                 invoice.setRestDePlata(invoice.getRestDePlata() - payment.getAmount());
                 if (invoice.getRestDePlata() == 0) {
-                    invoice.setPaid(true);
+                    invoice.setStatus(INVOICE_STATUS.PLATITA);
                 }
                 user.setRestDePlataTotal(user.getRestDePlataTotal() - payment.getAmount());
             } else {
-                invoice.setPaid(true);
+                invoice.setStatus(INVOICE_STATUS.PLATITA);
                 user.setRestDePlataTotal(user.getRestDePlataTotal() - invoice.getRestDePlata());
                 invoice.setRestDePlata(0);
             }
@@ -259,8 +262,8 @@ public class InvoiceService {
             if (priceDifference > 0) {
                 invoice.setRestDePlata(invoice.getRestDePlata() + priceDifference);
                 user.setRestDePlataTotal(user.getRestDePlataTotal() + priceDifference);
-                if (invoice.getPaid()) {
-                    invoice.setPaid(false);
+                if (invoice.getStatus() == INVOICE_STATUS.PLATITA) {
+                    invoice.setStatus(INVOICE_STATUS.SCADENTA);
                 }
             }
             // If the price decreased
@@ -271,7 +274,7 @@ public class InvoiceService {
                 if (invoice.getRestDePlata() < 0) {
                     user.setRestDePlataTotal(user.getRestDePlataTotal() - invoice.getRestDePlata()); // Convert negative value to positive
                     invoice.setRestDePlata(0);
-                    invoice.setPaid(true);
+                    invoice.setStatus(INVOICE_STATUS.PLATITA);
                 }
             }
 
@@ -308,7 +311,7 @@ public class InvoiceService {
         user.setRestDePlataTotal(user.getRestDePlataTotal() + payment.getAmount());
 
         if (invoice.getRestDePlata() > 0) {
-            invoice.setPaid(false); // Set the invoice as unpaid
+            invoice.setStatus(INVOICE_STATUS.SCADENTA);
         }
 
         // Save updated invoice and user
@@ -345,7 +348,7 @@ public class InvoiceService {
         XSSFSheet sheet = workbook.createSheet("Facturi");
 
         Row headerRow = sheet.createRow(0);
-        String[] headers = {"ID", "Data Emisa", "Data Scadenta", "Suma", "Platita", "Nr. Factura", "Cod Client", "Rest de Plata", "Index Vechi", "Index Nou"};
+        String[] headers = {"ID", "Data Emisa", "Data Scadenta", "Suma", "Status", "Nr. Factura", "Cod Client", "Rest de Plata", "Index Vechi", "Index Nou"};
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
@@ -360,7 +363,7 @@ public class InvoiceService {
             row.createCell(1).setCellValue(invoice.getCreated_date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             row.createCell(2).setCellValue(invoice.getDue_date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             row.createCell(3).setCellValue(invoice.getPrice());
-            row.createCell(4).setCellValue(invoice.getPaid());
+            row.createCell(4).setCellValue(invoice.getStatus().toString());
             row.createCell(5).setCellValue(invoice.getNrFactura());
             row.createCell(6).setCellValue(invoice.getCodClient());
             row.createCell(7).setCellValue(invoice.getRestDePlata());
@@ -405,6 +408,36 @@ public class InvoiceService {
         sheet.setColumnWidth(3, 200*15);
         sheet.setColumnWidth(5, 200*15);
         return workbook;
+    }
+
+
+    public List<Invoice> getInvoicesFromLastMonth() {
+        List<Invoice> invoices = invoiceRepository.findAll();
+        List<Invoice> unpaidInvoices = invoices.stream()
+                .filter(invoice -> invoice.getStatus() != INVOICE_STATUS.PLATITA)
+                .toList();
+        LocalDate now = LocalDate.now();
+        LocalDate startOfLastMonth = now.minusMonths(1).withDayOfMonth(1);
+        LocalDate endOfLastMonth = now.withDayOfMonth(1).minusDays(1);
+
+        return unpaidInvoices.stream()
+                .filter(invoice -> isDateInLastMonth(invoice.getDue_date(), startOfLastMonth, endOfLastMonth))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isDateInLastMonth(LocalDate date, LocalDate startOfLastMonth, LocalDate endOfLastMonth) {
+        return (date.isEqual(startOfLastMonth) || date.isAfter(startOfLastMonth)) && date.isBefore(endOfLastMonth.plusDays(1));
+    }
+
+
+    @Scheduled(cron = "0 0 0 1 * ?") // Runs at 00:00 on the first of every month
+    public void updateInvoiceStatus() {
+
+        List<Invoice> overdueInvoices = getInvoicesFromLastMonth();
+        for (Invoice invoice : overdueInvoices) {
+            invoice.setStatus(INVOICE_STATUS.RESTANTA);
+            invoiceRepository.save(invoice);
+        }
     }
 
 

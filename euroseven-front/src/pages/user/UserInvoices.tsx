@@ -117,6 +117,9 @@ export const UserInvoices: React.FC<{
             <MenuItem value={"Toate"} sx={{ fontFamily: "Catesque" }}>
               Toate
             </MenuItem>
+            <MenuItem value={"Scadente"} sx={{ fontFamily: "Catesque" }}>
+              Scadente
+            </MenuItem>
             <MenuItem value={"Restante"} sx={{ fontFamily: "Catesque" }}>
               Restante
             </MenuItem>
