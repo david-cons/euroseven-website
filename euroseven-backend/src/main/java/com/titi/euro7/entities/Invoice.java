@@ -33,7 +33,9 @@ public class Invoice {
 
     private String file;
 
-    private Boolean paid; // SCADENTA/RESTANTA
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private INVOICE_STATUS status;
 
     @Column(name = "location")
     private String location;
@@ -60,13 +62,13 @@ public class Invoice {
         this.codClient = codClient;
     }
 
-    public Invoice(Long id, LocalDate created_date, LocalDate due_date, double price, String file, Boolean paid, String location, Integer nrFactura, Integer codClient, double restDePlata, double indexVechi, double indexNou) {
+    public Invoice(Long id, LocalDate created_date, LocalDate due_date, double price, String file, INVOICE_STATUS status, String location, Integer nrFactura, Integer codClient, double restDePlata, double indexVechi, double indexNou) {
         this.id = id;
         this.created_date = created_date;
         this.due_date = due_date;
         this.price = price;
         this.file = file;
-        this.paid = paid;
+        this.status= status;
         this.location = location;
         this.nrFactura = nrFactura;
         this.codClient = codClient;

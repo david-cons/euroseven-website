@@ -151,10 +151,10 @@ public class UserController {
                 newUser.setDefaultPassword(true);
                 System.out.print(newUser + "\n");
 
-                if (newUser.getPhone().equals("") || newUser.getJudet().equals("") || newUser.getLocalitate().equals("") || newUser.getAddress().equals("")) {
-                    Notification notification = new Notification("Completează-ți profilul", newUser.getCodClient());
-                    notificationService.createNotification(notification);
-                }
+//                if (newUser.getPhone().equals("") || newUser.getJudet().equals("") || newUser.getLocalitate().equals("") || newUser.getAddress().equals("")) {
+//                    Notification notification = new Notification("Completează-ți profilul", newUser.getCodClient());
+//                    notificationService.createNotification(notification);
+//                }
 
                 userService.createUser(newUser);
             }

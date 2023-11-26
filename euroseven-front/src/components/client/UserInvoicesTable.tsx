@@ -95,9 +95,17 @@ export const UserInvoicesTable = (props: {
 
   useEffect(() => {
     if (props.filter === "Restante") {
-      setInvoices(allInvoices.filter((invoice) => invoice.paid === false));
+      setInvoices(
+        allInvoices.filter((invoice) => invoice.status === "RESTANTA")
+      );
     } else if (props.filter === "Plătite") {
-      setInvoices(allInvoices.filter((invoice) => invoice.paid === true));
+      setInvoices(
+        allInvoices.filter((invoice) => invoice.status === "PLATITA")
+      );
+    } else if (props.filter === "Scadente") {
+      setInvoices(
+        allInvoices.filter((invoice) => invoice.status === "SCADENTA")
+      );
     } else if (props.filter === "Toate") {
       setInvoices(allInvoices);
     }
@@ -209,7 +217,13 @@ export const UserInvoicesTable = (props: {
                           }
                         >
                           <InvoiceElement
-                            color={invoice.paid === true ? "#0054a6" : "red"}
+                            color={
+                              invoice.status !== "PLATITA"
+                                ? invoice.status === "RESTANTA"
+                                  ? "red"
+                                  : "#ffde00"
+                                : "#0054a6"
+                            }
                           />
                           {`Factură ${invoice.created_date!.substring(3)}`}
                         </Box>
@@ -261,7 +275,7 @@ export const UserInvoicesTable = (props: {
                           >
                             Descarcă
                           </Button>
-                          {invoice.paid !== true && (
+                          {invoice.status !== "PLATTIA" && (
                             <>
                               <Button
                                 variant="outlined"

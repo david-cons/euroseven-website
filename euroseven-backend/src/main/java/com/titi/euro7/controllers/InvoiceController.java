@@ -9,6 +9,7 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.titi.euro7.dto.InvoiceDTO;
+import com.titi.euro7.entities.INVOICE_STATUS;
 import com.titi.euro7.entities.Invoice;
 import com.titi.euro7.entities.Payment;
 import com.titi.euro7.services.InvoiceService;
@@ -232,7 +233,11 @@ public class InvoiceController {
                 invoice.setIndexNou(indexNou);
                 invoice.setIndexVechi(indexVechi);
                 invoice.setRestDePlata(restDePlata);
-                invoice.setPaid(invoice.getRestDePlata() == 0);
+                if (invoice.getRestDePlata() == 0) {
+                    invoice.setStatus(INVOICE_STATUS.PLATITA);
+                } else {
+                    invoice.setStatus(INVOICE_STATUS.SCADENTA);
+                }
                 invoice.setCodClient(codClient);
                 invoice.setCreated_date(createdDate);
                 invoice.setPrice(price);
