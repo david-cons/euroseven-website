@@ -49,7 +49,7 @@ export const AdminIFactura: React.FC<{
 
     try {
       await axios
-        .post("http://localhost:8081/api/invoices/upload", formData, {
+        .post("http://34.147.113.108:8081/api/invoices/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

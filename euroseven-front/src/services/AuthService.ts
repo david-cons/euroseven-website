@@ -3,7 +3,7 @@ import { RootState, persistor } from "../store";
 import { Dispatch, AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 
-const API_URL = "http://localhost:8081/api/auth/";
+const API_URL = "http://34.147.113.108:8081/api/auth/";
 
 export const authenticateUser = (username: string, password: string) => {
   return (dispatch: Dispatch<AnyAction>) => {

@@ -1,7 +1,7 @@
 import axios from "../axios";
 import { NotificationEntity } from "../types";
 
-const URL = "http://localhost:8081/api/notifications";
+const URL = "http://34.147.113.108:8081/api/notifications";
 
 export abstract class NotificationService {
   public static async completeInvoice(id: number): Promise<NotificationEntity> {

@@ -41,7 +41,7 @@ export const UserInvoicesTable = (props: {
   const checkoutInvoice = async (invoiceId: number) => {
     axios
       .post(
-        "http://localhost:8081/api/checkout/create-checkout-session/" +
+        "http://34.147.113.108:8081/api/checkout/create-checkout-session/" +
           invoiceId
       )
       .then((res) => {

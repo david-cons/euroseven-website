@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import axios from "../axios";
 import { MeterReadingEntity } from "../types";
 
-const URL = "http://localhost:8081/api/meter-readings";
+const URL = "http://34.147.113.108:8081/api/meter-readings";
 
 export abstract class MeterReadingService {
   public static async getAllMeterReadings(): Promise<MeterReadingEntity[]> {

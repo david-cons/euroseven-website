@@ -143,7 +143,7 @@ export const IncasariInvoices: React.FC<{
   const fetchSearchResults = async (query: string) => {
     if (query.trim() !== "") {
       const response = await axios.get(
-        "http://localhost:8081/api/invoices/search?keyword=" + query
+        "http://34.147.113.108:8081/api/invoices/search?keyword=" + query
       );
       setSearchedInvoices(response.data);
     } else {
