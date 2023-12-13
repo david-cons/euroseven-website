@@ -148,7 +148,7 @@ export const Jumbotron = () => {
           unselectable="on"
         />
       ))}
-      <JumbotronOverlay />
+      <JumbotronOverlay page={0} />
       <Box
         sx={{
           position: "absolute",

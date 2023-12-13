@@ -61,7 +61,7 @@ export const ContactPage: React.FC = () => {
           draggable="false"
           unselectable="on"
         />
-        <JumbotronOverlay />
+        <JumbotronOverlay page={0} />
         <Box
           sx={{
             position: "absolute",

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import "../App.css";
 import { Title } from "../components/Title";
 import { Jumbotron } from "../components/Jumbotron";
@@ -25,79 +25,108 @@ export const LandingPage = () => {
           width: "100%",
           overflow: "auto",
           backgroundColor: "#0054a6",
-          display: "flex", // Use flexbox to layout child elements
-          alignItems: "center", // Vertically center the child elements
-          justifyContent: "flex-start", // Align children to the start of the container
-          px: "1%", // Add padding on the left and right sides
-          boxSizing: "border-box", // Include padding in the width calculation
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: "1%",
+          boxSizing: "border-box",
         }}
       >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            mr: "25px", // Add margin to the right of the first box
+            justifyContent: "flex-start",
+            boxSizing: "border-box",
           }}
         >
-          <PhoneAndroidOutlinedIcon sx={{ color: "white", mr: "8px" }} />
-          <Typography
-            component="a"
-            fontFamily={"Catesque"}
-            color={"white"}
+          <Box
             sx={{
-              userSelect: "none",
-              ":hover": {
-                cursor: "pointer",
-              },
+              display: "flex",
+              alignItems: "center",
+              mr: "25px",
             }}
           >
-            031 67 56
-          </Typography>
-        </Box>
+            <PhoneAndroidOutlinedIcon sx={{ color: "white", mr: "8px" }} />
+            <Typography
+              component="a"
+              fontFamily={"Catesque"}
+              color={"white"}
+              sx={{
+                userSelect: "none",
+                ":hover": {
+                  cursor: "pointer",
+                },
+              }}
+            >
+              031 67 56
+            </Typography>
+          </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            mr: "25px",
-          }}
-        >
-          <CreditCardOutlinedIcon sx={{ color: "white", mr: "8px" }} />
-          <Typography
-            component="a"
-            fontFamily={"Catesque"}
-            color={"white"}
+          <Box
             sx={{
-              userSelect: "none",
-              ":hover": {
-                cursor: "pointer",
-              },
+              display: "flex",
+              alignItems: "center",
+              mr: "25px",
             }}
           >
-            Plătește Factura
-          </Typography>
+            <CreditCardOutlinedIcon sx={{ color: "white", mr: "8px" }} />
+            <Typography
+              component="a"
+              fontFamily={"Catesque"}
+              color={"white"}
+              sx={{
+                userSelect: "none",
+                ":hover": {
+                  cursor: "pointer",
+                },
+              }}
+            >
+              Plătește Factura
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <PinDropIcon sx={{ color: "white", mr: "8px" }} />
+            <Typography
+              component="a"
+              fontFamily={"Catesque"}
+              onClick={() => navigate("/contact")}
+              color={"white"}
+              sx={{
+                userSelect: "none",
+                ":hover": {
+                  cursor: "pointer",
+                },
+              }}
+            >
+              Contact
+            </Typography>
+          </Box>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <PinDropIcon sx={{ color: "white", mr: "8px" }} />
-          <Typography
-            component="a"
-            fontFamily={"Catesque"}
-            onClick={() => navigate("/contact")}
-            color={"white"}
+        <Box>
+          <Button
+            variant="contained"
             sx={{
-              userSelect: "none",
+              borderRadius: "20px",
+              backgroundColor: "white",
+              color: "#0054a6",
+              fontFamily: "Catesque",
               ":hover": {
-                cursor: "pointer",
+                backgroundColor: "#0054a6",
+                color: "white",
               },
+              height: "23px",
+              width: "130px",
+              mr: "2px",
             }}
           >
-            Contact
-          </Typography>
+            Înregistrare
+          </Button>
         </Box>
       </Box>
       <Jumbotron />

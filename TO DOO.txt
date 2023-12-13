@@ -1,0 +1,185 @@
+
+TOO DOO |
+__________|
+
+
+
+- Nr factura manual, nu UUID
+- Edit Factura -> Edit PDF
+- Modifica coloana pret sa fie de tip numar
+- Sterge Etica
+- Cookie
+- Add static pages
+- Make website responsive
+- Finish FAB
+- Add statistics
+- Fix Footer
+- Refactor frontend code
+- Finish user side
+- Research Deployment Database, Backend
+- Test create invoice, register payment, generate for pdf invoices, pay invoice with card, download invoice
+- Create CI/CD pipeline
+
+
+- If you press back from logged in page, it doesn't take you to landing -> Add Landing Button [DONE] 
+- Submit contor maxim de doua ori pe luna [DONE]
+- Buton rest de plata card client home page pay everything if RDP > 0 [DONE] -> awaiting payment provider
+- If you press forward after logging out, you are logged back in [DONE]
+- Remove index vechi from form and change system [DONE]
+- Incasari select component with Numerar default, optiuni: OP, POS-SB, POS-BD [DONE]
+- Cannot change address, localitate, judet only first time [DONE]
+_______________________________________________________
+
+____
+MISC|
+____|
+
+- Mai multi utilizatori cu acelasi cod client??? {IMPORTANT}
+- Notes if the image uploaded is bigger than accepted in the database
+SOLUTION: Longblob accepts 4 GB
+- Redux Stores Authentication in Local Storage
+SOLUTION:
+- Search User, Invoices -> so it does not search by contain, but by begins with
+[DONE]
+-  Add index nou, index vechi on Invoice entity [DONE]
+REMARK: What exactly to do with them? Should they be taken automatically when you upload the invoice or should i type them in manually?
+-  Finish Design Edit User + Fix Bugs [DONE]
+REMARK: User cannot be edited if is inactive
+
+[true, true, false] Suma amount almost equal or equal to restDePlata of invoices
+
+map boolean array ->
+for each boolean ->
+if true ->
+substract suma from restDePlata ->
+if restDePlata < 0 ? suma = restDePlata * -1; restDePlata = 0; : display error message, 
+
+[true, true, true] Suma Amount Bigger than invoice's rest de plata
+
+invoices: 50, 50, 50
+suma: 250
+
+map boolean array ->
+for each boolean ->
+if true ->
+restDePlata = restDePlata - suma = -200 
+if (restDePlata<0) -> suma = 200; restDePlata=0; 
+
+ONE MORE TIME -> suma = 150; restDePlata=0;
+ONE MORE TIME -> suma = 100; restDePlata=0;
+
+if (suma>0) -> user.saldo = user.saldo + suma; 
+
+
+-> register payment for 3 invoices
+1) 50 RON | RDP: 0 RON, [PAID]
+2) 25 RON | RDP: 0 RON, [PAID]
+3) 45 RON | RDP: 0 RON, [PAID]
+
+User Saldo: 0, restDePlata: 0,
+
+Suma / Payment amount: 10;
+
+
+3 invoices ->
+
+CASE 1) All selected, amount equal to all ✅
+[SOLUTION] 3 payments, payment amount will be selected invoice RDP.
+CASE 2) All selected, amount smaller than selected total invoice restDePlata ✅
+[SOLUTION] 3 payments,first two payment amount will be respective invoice RDP,last payment amount will invoiceRDP-remainingAmount
+CASE 3) All selected, amount bigger than selected invoice restDePlata ✅
+[SOLUTION] 3 payments, payment amount will be selected invoice RDP, user sold = sold + remainingAmount
+CASE 4) All selected, amount smaller than any invoice RDP ✅
+[SOLUTION] 0 payments, alert
+CASE 5) 2/3 selected, amount equal to them ✅ [FIX ALERT]
+[SOLUTION] 2 payments, payment amount equal to invoice RDP
+CASE 6) 2/3 selected, amount bigger than selected invoice RDP ??? [FIX]
+[SOLUTION] 3 payments, first two payments amount will be first two invoices RDP, next payment amount will be invoiceRDP-remainingAmount
+CASE 7) 2/3 selected, amount smaller than selected invoice RDP
+[SOLUTION] 2 payment, first payment amount will be first invoice RDP, second payment amount will be second invoiceRDP-remainingAmount
+CASE 8) 2/3 selected, amount smaller than any invoice RDP
+[SOLUTION] 0 payments, alert
+
+
+Link: http://34.147.113.108:3000/
+Cont Admin ->  EMAIL: testtt@gmail.com PASSWORD: 1234
+Cont Incasari -> EMAIL: testttt@gmail.com PASSWORD: 1234
+
+
+!!! DELETE INVOICE -> USER RDP =  USER RDP - INVOICE RDP ; USER SOLD = USER SOLD + (INVOICE PRET - INVOICE RDP )
+
+USER -> RDP = 50
+
+FACTURA NR 1 -> PRET = 75, RDP = 50
+
+https://drive.google.com/file/d/1In0er7P-7zBlkhzMxvac6tb0LRBdVDox/view?usp=sharing
+
+
+INTERNSHIPS:
+
+1) https://asam.fhict.nl/student/Assignment/Details/ad866c41-1432-4e6a-a587-7aea884faaa0 [APPLIED]
+2) https://asam.fhict.nl/student/Assignment/Details/c1389ec0-b838-4b99-be4e-c5a81ecaa6d8 / https://asam.fhict.nl/student/Assignment/Details/b5c7b2e4-8d0a-4d48-9b46-c43f27b847ae
+3) https://asam.fhict.nl/student/Assignment/Details/c5a16343-e2bf-4571-b6e0-9cf6444987cf
+4) https://asam.fhict.nl/student/Assignment/Details/e709ceaa-f73e-4971-a58f-88c71c4ead60
+5) https://asam.fhict.nl/student/Assignment/Details/6bf3d461-4614-448d-b9cd-d32f4e5fd8d0
+6) https://asam.fhict.nl/student/Assignment/Details/7846181c-412d-4747-b6ef-299791bd6fd1
+
+
+
+Invoice Price: 150
+
+User -> RDP: -100 -> 
+Invoice RDP: 150 -> 50, User RDP: 0
+
+User -> RDP: 0 -> Invoice RDP: 150, User RDP: 150
+
+User -> RDP: 100
+
+
+
+
+Mesaj 1 -> Buna! Sunt Buddy Euro Seven 🤖, un chatbot care asista relatiile cu clienti!
+Mesaj 2 -> Daca doriti ajutor personalizat va rog sunati la nr 0316756.
+Mesaj 3 -> Cunostiintele mele sunt limitate la subiectele de mai jos.
+
+
+Dear GravityMedia Team,
+
+I hope this message finds you well.
+
+My name is [Your Name], and I am currently in the final year of my HBO-ICT studies at Fontys University of Applied Sciences. I have been closely following the exciting work GravityMedia has been producing, and I am impressed by your team's dedication to transforming creative ideas into tangible, strong concepts. It is with great enthusiasm that I wish to express my interest in joining your team as an intern.
+
+During my academic and professional journey, I have cultivated a profound appreciation for the power of branding and concept development, akin to the mission GravityMedia passionately pursues. My experiences have honed my ability to work collaboratively in dynamic settings, closely aligning with your philosophy of proactive teamwork and inventive brainstorming.
+
+As a full-stack developer with a successful track record in freelance projects, I have developed a robust skill set that I believe will complement the innovative and creative spirit at GravityMedia. I am not just a programmer; I am a team player who thrives on contributing to the entire creative process, from ideation to execution. This multidisciplinary approach echoes GravityMedia's commitment to not just thinking but working closely together to invent, design, and build captivating concepts for both customers and the brand itself.
+
+I am excited about the possibility of bringing my technical expertise and creative passion to a forward-thinking team like yours, where we can collaboratively create impactful and engaging brand experiences.
+
+Please find attached my resume and portfolio for your consideration. I am looking forward to the opportunity to discuss how my background, skills, and enthusiasms can be aligned with the innovative work at GravityMedia.
+
+Thank you for considering my application. I am eager to contribute to and learn from the esteemed team at GravityMedia.
+
+Warm regards,
+
+
+
+
+daca esti logat si dai back din browser, sa nu se intample nimic: cum era initial [DONE]
+Buton 'pagina principala' scrisul sa fie centrat [DONE]
+peste tot 'mc' in loc de 'cm' [DONE]
+"Plateste" in loc de "Plateste tot" pe homepage user; si butonul putin mai mare (cam aceasi dimensiune cu cel de la index) [DONE]
+la citire contoare apare ultima poza la toate solicitarile [DONE]
+aprobarile la auto-citire apar invers (cele vechi in fata si cele noi in spate) [DONE]
+la citire contor user, sa i apara index vechi automat in form [DONE]
+se pot trimite/ aproba chiar daca 'index vechi' este diferit cu indexul de il are clientul pe cont ( sa facem din ambele sensuri: nici userul sa nu poata da submit, nici noi sa nu putem aproba; daca 'indexul vechi' nu coincide cu ce are el pe cont) [DONE]
+daca incearca sa dea submit fara sa puna poza: popup rosu: Adaugati poza contorului pentru a trimite auto-citirea. [DONE]
+text pop-up cookies: "<text>" [DONE]
+scrisul din home-page client 'Detalii' Adresa este prea mare, nu incape adresa
+
+
+
+card detalii -> scos detalii, text adresa whitespace: nowrap
+
+
+
+

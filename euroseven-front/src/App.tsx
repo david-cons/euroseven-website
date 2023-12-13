@@ -13,6 +13,7 @@ import { CustomErrorPage } from "./pages/Error500";
 import { InformationPage } from "./pages/InformationPage";
 import CookieConsent from "react-cookie-consent";
 import { ContactPage } from "./pages/ContactPage";
+import { ClientiCasniciPage } from "./pages/ClientiCasniciPage";
 
 function App() {
   const removeFromLocalStorage = () => {
@@ -47,6 +48,7 @@ function App() {
           <Route path="/home" element={<UserHomePage />} />
           <Route path="/test" element={<InformationPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/clienti-casnici" element={<ClientiCasniciPage />} />
           <Route
             path="/admin/home"
             element={

@@ -53,7 +53,7 @@ export const InformationPage: React.FC = () => {
           draggable="false"
           unselectable="on"
         />
-        <JumbotronOverlay />
+        <JumbotronOverlay page={0} />
         <Typography
           variant="h1"
           component="h1"

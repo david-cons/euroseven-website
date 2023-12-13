@@ -6,7 +6,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const JumbotronOverlay = () => {
+export const JumbotronOverlay = (props: { page: number }) => {
+  const { page } = props;
+
   const [isBoxVisible, setIsBoxVisible] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const boxRef = useRef<HTMLDivElement | null>(null);
@@ -14,6 +16,10 @@ export const JumbotronOverlay = () => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setIsBoxVisible(!isBoxVisible);
     setIsOpen(!isOpen);
+  };
+
+  const clickButton = (url: string) => {
+    navigate(url);
   };
   return (
     <Box
@@ -114,8 +120,23 @@ export const JumbotronOverlay = () => {
             "Servicii Online",
             "Informatii Utile",
             "Consultare Consum",
-          ].map((buttonText) => (
-            <AnimatedButton key={buttonText} variant="text">
+          ].map((buttonText, index) => (
+            <AnimatedButton
+              key={buttonText}
+              variant="text"
+              sx={{
+                color: page === index + 1 ? "#0075e8" : "white",
+              }}
+              onClick={() =>
+                clickButton(
+                  `/${buttonText
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`
+                )
+              }
+            >
               {buttonText}
             </AnimatedButton>
           ))}
@@ -138,8 +159,13 @@ const AnimatedButton = styled(Button)({
       transform: "translateX(0)",
     },
   },
+  ":hover": {
+    color: "#0075e8",
+  },
   fontWeight: "bold",
   color: "white",
   mr: "25px",
   animation: "flyInFromRight 1s ease-out forwards",
+  fontFamily: "Arial Black",
+  whiteSpace: "nowrap",
 });
