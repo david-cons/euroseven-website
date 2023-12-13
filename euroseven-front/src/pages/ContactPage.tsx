@@ -537,7 +537,7 @@ export const ContactPage: React.FC = () => {
                 fontFamily: "Catesque",
               }}
             >
-              Electricitate
+              Gaze Nautrale
             </Button>
             <FormControl sx={{ width: "30%" }}>
               <InputLabel variant="standard" htmlFor="uncontrolled-native">
