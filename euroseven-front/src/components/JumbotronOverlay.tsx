@@ -112,7 +112,7 @@ export const JumbotronOverlay = (props: { page: number }) => {
         </Box>
       </Box>
 
-      <Box sx={{ width: "178px", mt: "4vh", pl: "25px" }}>
+      <Box sx={{ width: "178px", mt: "4vh", pl: "25px", textAlign: "left" }}>
         <Stack direction="column" spacing={5}>
           {[
             "Clienți Casnici",
