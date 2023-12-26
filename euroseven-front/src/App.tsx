@@ -14,6 +14,7 @@ import { InformationPage } from "./pages/InformationPage";
 import CookieConsent from "react-cookie-consent";
 import { ContactPage } from "./pages/ContactPage";
 import { ClientiCasniciPage } from "./pages/ClientiCasniciPage";
+import { ConsultareConsum } from "./pages/ConsultareConsum";
 
 function App() {
   const removeFromLocalStorage = () => {
@@ -49,6 +50,7 @@ function App() {
           <Route path="/test" element={<InformationPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/clienti-casnici" element={<ClientiCasniciPage />} />
+          <Route path="/consultare-consum" element={<ConsultareConsum />} />
           <Route
             path="/admin/home"
             element={

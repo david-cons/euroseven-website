@@ -61,3 +61,14 @@ export type NotificationEntity = {
   codClient?: number;
   completed?: boolean;
 };
+
+export type ConsumEntity = {
+  id: number;
+  cod: string;
+  nrFactura: string;
+  dePlata: string;
+  indexVechi: string;
+  indexNou: string;
+  consumT: string;
+  perioada: string;
+}

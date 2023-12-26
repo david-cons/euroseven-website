@@ -40,7 +40,7 @@ export const UserHome: React.FC<{
   }, [user]);
 
   return (
-    <Box sx={{ width: "100%", overflowY: "hidden" }}>
+    <Box sx={{ width: "100%", overflowY: "hidden", height: "100%" }}>
       <Box
         sx={{
           width: "100%",
@@ -64,7 +64,7 @@ export const UserHome: React.FC<{
       <Box
         sx={{
           width: "100%",
-          height: "810.79px",
+          height: "80%",
           position: "absolute",
           background: "linear-gradient(to bottom,#FFFFFF,#dee2e6)",
           top: "20%",
@@ -84,7 +84,7 @@ export const UserHome: React.FC<{
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          mt: "10rem",
+          mt: "25vh",
         }}
       >
         <Stack

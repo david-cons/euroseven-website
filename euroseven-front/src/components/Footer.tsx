@@ -12,12 +12,17 @@ import {
   InputBase,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 export const Footer: React.FC = () => {
+
+  const navigate = useNavigate();
+
+
   return (
     <Box
       sx={{
         width: "100%",
-        minHeight: "75vh",
+        height: "700px",
         backgroundColor: "#282424",
         display: "flex",
         justifyContent: "center",
@@ -123,7 +128,7 @@ export const Footer: React.FC = () => {
               fontSize={"1rem"}
               color={"white"}
               component="a"
-              href="#"
+              onClick={() => navigate("/contact")}
               sx={{
                 textDecoration: "none",
                 ":hover": {

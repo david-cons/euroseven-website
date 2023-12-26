@@ -23,6 +23,7 @@ import { SetariPage } from "../SetariPage";
 import { pagesAdmin } from "../../lunrjs/dataAdmin";
 import { IncasariInvoices } from "../incasari/IncasariInvoices";
 import { AdminIFactura } from "./AdminIFactura";
+import { AdminConsum } from "./AdminConsum";
 
 export const AdminHomePage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<String>(
@@ -236,6 +237,7 @@ export const AdminHomePage: React.FC = () => {
         {selectedTab === "setari" && (
           <SetariPage user={admin} setUser={setAdmin} />
         )}
+        {selectedTab === "consum" && <AdminConsum />}
       </Box>
     </Box>
   );

@@ -1,4 +1,4 @@
-import { styled } from "@mui/material/styles";
+import { Theme, createStyles, styled, withStyles } from "@mui/material/styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import VideoLabelIcon from "@mui/icons-material/VideoLabel";
@@ -23,6 +23,9 @@ export const ActualizeDatePersonale: React.FC = () => {
         width: "80%",
         margin: "0 auto",
         textAlign: "left",
+        '@media (max-width: 900px)': {
+          height: "800px",
+        }
       }}
     >
       <Stack
@@ -41,15 +44,33 @@ export const ActualizeDatePersonale: React.FC = () => {
           alternativeLabel
           activeStep={2}
           connector={<ColorlibConnector />}
+          orientation="horizontal" // Default orientation
+          sx={{
+            '@media (max-width: 900px)': {
+              flexDirection: 'column', // Change orientation to vertical on smaller screens
+            },
+          }}
         >
           {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel
+            <Step key={label} sx={{
+              "&. MuiStepLabel-label": {
+                fontFamily: "Catesque",
+              }
+            }}>
+              <CustomStepLabel
                 StepIconComponent={ColorlibStepIcon}
-                sx={{ fontFamily: "Catesque" }}
+
+                sx={{
+                  fontFamily: "Catesque",
+                  "&. MuiStepLabel-labelContainer": {
+                    "&. MuiStepLabel-label": {
+                      fontFamily: "Catesque",
+                    },
+                  }
+                }}
               >
                 {label}
-              </StepLabel>
+              </CustomStepLabel>
             </Step>
           ))}
         </Stepper>
@@ -85,6 +106,14 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
       theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
     borderRadius: 1,
   },
+  '@media (max-width: 900px)': {
+    flexDirection: 'column', // Change direction to vertical
+    alignItems: 'center', // Optional: center the connector vertically
+    [`& .${stepConnectorClasses.line}`]: {
+      width: 3, // Change the width to create a vertical line
+      height: '100%', // Make the line take full height
+    },
+  },
 }));
 
 const ColorlibStepIconRoot = styled("div")<{
@@ -99,6 +128,7 @@ const ColorlibStepIconRoot = styled("div")<{
   display: "flex",
   borderRadius: "50%",
   justifyContent: "center",
+  fontFamily: "Catesque",
   alignItems: "center",
   ...(ownerState.active && {
     backgroundImage:
@@ -110,6 +140,15 @@ const ColorlibStepIconRoot = styled("div")<{
       "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
   }),
 }));
+
+
+const CustomStepLabel = styled(StepLabel)(({ theme }) => ({
+  '& .MuiStepLabel-label': {
+    fontFamily: 'Catesque',
+    fontSize: '1rem',
+  },
+}));
+
 
 function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed, className } = props;

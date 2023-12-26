@@ -1,10 +1,11 @@
-import { Box, Button, IconButton, Stack, styled } from "@mui/material";
+import { Box, Button, IconButton, Stack, Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material";
 import { LandingPageMenu } from "./LandingPageMenu";
 import logo2 from "../assets/logo2.png";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 export const JumbotronOverlay = (props: { page: number }) => {
   const { page } = props;
@@ -118,7 +119,6 @@ export const JumbotronOverlay = (props: { page: number }) => {
             "Clienți Casnici",
             "Clienti Business",
             "Servicii Online",
-            "Informatii Utile",
             "Consultare Consum",
           ].map((buttonText, index) => (
             <AnimatedButton
@@ -140,6 +140,21 @@ export const JumbotronOverlay = (props: { page: number }) => {
               {buttonText}
             </AnimatedButton>
           ))}
+          <HtmlTooltip
+            title={
+              <React.Fragment>
+                <Button sx={{ fontFamily: "Catesque" }} onClick={() => navigate("/clienti-casnici")}>Clienti Casnici</Button>
+                <Button sx={{ fontFamily: "Catesque" }} onClick={() => navigate("/clienti-business")}>Clienti Business</Button>
+              </React.Fragment>
+            }
+          >
+            <AnimatedButton
+              variant="text"
+              sx={{
+                color: page === 5 ? "#0075e8" : "white",
+              }}
+            >Informatii Utile</AnimatedButton>
+          </HtmlTooltip>
         </Stack>
       </Box>
 
@@ -168,4 +183,19 @@ const AnimatedButton = styled(Button)({
   animation: "flyInFromRight 1s ease-out forwards",
   fontFamily: "Arial Black",
   whiteSpace: "nowrap",
+  justifyContent: "flex-start",
 });
+
+
+
+const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} placement="right" />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 150,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}));

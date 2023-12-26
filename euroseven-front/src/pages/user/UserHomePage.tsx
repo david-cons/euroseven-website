@@ -215,7 +215,7 @@ export const UserHomePage: React.FC = () => {
       />
       <Box
         sx={{
-          height: "911px",
+          height: "100%",
           position: "relative",
           width: `calc(100% - 260px)`,
           justifyContent: "center",

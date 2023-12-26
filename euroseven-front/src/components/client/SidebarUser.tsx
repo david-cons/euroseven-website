@@ -39,7 +39,7 @@ export const SidebarUser = (props: {
   return (
     <Box
       sx={{
-        height: "911px",
+        height: "100%",
         width: "260px",
         backgroundColor: "#1c2536",
         position: "relative",

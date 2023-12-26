@@ -314,7 +314,6 @@ export const InfoUtile: React.FC = () => {
             fontSize={"2rem"}
             sx={{
               borderBottom: "1px solid #0054a6",
-              width: "35%",
               margin: "0 auto",
             }}
           >
@@ -374,10 +373,13 @@ export const InfoUtile: React.FC = () => {
       <Box
         sx={{
           height: "300px",
-          width: "70%",
           margin: "0 auto",
           display: "flex",
           gap: "25px",
+          "@media (max-width: 1300px)": {
+            flexDirection: "column",
+            height: "auto"
+          }
         }}
       >
         <Card sx={{ width: 420 }}>
@@ -471,7 +473,6 @@ export const InfoUtile: React.FC = () => {
             fontSize={"2rem"}
             sx={{
               borderBottom: "1px solid #0054a6",
-              width: "48%",
               margin: "0 auto",
             }}
           >

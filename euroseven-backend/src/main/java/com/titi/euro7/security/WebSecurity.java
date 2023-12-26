@@ -66,7 +66,9 @@ public class WebSecurity {
                         .requestMatchers(
                                 antMatcher("/api/auth/register"),
                                 antMatcher("/api/auth/login"),
-                                antMatcher("/api/auth/token"))
+                                antMatcher("/api/auth/token"),
+                                antMatcher("/api/consum/find")
+                                )
                         .permitAll()
                         .requestMatchers(
                                 antMatcher("/api/users"),

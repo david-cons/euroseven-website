@@ -1,12 +1,7 @@
 import { Title } from "../components/Title";
-import information from "../assets/information.jpg";
 
 import {
   Box,
-  Stack,
-  Step,
-  StepLabel,
-  Stepper,
   Tab,
   Tabs,
   Typography,
@@ -24,6 +19,10 @@ import BalanceIcon from "@mui/icons-material/Balance";
 import { InfoUtile } from "../components/InfoUtile";
 import { OfertaGazeNaturale } from "../components/OfertaGazeNaturale";
 import { ActualizeDatePersonale } from "../components/ActualizareDatePersonale";
+import { AutocitireIndex } from "../components/AutocitireIndex";
+import { Revizie } from "../components/Revizie";
+import { DrepturiSiObligatii } from "../components/DrepturiSiObligatii";
+import clienticasnici from "../assets/clienticasnici.jpg"
 
 export const ClientiCasniciPage: React.FC = () => {
   const [value, setValue] = useState<number>(0);
@@ -64,7 +63,7 @@ export const ClientiCasniciPage: React.FC = () => {
         }}
       >
         <img
-          src={information}
+          src={clienticasnici}
           alt="jumbotron"
           style={{
             width: "100%", // Maintain aspect ratio and cover the container
@@ -155,6 +154,9 @@ export const ClientiCasniciPage: React.FC = () => {
       {value === 0 && <InfoUtile />}
       {value === 1 && <OfertaGazeNaturale />}
       {value === 2 && <ActualizeDatePersonale />}
+      {value === 3 && <AutocitireIndex />}
+      {value === 4 && <Revizie />}
+      {value === 5 && <DrepturiSiObligatii />}
       <Footer />
     </Box>
   );

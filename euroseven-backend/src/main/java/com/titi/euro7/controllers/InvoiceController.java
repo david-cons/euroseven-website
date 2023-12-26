@@ -46,17 +46,17 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    private static final String BUCKET_NAME = "euro7";
+    private static final String BUCKET_NAME = "euro77";
 
 
     @JsonIgnore
     private final Storage storage;
 
     public InvoiceController() throws IOException {
-        Resource resource = new ClassPathResource("neat-fin-401511-e125ce7ad47c.json");
+        Resource resource = new ClassPathResource("original-circle-408713-9c74d9d1773f.json");
         InputStream keyFileStream = resource.getInputStream();
         this.storage = StorageOptions.newBuilder()
-                .setProjectId("neat-fin-401511")
+                .setProjectId("original-circle-408713")
                 .setCredentials(ServiceAccountCredentials.fromStream(keyFileStream))
                 .build()
                 .getService();

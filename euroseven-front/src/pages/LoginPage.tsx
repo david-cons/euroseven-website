@@ -134,7 +134,7 @@ export const LoginPage: React.FC = () => {
         <Box
           component="form"
           onSubmit={handleSubmit}
-          sx={{ width: "80%", textAlign: "center" }}
+          sx={{ width: "80%", textAlign: "center", margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}
         >
           <Box
             style={{
